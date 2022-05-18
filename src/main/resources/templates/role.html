@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>HRIS-ROLE</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+         <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"
+          rel="stylesheet" />
+          <link th:href="@{/dist/css/role.css}" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div class='split-pane col-xs-12 col-sm-6 admin-side'>
+            <div>
+                <div class='text-content'>
+                    <div>Login as</div>
+                    <div class='big'>ADMIN</div>
+                </div>
+                <a class="button" th:href="@{/homeAdm}">
+                    TAKE ME TO HOME
+                </a>
+            </div>
+        </div>
+        <div class='split-pane col-xs-12 col-sm-6 requester-side'>
+            <div>
+                <div class='text-content'>
+                    <div>Login as</div>
+                    <div class='big'>REQUESTER</div>
+                </div>
+                <a class='button' th:href="@{/home}">
+                    TAKE ME TO HOME
+                </a>
+            </div>
+        </div>
+        <div id='split-pane-or'>
+            <div>
+                <img src='dist/img/hris.png'>    
+            </div>
+        </div>
+        <!--        <div class="accountbg"></div>
+                <div class="container">
+                    <div class="cards-list">
+                        <a class="btn btn-success" th:href="@{/homeAdm}">
+                            <div class="card 1">
+                                <div class="card_image"> <img src="https://www.fourthday.co.uk/wp-content/uploads/2018/09/copy-approval_1100x600_acf_cropped.png"/> </div>
+                                <div class="card_title title-white">
+                                    <p></p>
+                                </div>
+                            </div>
+                        </a>
+                        <a class="btn btn-success" th:href="@{/home}">
+                            <div class="card 1">
+                                <div class="card_image"> <img src="https://media.giphy.com/media/10SvWCbt1ytWCc/giphy.gif"/> </div>
+                                <div class="card_title title-white">
+                                    <p>Requester</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                /<div>-->
+    </body>
+</html>

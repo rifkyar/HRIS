@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReportRequesterInformation" pageWidth="650" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="610" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="f2443b4b-73ce-4ee1-b7cf-f5ef1b1ca521">
+	<property name="ireport.zoom" value="1.2100000000000002"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#6495ED">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFD6FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="New Dataset 1" uuid="c4cc0598-80f9-46db-b544-b194d2dc262d">
+		<queryString>
+			<![CDATA[SELECT nik, name, available_leave_lastyear, expireddate_leave_lastyear, available_leave_currentyear,
+expireddate_leave_currentyear, Total_available_leave
+FROM requester_information ORDER BY `nik` DESC]]>
+		</queryString>
+		<field name="nik" class="java.lang.Integer">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="name" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="available_leave_lastyear" class="java.lang.Integer">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="expireddate_leave_lastyear" class="java.sql.Date">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="available_leave_currentyear" class="java.lang.Integer">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="expireddate_leave_currentyear" class="java.sql.Date">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="Total_available_leave" class="java.lang.Integer">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+	</subDataset>
+	<queryString>
+		<![CDATA[select 1 from dual]]>
+	</queryString>
+	<field name="1" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="37" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="26" uuid="93c63121-5a9d-4b7b-8739-ec28a8d56226"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DATA LEAVE EMPLOYEE]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="160" splitType="Stretch">
+			<componentElement>
+				<reportElement key="table" style="table" x="0" y="0" width="610" height="64" uuid="9c363917-2312-4fb9-b1a0-12cfd1587065"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="New Dataset 1" uuid="f513cd85-bb10-4627-84a6-7cb915807ab6">
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="39" uuid="cc3e697e-c09d-4617-b43c-9c8dfa262beb">
+						<jr:tableHeader style="table_TH" height="32" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="39" height="32" uuid="aaf677de-6469-42b6-adb0-0926ee890e28"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[No]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="table_TD" height="32" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="39" height="32" uuid="96da68c5-e916-4870-a857-166456515461"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="50" uuid="3813894f-f663-4fc0-8791-100f75ccf878">
+						<jr:tableHeader style="table_TH" height="32" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="50" height="32" uuid="1f81a1c8-04ba-447d-baa5-8497160c9196"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[NIK]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="table_TD" height="32" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="50" height="32" uuid="7e2edeb9-98c8-48ea-ad2d-54d50f15db4f"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{nik}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="135" uuid="f7d5ebbf-ef78-4594-a453-ce20af3bc6b9">
+						<jr:tableHeader style="table_TH" height="32" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="133" height="29" uuid="e63c208d-d8c0-4d8a-a64a-580a71b5aeab"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Name]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="table_TD" height="32" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="135" height="32" uuid="afab3dd7-dddb-418d-bc21-6816fbac03d7"/>
+								<textElement verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="74" uuid="98754f92-d2a3-4656-b475-81650358abe2">
+						<jr:tableHeader style="table_TH" height="32" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="73" height="29" uuid="51d824f5-9711-4e09-9f58-9a34104bc562"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Last Year]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="table_TD" height="32" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="73" height="32" uuid="934f6369-5905-4c4b-92eb-e759e73c899a"/>
+								<textElement verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{available_leave_lastyear} + " Days"]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="87" uuid="89ad9d16-d683-4a53-aefe-5d0347d7bfe6">
+						<jr:tableHeader style="table_TH" height="32" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="81" height="29" uuid="d1960703-7c70-4d87-8e2a-c00f69a5fe25"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Expired Date Last Year]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="table_TD" height="32" rowSpan="1">
+							<textField pattern="dd MMMMM yyyy">
+								<reportElement x="0" y="0" width="81" height="32" uuid="5c8376c0-c053-4258-be73-661a21828b55"/>
+								<textElement verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{expireddate_leave_lastyear}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="58" uuid="53d71dec-ad8c-4316-a694-87517a7fccd9">
+						<jr:tableHeader style="table_TH" height="32" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="51" height="32" uuid="c813396e-2939-4624-b691-858d2718b1a5"/>
+								<textElement textAlignment="Center" verticalAlignment="Top"/>
+								<text><![CDATA[Current Year]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="table_TD" height="32" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="58" height="32" uuid="4740de14-7638-4e6c-a492-d8f7e0f684e1"/>
+								<textElement verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{available_leave_currentyear}+ " Days"]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="86" uuid="a8e6c97d-48fd-4754-ba26-19e2bfc5dd38">
+						<jr:tableHeader style="table_TH" height="32" rowSpan="1">
+							<staticText>
+								<reportElement x="7" y="0" width="79" height="29" uuid="79ef4187-62d8-4bef-a60a-efda41be7937"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Expired Date Current Year]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="table_TD" height="32" rowSpan="1">
+							<textField pattern="dd MMMMM yyyy">
+								<reportElement x="0" y="0" width="86" height="32" uuid="93451f74-f8ce-43bb-b9be-20c2cbab5b66"/>
+								<textElement verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{expireddate_leave_currentyear}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="79" uuid="eca0c948-a3b1-4a7f-9895-8d3050457184">
+						<jr:tableHeader style="table_TH" height="32" rowSpan="1">
+							<staticText>
+								<reportElement x="10" y="0" width="66" height="32" uuid="0b1b04a3-306c-472e-a5a5-518e0a896c86"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Total Leave]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="table_TD" height="32" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="79" height="32" uuid="748b95b8-002a-4466-829d-440ccb657b9d"/>
+								<textElement verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{Total_available_leave} + " Days"]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</summary>
+</jasperReport>

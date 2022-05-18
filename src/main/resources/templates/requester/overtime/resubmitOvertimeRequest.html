@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>HRIS - Requesters</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <!-- App Icons -->
+        <link rel="shortcut icon" th:href="@{/dist/img/favicon.ico}">
+        
+        <div th:replace="fragments/header::css"></div>
+        
+        <link th:href="@{/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css}" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/eonasdan-bootstrap-datetimepicker/3.1.4/css/bootstrap-datetimepicker.min.css" />
+        <link th:href="@{/dist/wicked-picker/wickedpicker.min.css}" rel="stylesheet" type="text/css" />
+        
+        <style>
+            table thead{
+                background-color: #007ac0;
+                color: #fafafa;
+            }
+            .approval{
+                color: #ffbb44;
+            }
+            .ui-datepicker-calendar {
+                display: none;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div class="header-bg">
+
+            <div th:replace="fragments/header::header"></div>
+
+            <div class="container-fluid">
+                <!-- Page-Title -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="page-title-box">
+                                                       <h4 class="page-title"> <i class="dripicons-blog"></i> Overtime Request</h4>
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title end breadcrumb -->
+
+            </div>
+        </div>
+        
+         <div class="wrapper">
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card m-b-20">
+                            <form id="formOvertimeResubmit" th:action="@{'/resubmitOt/' + ${nik}}" method="POST">
+                                <div class="card-body" style="padding-left: 100px; padding-right: 100px;">
+                                    <h4 class="text-center">Formulir Pengajuan Lembur</h4>
+                                    <br>
+                                    <div class="form-group row justify-content-center">
+                                        <label for="example-text-input" class="col-md-2 col-form-label">Site/Project</label>
+                                        <span class="float-right col-form-label">:</span>
+                                        <div class="col-md-3">
+                                            <select name="customerName" id="customerName" class="form-control">
+                                                <option th:each="cust : ${Customer_Name}" th:value="${cust}" th:text="${cust}">Choose Site/Project</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row justify-content-center">
+                                        <label for="example-text-input" class="col-md-2 col-form-label">Periode</label>
+                                        <span class="float-right col-form-label">:</span>
+                                        <div class="col-md-3">
+                                            <input class="form-control periode" type="text" id="periode" name="periode">
+                                        </div>
+                                    </div>
+                                    <input name="monthNow" id="monthNow" class="form-control" type="hidden" th:value="${monthNow}" hidden=""/>
+                                    <input name="monthPrev" id="monthPrev" class="form-control" type="hidden" th:value="${monthPrev}" hidden=""/> 
+                                    <br>
+
+                                    <div class="card">
+                                        <div class="card-header"><b>KARYAWAN, WAKTU, DAN LOKASI LEMBUR</b></div>
+                                        <div class="card-body">
+                                            <ol type="A">
+                                                <li>PIC Customer</li>
+                                                <div class="form-group row">
+                                                    <label for="example-text-input" class="col-md-2 col-form-label">Nama</label>
+                                                    <span class="float-right col-form-label">:</span>
+                                                    <div class="col-md-4">
+                                                        <input class="form-control" type="text" id="picName" name="picName" th:value="${pic_name}" readonly="">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="example-text-input" class="col-md-2 col-form-label">Jabatan</label>
+                                                    <span class="float-right col-form-label">:</span>
+                                                    <div class="col-md-4">
+                                                        <input class="form-control" type="text" id="picJabatan" name="picJabatan" th:value="${pic_post}" readonly="">
+                                                    </div>
+                                                    <div class="col-sm-5" hidden="">
+                                                        <div class="input-daterange input-group">
+                                                            <input name="approval_id" type="text" class="form-control" th:value="${approval_id}" readonly="">
+                                                            <input name="requestOTID" type="text" class="form-control" th:value="${requestOTID}" readonly="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <br>
+
+                                                <li>Karyawan</li>
+                                                <div class="form-group row">
+                                                    <label class="col-md-2 label-request">Nama</label>
+                                                    <span class="float-right">:</span>
+                                                    <span class="col-md-4" th:text="${nik + ' - ' + nama_requester}">1234 - Name</span>
+                                                    <span hidden="" id="empl_nik" th:text="${nik}"></span>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-2 label-request">Jabatan</label>
+                                                    <span class="float-right">:</span>
+                                                    <span class="col-md-4" th:text="${position}">Position</span>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-2 label-request">Status</label>
+                                                    <span class="float-right">:</span>
+                                                    <span class="col-md-4" th:text="${sifting}">Sifting OR Non Sifting</span>
+                                                </div>
+                                                <br>
+
+                                                <li>Waktu & Lokasi Lembur</li>
+                                                <div class="form-group row">
+                                                    <label for="example-text-input" class="col-md-2 col-form-label">Tiket</label>
+                                                    <span class="float-right col-form-label">:</span>
+                                                    <div class="col-md-4">
+                                                        <input class="form-control" type="text" id="ticketNumber" placeholder="Tiket">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="example-text-input" class="col-md-2 col-form-label">Tanggal Lembur</label>
+                                                    <span class="float-right col-form-label">:</span>
+                                                    <div class="col-md-9">
+                                                        <div class="input-daterange input-group">
+                                                            <input class="form-control" type="text" id="dateStart" placeholder="Tanggal Mulai">
+                                                            <input class="form-control" type="text" id="dateEnd" placeholder="Tanggal Selesai">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="example-text-input" class="col-md-2 col-form-label">Jam Lembur</label>
+                                                    <span class="float-right col-form-label">:</span>
+                                                    <div class="col-md-9">
+                                                        <div class="input-daterange input-group">
+                                                            <input class="time form-control" type="text" id="timeStart" placeholder="Jam Mulai">
+                                                            <input class="time form-control" type="text" id="timeEnd" placeholder="Jam Selesai">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="example-text-input" class="col-md-2 col-form-label">Tugas</label>
+                                                    <span class="float-right col-form-label">:</span>
+                                                    <div class="col-md-9">
+                                                        <textarea id="task" class="form-control" maxlength="225" rows="5"
+                                                                placeholder="This notes has a limit of 225 chars."></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="example-text-input" class="col-md-2 col-form-label">Lokasi</label>
+                                                    <span class="float-right col-form-label">:</span>
+                                                    <div class="col-md-9">
+                                                        <input class="form-control" type="text" id="lokasi" placeholder="Lokasi">
+                                                    </div>
+    <!--                                                <div>
+                                                        <button id="addList" type="button" class="btn btn-primary">Add List</button>
+                                                    </div>-->
+                                                </div>
+                                                <div class="text-center">
+                                                    <button id="addList" type="button" class="btn btn-primary">Add List</button>
+                                                </div>
+                                                <br>
+                                                <div class="table-responsive">
+                                                    <table id="dataOt" class="table table-bordered">
+                                                        <thead id="tableHead">
+                                                            <tr id="mainRow">
+                                                                <td>Tiket</td>
+                                                                <td>Tanggal Mulai</td>
+                                                                <td>Jam Mulai</td>
+                                                                <td>Tanggal Selesai</td>
+                                                                <td>Jam Selesai</td>
+                                                                <td>Jumlah Lebur</td>
+                                                                <td>Tipe Hari</td>
+                                                                <td>Tugas</td>
+                                                                <td>Lokasi</td>
+                                                                <td>Action</td>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                        <tfoot id="tabelFoot">
+                                                            <tr>
+                                                                <th colspan="5" class="text-center"><b>Total Submitted Overtime</b></th>
+                                                                <th class="totalLembur"></th>
+                                                                <!--<th><input type="text" name="totalOvertime" id="totalOvertime" class="form-control" readonly=""></th>-->
+                                                                <th colspan="4"></th>
+                                                            </tr>
+                                                        </tfoot>
+                                                    </table>
+                                                </div>
+                                                <div>
+                                                    <input id="ticket" class="form-control" type="hidden" name="ticket[]">
+                                                    <input id="stardate" class="form-control" type="hidden" name="stardate[]">
+                                                    <input id="starttime" class="form-control" type="hidden" name="starttime[]">
+                                                    <input id="enddate" class="form-control" type="hidden" name="enddate[]">
+                                                    <input id="endtime" class="form-control" type="hidden" name="endtime[]">
+                                                    <input id="hourstime" class="form-control" type="hidden" name="hourstime[]">
+                                                    <input id="typeday" class="form-control" type="hidden" name="typeday[]">
+                                                    <input id="duty" class="form-control" type="hidden" name="duty[]">
+                                                    <input id="location" class="form-control" type="hidden" name="location[]">
+                                                    <input id="total" class="form-control" type="hidden" name="total">
+                                                </div>
+                                            </ol>
+                                            <hr>
+                                            <h5 class="text-center">PENGESAHAN</h5>
+                                            <br>
+                                            <div class="row">
+                                                <div class="col-md-4 text-center">
+                                                    Pemohon,
+                                                    <br>
+                                                    <div th:switch="${position}">
+                                                        <b th:case="'null'">N/A</b>
+                                                        <b th:case="${position}" th:text="${position}"></b>
+                                                    </div>
+                                                    <div class="approval">
+                                                        <button id="submitBtn" type="button" class="btn btn-info mt-3" data-target="#confirmResubmit" data-toggle="modal">Submit</button>
+                                                    </div>
+                                                    <div class="name pt-3">
+                                                        <span th:text="${nama_requester}">Requester Name</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 text-center">
+                                                    Menyetujui,
+                                                    <br>
+                                                    <b>Relational Manager</b>
+                                                    <div class="approval pt-3">
+                                                        <span class="waiting">Waiting confirmation...</span>
+                                                        <span class="approved" hidden="">Approved</span>
+                                                        <span class="rejected" hidden="">Rejected</span>
+                                                    </div>  
+                                                    <div th:switch="${RM_Name}" class="name pt-3">
+                                                        <span th:case="'null'"><font color="red">N/A</font></span>
+                                                        <span th:case="${RM_Name}" th:text="${RM_Name}">RM Name</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 text-center">
+                                                    Menyetujui,
+                                                    <br>
+                                                    <b>Managed Service Finance Controller</b>
+                                                    <div class="approval pt-3">
+                                                        <span class="waiting">Waiting confirmation...</span>
+                                                        <span class="approved" hidden="">Approved</span>
+                                                        <span class="rejected" hidden="">Rejected</span>
+                                                    </div>
+                                                    <div class="name pt-3">
+                                                        <span>Afia Arafah Noor</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--Modal Confirm -->
+                                            <div class="modal" id="confirmResubmit" tabindex="-1" role="dialog"
+                                                 aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalCenterTitle">Confirmation</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body text-center">
+                                                            Are you sure to submit request overtime?
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                            <button type="submit" id="submForm" class="btn btn-primary">Submit</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div> <!-- end col -->
+                    </div> <!-- end row -->
+                </div> <!-- end container -->
+            </div>
+        </div>
+        <!-- end wrapper -->
+        
+         <!-- Footer -->
+        <div th:replace="fragments/footer::footer"></div>
+        <!-- End Footer -->
+        <div th:replace="fragments/footer::js"></div>
+        <script th:src="@{/dist/js/session.js}"></script>
+        <script th:src="@{/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js}"></script>
+        <script th:src="@{/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
+        <script th:src="@{/dist/wicked-picker/wickedpicker.min.js}"></script>
+        <script th:src="@{/dist/js/jquery.validate.min.js}"></script>
+        <script  type="text/javascript" th:inline="javascript">
+            var submittedDate = [];
+            /*<![CDATA[*/
+
+            /*[# th:each="listdate : ${session.listlastreq}"]*/
+            submittedDate.push(/*[[${listdate}]]*/);
+            /*[/]*/
+            /*]]>*/
+        </script>
+        <script>
+            var hol = 0;
+            var total = 0;
+            $(document).ready(function() {
+                document.getElementById("submitBtn").disabled = true;
+                $('#formOvertimeResubmit').validate({
+                    rules: {
+                        periode: "required",
+                        picName: "required",
+                        picJabatan: "required"
+                    },
+                    message: {
+                        periode: "Please choose your period",
+                        picName: "Please enter a PIC name",
+                        picJabatan: "Please enter a PIC position"
+                    },
+                    errorElement: "em",
+                    highlight: function (element, errorClass, validClass) {
+                        $(element).addClass('is-invalid').removeClass("is-valid");
+                        $('#myConfirm').modal('hide');
+                    },
+                    unhighlight: function (element, errorClass, validClass) {
+                        $(element).addClass('is-valid').removeClass("is-invalid");
+
+                    },
+                    submitHandler: function (form) {
+                        $(form).find(':submit').prop('disabled', true);
+                        fomm.submit();
+                    }
+                });
+                
+                $('#periode').datepicker({
+                    format: "MM yyyy",
+                    viewMode: "months",
+                    minViewMode: "months",
+                    startDate: '-30d',
+                    endDate: '0d'
+                });
+                
+                $('#periode').datepicker().on('changeDate', function(e) {
+                    var m = moment(new Date(e.date));
+                    var s = new Date(e.date);
+                    var today = new Date().getDate();
+                    var getFirst;
+                    if (today <= 25) {
+                        getFirst = new Date(s.getFullYear(), s.getMonth(), new Date().getDate() - 30);
+                    } else {
+                        getFirst = new Date(s.getFullYear(), s.getMonth(), new Date().getDate() - 30);
+                    }
+                    var getLast = new Date(s.getFullYear(), s.getMonth() + 1, 0);
+                    startDate = getFirst;
+                    endDate = getLast;
+                    $('#dateStart').datepicker('setStartDate', startDate);
+                    $('#dateStart').datepicker('setEndDate', endDate);
+                });
+                
+                $('#dateStart').datepicker({
+                    format: "dd-mm-yyyy",
+                    toggleActive: true
+                });
+                
+                $('#dateEnd').datepicker({
+                    format: "dd-mm-yyyy",
+                    toggleActive: true,
+                });
+                
+                $("#dateStart").datepicker().on('changeDate', function (selected) {
+                    var month = $('#periode').val();
+                    if (month === "") {
+                        Swal.fire("Sorry...", "You must select a period first!", "warning");
+                        $('#dateStart').val("");
+                    } else {
+                        var from = $('#dateStart').val();
+                        $('#dateEnd').val(from);
+                        startDate = new Date(selected.date.valueOf());
+                        endDate = $('#dateStart').datepicker('getDate');
+                        endDate.setDate(endDate.getDate() + 1);
+                        $('#dateEnd').datepicker('setStartDate', startDate);
+                        $('#dateEnd').datepicker('setEndDate', endDate);
+                    }
+                });
+                
+                $('.time').wickedpicker();
+                
+                $("#timeStart").on('change', function() {
+                    var hour = parseInt($('#timeStart').val().split(":")[0]);
+                    var min = parseInt($('#timeStart').val().split(":")[1]);
+                    var status = $('#timeStart').val().split(" ")[3];
+                    var hourPlus = hour + 1;
+                    
+                    if (hourPlus === 13) {
+                        var hourPlus = 1;
+
+                        $("#timeEnd").val(hourPlus + " " + ":" + " " + min + " " + status);
+                    } else {
+                        $("#timeEnd").val(hourPlus + " " + ":" + " " + min + " " + status);
+                    }
+                });
+                
+                //convert time to number
+                function timeStringToFloat(time) {
+                    var hoursMinutes = time.split(/[.:]/);
+                    var hours = parseInt(hoursMinutes[0], 10);
+                    var minutes = hoursMinutes[1] ? parseInt(hoursMinutes[1], 10) : 0;
+                    return hours + minutes / 60;
+                }
+                
+                $('#addList').on('click', function() {
+                    if($('#dateStart').val() == "" || $('#dateEnd').val() == "" || $('#task').val() == "" || $('#lokasi').val() == ""){
+                        Swal.fire({type: 'error', title: 'There is No Data!', text: 'Please Fill in The Blank Field'});
+                    } else if ($('#task').val().length < 20) {
+                        Swal.fire({type: 'error', title: 'Attention!', text: 'Please enter tugas min 20 character'});
+                    } else {
+                        var diff = 0;
+                        var start_time = 0;
+                        var end_time = 0;
+                        var tiket = $('#ticketNumber').val();
+                        var tanggalMulai = $('#dateStart').val();
+                        var jamMulai = $('#timeStart').val();
+                        var tanggalSelesai = $('#dateEnd').val();
+                        var jamSelesai = $('#timeEnd').val();
+                        var tm = parseDate(tanggalMulai.split("-").reverse().join("-"));
+                        var ts = parseDate(tanggalSelesai.split("-").reverse().join("-"));
+                        if(tm.getDay() === 6 || tm.getDay() === 0){
+                            tempdays = "Holiday";
+                        } else {
+                            tempdays = "Daily";
+                        }
+                        var tempEndDate = 0;
+                        if(tm.getDay() === 0){
+                            tempEndDate = ts.getDay() + 7;
+                        } else {
+                            tempEndDate = ts.getDay();
+                        }
+                        
+                        function check(x, y){
+                            return x.some( element => element === y);
+                        }
+                        
+                        var tugas = $('#task').val();
+                        var lokasi = $('#lokasi').val();
+                        if (tempEndDate - tm.getDay() === 1){
+                            var st = timeStringToFloat(moment(jamMulai, ["h:mm A"]).format("HH:mm"));
+                            var et = timeStringToFloat(moment(jamSelesai, ["h:mm A"]).format("HH:mm"));
+                            diff = (parseFloat(et) + 24) - parseFloat(st);
+                            console.log("LV 1 = " + diff);
+                        } else if (tempEndDate - tm.getDay() === 0) {
+                            var st = timeStringToFloat(moment(jamMulai, ["h:mm A"]).format("HH:mm"));
+                            var et = timeStringToFloat(moment(jamSelesai, ["h:mm A"]).format("HH:mm"));
+                            diff = parseFloat(et) - parseFloat(st);
+                            console.log("LV 2 = " + diff);
+                        } else if (tempEndDate == 7 && tm.getDay() == 0){
+                            var st = timeStringToFloat(moment(jamMulai, ["h:mm A"]).format("HH:mm"));
+                            var et = timeStringToFloat(moment(jamSelesai, ["h:mm A"]).format("HH:mm"));
+                            diff = parseFloat(et) - parseFloat(st);
+                            console.log("LV 3 = " + diff);
+                        } else {
+                            diff = -2;
+                            console.log("LV 4 = " + diff);
+                        }
+                        if (diff < 0) {
+                            Swal.fire({type: 'error', title: 'Incorrect Data Entered', text: 'Incorrect Data Entered'});
+                        } else if (check(submittedDate, tanggalMulai) === true) {
+                            Swal.fire({title: "You've been overtime on this date !", text: "Please check the date that you entered", type: "error"});
+                        } else {
+                            document.getElementById("submitBtn").disabled = false;
+                            var content = '<td>' + tiket + '</td>' + 
+                                    '<td>' + tanggalMulai + '</td>' +
+                                    '<td>' + jamMulai + '</td>' +
+                                    '<td>' + tanggalSelesai + '</td>' + 
+                                    '<td>' + jamSelesai + '</td>' +
+                                    '<td>' + diff.toFixed(2) + '</td>' +
+                                    '<td>' + tempdays + '</td>' +
+                                    '<td>' + tugas + '</td>' + 
+                                    '<td>' + lokasi + '</td>' + 
+                                    '<td><button id="btnDelete" type="button" class="btn btn-sm btn-danger"><i id="iconDelete" class="fa fa-close"></i></button></td>';
+                            var rowContent = '<tr class="rowOt">' + content + '</tr>';
+                            $('#dataOt').append(rowContent);
+                            total = total + diff;
+                            total2 = total.toFixed(2);
+                            $('.totalLembur').text(total2);
+                            
+                            //value tiket
+                            var a = $('#dataOt > tbody > tr > td:first-child').map(function() {
+                                return this.textContent;
+                            }).get().join();
+                            //value tanggal mulai
+                            var b = $('#dataOt > tbody > tr > td:nth-child(2)').map(function() {
+                                return this.textContent;
+                            }).get().join();
+                            //value jam mulai
+                            var c = $('#dataOt > tbody > tr > td:nth-child(3)').map(function() {
+                                return this.textContent;
+                            }).get().join();
+                            //value tanggal akhir
+                            var d = $('#dataOt > tbody > tr > td:nth-child(4)').map(function() {
+                                return this.textContent;
+                            }).get().join();
+                            //value jam akhir
+                            var e = $('#dataOt > tbody > tr > td:nth-child(5)').map(function() {
+                                return this.textContent;
+                            }).get().join();
+                            //value jumlah lembur
+                            var f = $('#dataOt > tbody > tr > td:nth-child(6)').map(function() {
+                                return this.textContent;
+                            }).get().join();
+                            //value tipe hari
+                            var g = $('#dataOt > tbody > tr > td:nth-child(7)').map(function() {
+                                return this.textContent;
+                            }).get().join();
+                            //value tugas
+                            var h = $('#dataOt > tbody > tr > td:nth-child(8)').map(function() {
+                                return this.textContent;
+                            }).get().join();
+                            //value lokasi
+                            var i = $('#dataOt > tbody > tr > td:nth-child(9)').map(function() {
+                                return this.textContent;
+                            }).get().join();
+                            
+                            $('#ticket').val(a);
+                            $('#stardate').val(b);
+                            $('#starttime').val(c);
+                            $('#enddate').val(d);
+                            $('#endtime').val(e);
+                            $('#hourstime').val(f);
+                            $('#typeday').val(g);
+                            $('#duty').val(h);
+                            $('#location').val(i);
+                            $('#total').val(total2);
+                            
+                            //Clear All Input
+                            $('#ticketNumber').val("");
+                            $('#dateStart').val("");
+                            $('#timeStart').val("");
+                            $('#dateEnd').val("");
+                            $('#timeEnd').val("");
+                            $('#task').val("");
+                            $('#lokasi').val("");
+                        }
+                    }
+                });
+                
+                //parsing date ke format DD/MM/YYYY
+                function parseDate(input) {
+                    // Transform date from text to date
+                    var parts = input.match(/(\d+)/g);
+                    // new Date(year, month [, date [, hours[, minutes[, seconds[, ms]]]]])
+                    return new Date(parts[0], parts[1] - 1, parts[2]); // months are 0-based
+                }
+                
+                $(function() {
+                    $("table").on("click", "#btnDelete", function() {
+                        $(this).closest('tr').remove();
+//                        var id
+                        if ($('#dataOt > tbody > tr').length === 0) {
+                            //Clear All Input
+                            $(".totalLembur").text("");
+                            $('#ticket').val("");
+                            $('#stardate').val("");
+                            $('#starttime').val("");
+                            $('#enddate').val("");
+                            $('#endtime').val("");
+                            $('#hourstime').val("");
+                            $('#typeday').val("");
+                            $('#duty').val("");
+                            $('#location').val("");
+                            $('#total').val("");
+                            total = 0;
+                            document.getElementById("submitBtn").disabled = true;
+                        } else {
+                            //value tiket
+                            var a = $('#dataOt > tbody > tr > td:first-child').map(function() {
+                                return this.textContent;
+                            }).get().join();
+                            //value tanggal mulai
+                            var b = $('#dataOt > tbody > tr > td:nth-child(2)').map(function() {
+                                return this.textContent;
+                            }).get().join();
+                            //value jam mulai
+                            var c = $('#dataOt > tbody > tr > td:nth-child(3)').map(function() {
+                                return this.textContent;
+                            }).get().join();
+                            //value tanggal akhir
+                            var d = $('#dataOt > tbody > tr > td:nth-child(4)').map(function() {
+                                return this.textContent;
+                            }).get().join();
+                            //value jam akhir
+                            var e = $('#dataOt > tbody > tr > td:nth-child(5)').map(function() {
+                                return this.textContent;
+                            }).get().join();
+                            //value jumlah lembur
+                            var f = $('#dataOt > tbody > tr > td:nth-child(6)').map(function() {
+                                return this.textContent;
+                            }).get().join();
+                            //value tipe hari
+                            var g = $('#dataOt > tbody > tr > td:nth-child(7)').map(function() {
+                                return this.textContent;
+                            }).get().join();
+                            //value tugas
+                            var h = $('#dataOt > tbody > tr > td:nth-child(8)').map(function() {
+                                return this.textContent;
+                            }).get().join();
+                            //value lokasi
+                            var i = $('#dataOt > tbody > tr > td:nth-child(9)').map(function() {
+                                return this.textContent;
+                            }).get().join();
+                            
+                            $('#ticket').val(a);
+                            $('#stardate').val(b);
+                            $('#starttime').val(c);
+                            $('#enddate').val(d);
+                            $('#endtime').val(e);
+                            $('#hourstime').val(f);
+                            $('#typeday').val(g);
+                            $('#duty').val(h);
+                            $('#location').val(i);
+                            
+                            var numeric = 0;
+                            var rowTotal = 0;
+                            var diff = f.split(",");
+                            for (i = 0; i < diff.length; i++) {
+                                numeric = diff[i];
+                                var totalRow = Math.floor(numeric);
+                                rowTotal += totalRow;
+                            }
+                            var result = [rowTotal];
+                            var hasil = result.reduce((total, value) => total + value, 0);
+                            var totalOt = hasil.toFixed(2)
+                            $('#total').val(totalOt);
+                            $('.totalLembur').text(totalOt);
+                            total = total - hasil;
+                        }
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>

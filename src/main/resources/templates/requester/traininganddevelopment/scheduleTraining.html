@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>HRIS - Schedule</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- App Icons -->
+        <link rel="shortcut icon" th:href="@{/dist/img/favicon.ico}">
+        <div th:replace="fragments/header::css"></div>
+
+        <link th:href="@{/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css}" rel="stylesheet" type="text/css" />
+        <style>
+            .accordion {
+                width: auto;
+                max-width: 1000px;
+                margin: 2rem auto;
+            }
+            .accordion-item {
+                background-color: #1967a9;
+                color: #fff;
+                margin: 1rem 0;
+                border-radius: 0.5rem;
+                box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.25);
+            }
+
+            .accordion-item-header {
+                padding: 0.5rem 3rem 0.5rem 1rem;
+                min-height: 3.5rem;
+                line-height: 1.25rem;
+                font-weight: bold;
+                display: flex;
+                align-items: center;
+                position: relative;
+                cursor: pointer;
+            }
+
+            .accordion-item-header::after {
+                content: "\002B";
+                font-size: 2rem;
+                position: absolute;
+                right: 1rem;
+            }
+
+            .accordion-item-header.active::after {
+                content: "\2212";
+            }
+
+            .accordion-item-body {
+                background-color: #fff;
+                color: #111;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.2s ease-out;
+            }
+
+            .accordion-item-body-content {
+                padding: 1rem;
+                line-height: 1.5rem;
+                border-top: 1px solid;
+                border-image: linear-gradient(to right, transparent, #34495e, transparent) 1;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Loader -->
+        <div id="preloader">
+            <div id="status">
+                <div class="spinner"></div>
+            </div>
+        </div>
+
+        <div class="header-bg">
+
+            <div th:replace="fragments/header::header"></div>
+
+            <div class="container-fluid">
+                <!-- Page-Title -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="page-title-box">
+                            <h4 class="page-title"> <i class="dripicons-blog"></i>Training Schedule</h4>
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title end breadcrumb -->
+
+            </div>
+        </div>
+        
+        <div class="wrapper">
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card m-b-20">
+                            <div class="card-body" style="padding-left: 100px; padding-right: 100px;">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <h4 class="font-weight-bold float-left">List Training</h4>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input type="text" placeholder="Search..." id="search-filter" class="float-right app-search">
+                                    </div>
+                                </div>
+                                <hr>
+                                
+                                <ul class="nav nav-tabs nav-tabs-custom nav-justified" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" data-toggle="tab" href="#onlineClass" role="tab">
+                                            <span class="d-none d-md-block">Online Class</span><span class="d-block d-md-none"><i class="dripicons-suitcase h5"></i></span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#offlineClass" role="tab">
+                                            <span class="d-none d-md-block">Offline Class</span><span class="d-block d-md-none"><i class="dripicons-clock h5"></i></span>
+                                        </a>
+                                    </li>
+                                </ul>
+                                
+                                <div class="tab-content">
+                                    <div class="tab-pane active p-3" id="onlineClass" role="tabpanel">
+                                        <div class="accordion">
+                                            <div class="accordion-item" th:each="trn : ${trainingListOnline}" id="accordion" th:if="${condition} == 'disable'">
+                                                <div class="acc-container" th:if="${dl[0] == trn[0]}" th:each="dl : ${detailListOnline}">
+                                                    <div class="accordion-item-header">
+                                                        <div class="panel-heading simple">
+                                                            <h5 class="panel-title mt-1 mb-0" id="judul"  th:text="${trn[1]}" aria-expanded="true">
+                                                                aria-controls="collapseUnfiled">
+                                                            </h5>
+                                                            <h6 th:text="${dl[4]}"></h6>
+                                                        </div>
+                                                    </div>
+                                                    <div class="accordion-item-body">
+                                                        <div class="accordion-item-body-content">
+                                                            <div class="form-group row ml-auto" style="margin: 0;">
+                                                                <label class="col-md-3 label-request">Date</label>
+                                                                <p class="float-right">:</p>
+                                                                <p class="col-md-6" th:text="${dl[4]}"></p>
+                                                            </div>
+                                                            <div class="form-group row ml-auto" style="margin: 0;">
+                                                                <label class="col-md-3 label-request">Trainer</label>
+                                                                <p class="float-right">:</p>
+                                                                <p class="col-md-6" th:text="${dl[2]}"></p>
+                                                            </div>
+                                                            <div class="form-group row ml-auto" style="margin: 0;">
+                                                                <label class="col-md-3 label-request">Time</label>
+                                                                <p class="float-right">:</p>
+                                                                <p class="col-md-6" th:text="${dl[5]+ ' WIB'}"></p>
+                                                            </div>
+                                                            <div class="form-group row ml-auto" style="margin: 0;">
+                                                                <label class="col-md-3 label-request">Quota</label>
+                                                                <p class="float-right">:</p>
+                                                                <p class="col-md-6" th:text="${dl[3]}"></p>
+                                                            </div>
+                                                            <div class="form-group row ml-auto" style="margin: 0;">
+                                                                <label class="col-md-3 label-request">Link</label>
+                                                                <p class="float-right">:</p>
+                                                                <p class="col-md-6" th:text="${dl[6]}"></p>
+                                                            </div>
+                                                            <span th:id="${'checkId'+trn[0]}" hidden="" th:text="${dl[7]}"></span>
+                                                            <span th:id="${'idTrOn'+trn[0]}" hidden="" th:text="${trn[0]}"></span>
+                                                            <!--<button class="btn btn-outline-success float-right" th:onclick="'javascript:registrationOnline(\''+${trn[0]}+'\');'">Registration</button>-->
+                                                            <br>
+                                                            <br>
+                                                        </div>
+                                                        <!-- Modal -->
+<!--                                                        <div class="modal fade" th:id="${'editModal'+trn[0]}">
+                                                            <div class="modal-dialog modal-lg modal-dialog-centered">
+                                                                <div class="modal-content">
+                                                                    Modal Header 
+                                                                    <form th:action="${'./Register/' + name + '/' + email + '/' + trn[1]}" method="POST" id="formAdd2" role="form">
+                                                                        <div class="modal-header">
+                                                                            <h4 class="modal-title">Detail Registration</h4>
+                                                                            <button type="button" class="close" data-dismiss="modal" style="color: #4bbbce">&times;</button>
+                                                                        </div>
+                                                                        Modal body 
+                                                                        <div class="modal-body">
+                                                                            <ol type="A">
+                                                                                <li>Training Registration Detail</li>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label class="col-md-3 label-request">Date</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${dl[4]}"></p>
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="employee_name" class="col-md-3 label-request">Name</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${name}"></p>
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="employee_nik" class="col-md-3 label-request">NIK</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${empl_nik}"></p>
+                                                                                    <input name="employee_nik" hidden="" type="number" th:value="${empl_nik}" readonly="">
+
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="employee_email" class="col-md-3 label-request">Email</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${email}"></p>
+
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="phone_number" class="col-md-3 label-request">Phone Number</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${hp}"></p>
+
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="employee_position" class="col-md-3 label-request">Position</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${position}"></p>
+
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="employee_allocation" class="col-md-3 label-request">Customer</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${customerName}"></p>   
+                                                                                    <input name="employee_allocation" hidden="" type="text" th:value="${customerName}" readonly="">
+                                                                                </div>
+
+                                                                                <li>Will Attend training on</li>
+
+                                                                                <div class="form-group row ml-auto" style="margin: 0;" hidden="">
+                                                                                    <label for="transaction" class="col-md-3 label-request">transaction</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <input th:value="${trn[0]}" readonly="true" type="text" id="" class="form-control" name="transaction">
+
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="date" class="col-md-3 label-request">Date</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${dl[4]}"></p>
+
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="trainer" class="col-md-3 label-request">Trainer</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${dl[2]}"></p> 
+
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="time" class="col-md-3 label-request">Time</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${dl[5]+' WIB'}"></p>   
+
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="quota" class="col-md-3 label-request">Quota</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${dl[3]}"></p>
+
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="requirement" class="col-md-3 label-request">Link</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${dl[6]}"></p>
+
+                                                                                </div>
+                                                                            </ol>
+                                                                        </div>                                              
+                                                                        <div class="modal-footer"> 
+                                                                            <div class="text-center">
+                                                                                <button type="button" th:id="${'submitForm'+trn[0]}" class="submitForm btn btn-primary mb-2">Submit</button>
+                                                                            </div>                                                        
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>-->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="accordion-item" th:each="trn : ${trainingListOnline}" id="accordion" th:if="${condition} == 'enable'">
+                                                <div class="acc-container" th:if="${dl[0] == trn[0]}" th:each="dl : ${detailListOnline}">
+                                                    <div class="accordion-item-header">
+                                                        <div class="panel-heading simple">
+                                                            <h5 class="panel-title mt-1 mb-0" id="judul"  th:text="${trn[1]}" aria-expanded="true">
+                                                                aria-controls="collapseUnfiled">
+                                                            </h5>
+                                                            <h6 th:text="${dl[4]}"></h6>
+                                                        </div>
+                                                    </div>
+                                                    <div class="accordion-item-body">
+                                                        <div class="accordion-item-body-content">
+                                                            <div class="form-group row ml-auto" style="margin: 0;">
+                                                                <label class="col-md-3 label-request">Date</label>
+                                                                <p class="float-right">:</p>
+                                                                <p class="col-md-6" th:text="${dl[4]}"></p>
+                                                            </div>
+                                                            <div class="form-group row ml-auto" style="margin: 0;">
+                                                                <label class="col-md-3 label-request">Trainer</label>
+                                                                <p class="float-right">:</p>
+                                                                <p class="col-md-6" th:text="${dl[2]}"></p>
+                                                            </div>
+                                                            <div class="form-group row ml-auto" style="margin: 0;">
+                                                                <label class="col-md-3 label-request">Time</label>
+                                                                <p class="float-right">:</p>
+                                                                <p class="col-md-6" th:text="${dl[5]+ ' WIB'}"></p>
+                                                            </div>
+                                                            <div class="form-group row ml-auto" style="margin: 0;">
+                                                                <label class="col-md-3 label-request">Quota</label>
+                                                                <p class="float-right">:</p>
+                                                                <p class="col-md-6" th:text="${dl[3]}"></p>
+                                                            </div>
+                                                            <div class="form-group row ml-auto" style="margin: 0;">
+                                                                <label class="col-md-3 label-request">Link</label>
+                                                                <p class="float-right">:</p>
+                                                                <p class="col-md-6" th:text="${dl[6]}"></p>
+                                                            </div>
+                                                            <span th:id="${'checkId'+trn[0]}" hidden="" th:text="${dl[7]}"></span>
+                                                            <span th:id="${'idTrOn'+trn[0]}"i hidden="" th:text="${trn[0]}"></span>
+                                                            <button th:id=${'btnRegistration'+trn[0]} class="btn btn-outline-success float-right" th:onclick="'javascript:registrationOnline(\''+${trn[0]}+'\');'">Registration</button>
+                                                            <br>
+                                                            <br>
+                                                        </div>
+                                                        <!-- Modal -->
+                                                        <div class="modal fade" th:id="${'editModal'+trn[0]}">
+                                                            <div class="modal-dialog modal-lg modal-dialog-centered">
+                                                                <div class="modal-content">
+                                                                    <!--Modal Header--> 
+                                                                    <form th:action="${'./Register/' + name + '/' + email + '/' + trn[1]}" method="POST" id="formAdd2" role="form">
+                                                                        <div class="modal-header">
+                                                                            <h4 class="modal-title">Detail Registration</h4>
+                                                                            <button type="button" class="close" data-dismiss="modal" style="color: #4bbbce">&times;</button>
+                                                                        </div>
+                                                                        <!--Modal body--> 
+                                                                        <div class="modal-body">
+                                                                            <ol type="A">
+                                                                                <li>Training Registration Detail</li>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label class="col-md-3 label-request">Date</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${dl[4]}"></p>
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="employee_name" class="col-md-3 label-request">Name</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${name}"></p>
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="employee_nik" class="col-md-3 label-request">NIK</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${empl_nik}"></p>
+                                                                                    <input name="employee_nik" hidden="" type="number" th:value="${empl_nik}" readonly="">
+
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="employee_email" class="col-md-3 label-request">Email</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${email}"></p>
+
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="phone_number" class="col-md-3 label-request">Phone Number</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${hp}"></p>
+
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="employee_position" class="col-md-3 label-request">Position</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${position}"></p>
+
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="employee_allocation" class="col-md-3 label-request">Customer</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${customerName}"></p>   
+                                                                                    <input name="employee_allocation" hidden="" type="text" th:value="${customerName}" readonly="">
+                                                                                </div>
+
+                                                                                <li>Will Attend training on</li>
+
+                                                                                <div class="form-group row ml-auto" style="margin: 0;" hidden="">
+                                                                                    <label for="transaction" class="col-md-3 label-request">transaction</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <input th:value="${trn[0]}" readonly="true" type="text" id="" class="form-control" name="transaction">
+
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="date" class="col-md-3 label-request">Date</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${dl[4]}"></p>
+
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="trainer" class="col-md-3 label-request">Trainer</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${dl[2]}"></p> 
+
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="time" class="col-md-3 label-request">Time</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${dl[5]+' WIB'}"></p>   
+
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="quota" class="col-md-3 label-request">Quota</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${dl[3]}"></p>
+
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="requirement" class="col-md-3 label-request">Link</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${dl[6]}"></p>
+
+                                                                                </div>
+                                                                            </ol>
+                                                                        </div>                                              
+                                                                        <div class="modal-footer"> 
+                                                                            <div class="text-center">
+                                                                                <button type="button" th:id="${'submitForm'+trn[0]}" class="submitForm btn btn-primary mb-2">Submit</button>
+                                                                            </div>                                                        
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane p-3" id="offlineClass" role="tabpanel">
+                                        <div class="accordion">
+                                            <div class="accordion-item" th:each="trn : ${trainingListOffline}" id="accordion" th:if="${condition} == 'disable'">
+                                                <div class="acc-container" th:if="${dl[0] == trn[0]}" th:each="dl : ${detailListOffline}">
+                                                    <div class="accordion-item-header">
+                                                        <div class="panel-heading simple">
+                                                            <h5 class="panel-title mt-1 mb-0" id="judul"  th:text="${trn[1]}" aria-expanded="true">
+                                                                aria-controls="collapseUnfiled">
+                                                            </h5>
+                                                            <h6 th:text="${dl[5]}"></h6>
+                                                        </div>
+                                                    </div>
+                                                    <div class="accordion-item-body">
+                                                        <div class="accordion-item-body-content">
+                                                            <div class="form-group row ml-auto" style="margin: 0;">
+                                                                <label class="col-md-3 label-request">Date</label>
+                                                                <p class="float-right">:</p>
+                                                                <p class="col-md-6" th:text="${dl[5]}"></p>
+                                                            </div>
+                                                            <div class="form-group row ml-auto" style="margin: 0;">
+                                                                <label class="col-md-3 label-request">Trainer</label>
+                                                                <p class="float-right">:</p>
+                                                                <p class="col-md-6" th:text="${dl[2]}"></p>
+                                                            </div>
+                                                            <div class="form-group row ml-auto" style="margin: 0;">
+                                                                <label class="col-md-3 label-request">Time</label>
+                                                                <p class="float-right">:</p>
+                                                                <p class="col-md-6" th:text="${dl[6]+ ' WIB'}"></p>
+                                                            </div>
+                                                            <div class="form-group row ml-auto" style="margin: 0;">
+                                                                <label class="col-md-3 label-request">Quota</label>
+                                                                <p class="float-right">:</p>
+                                                                <p class="col-md-6" th:text="${dl[3]}"></p>
+                                                            </div>
+                                                            <div class="form-group row ml-auto" style="margin: 0;">
+                                                                <label class="col-md-3 label-request">Location</label>
+                                                                <p class="float-right">:</p>
+                                                                <p class="col-md-6" th:text="${dl[4]}"></p>
+                                                            </div>
+                                                            <div class="form-group row ml-auto" style="margin: 0;">
+                                                                <label class="col-md-3 label-request">Note</label>
+                                                                <p class="float-right">:</p>
+                                                                <p class="col-md-6" th:text="${dl[7]}"></p>
+                                                            </div>
+                                                            <span th:id=${'checkIdOff'+trn[0]} th:text="${dl[9]}" hidden=""></span>
+                                                            <span th:id=${'idTrOff'+trn[0]} th:text="${trn[0]}" hidden=""></span>
+                                                            <!--<button class="btn btn-outline-success float-right" th:onclick="'javascript:registrationOffline(\''+${trn[0]}+'\');'">Registration</button>-->
+<!--                                                            <div th:if="${trn[0] == dl[9]}">
+                                                                <button class="registered btn btn-outline-success float-right" th:if="${empl_nik == dl[10]}">Registration</button>
+                                                            </div>         
+                                                            <div th:if="${trn[0] != dl[9]}">
+                                                            </div>-->
+                                                            <br>
+                                                            <br>
+                                                        </div>
+                                                        <!-- Modal -->
+<!--                                                        <div class="modal fade" th:id="${'addModalOffline'+trn[0]}">
+                                                            <div class="modal-dialog modal-lg modal-dialog-centered">
+                                                                <div class="modal-content">
+                                                                    Modal Header 
+                                                                    <form th:action="${'./Register/' + name + '/' + email + '/' + trn[1]}" method="POST" id="formAdd2" role="form">
+                                                                        <div class="modal-header">
+                                                                            <h4 class="modal-title">Detail Registration</h4>
+                                                                            <button type="button" class="close" data-dismiss="modal" style="color: #4bbbce">&times;</button>
+                                                                        </div>
+                                                                        Modal body 
+                                                                        <div class="modal-body">
+                                                                            <ol type="A">
+                                                                                <li>Training Registration Detail</li>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label class="col-md-3 label-request">Date</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${dl[5]}"></p>
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="employee_name" class="col-md-3 label-request">Name</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${name}"></p>
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="employee_nik" class="col-md-3 label-request">NIK</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${empl_nik}"></p>
+                                                                                    <input name="employee_nik" hidden="" type="number" th:value="${empl_nik}" readonly="">
+
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="employee_email" class="col-md-3 label-request">Email</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${email}"></p>
+
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="phone_number" class="col-md-3 label-request">Phone Number</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${hp}"></p>
+
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="employee_position" class="col-md-3 label-request">Position</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${position}"></p>
+
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="employee_allocation" class="col-md-3 label-request">Customer</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${customerName}"></p>   
+                                                                                    <input name="employee_allocation" hidden="" type="text" th:value="${customerName}" readonly="">
+                                                                                </div>
+
+                                                                                <li>Will Attend training on</li>
+
+                                                                                <div class="form-group row ml-auto" style="margin: 0;" hidden="">
+                                                                                    <label for="transaction" class="col-md-3 label-request">transaction</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <input th:value="${trn[0]}" readonly="true" type="text" id="" class="form-control" name="transaction">
+
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="date" class="col-md-3 label-request">Date</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${dl[5]}"></p>
+
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="trainer" class="col-md-3 label-request">Trainer</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${dl[2]}"></p> 
+
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="time" class="col-md-3 label-request">Time</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${dl[6]+' WIB'}"></p>   
+
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="quota" class="col-md-3 label-request">Quota</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${dl[3]}"></p>
+
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="location" class="col-md-3 label-request">Location</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${dl[4]}"></p>
+
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="requirement" class="col-md-3 label-request">Note</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${dl[7]}"></p>
+
+                                                                                </div>
+                                                                            </ol>
+                                                                        </div>                                              
+                                                                        <div class="modal-footer"> 
+                                                                            <div class="text-center">
+                                                                                <button type="button" th:id="${'submitForm'+trn[0]}" class="submitForm btn btn-primary mb-2">Submit</button>
+                                                                            </div>                                                        
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>-->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="accordion-item" th:each="trn : ${trainingListOffline}" id="accordion" th:if="${condition} == 'enable'">
+                                                <div class="acc-container" th:if="${dl[0] == trn[0]}" th:each="dl : ${detailListOffline}">
+                                                    <div class="accordion-item-header">
+                                                        <div class="panel-heading simple">
+                                                            <h5 class="panel-title mt-1 mb-0" id="judul"  th:text="${trn[1]}" aria-expanded="true">
+                                                                aria-controls="collapseUnfiled">
+                                                            </h5>
+                                                            <h6 th:text="${dl[5]}"></h6>
+                                                        </div>
+                                                    </div>
+                                                    <div class="accordion-item-body">
+                                                        <div class="accordion-item-body-content">
+                                                            <div class="form-group row ml-auto" style="margin: 0;">
+                                                                <label class="col-md-3 label-request">Date</label>
+                                                                <p class="float-right">:</p>
+                                                                <p class="col-md-6" th:text="${dl[5]}"></p>
+                                                            </div>
+                                                            <div class="form-group row ml-auto" style="margin: 0;">
+                                                                <label class="col-md-3 label-request">Trainer</label>
+                                                                <p class="float-right">:</p>
+                                                                <p class="col-md-6" th:text="${dl[2]}"></p>
+                                                            </div>
+                                                            <div class="form-group row ml-auto" style="margin: 0;">
+                                                                <label class="col-md-3 label-request">Time</label>
+                                                                <p class="float-right">:</p>
+                                                                <p class="col-md-6" th:text="${dl[6]+ ' WIB'}"></p>
+                                                            </div>
+                                                            <div class="form-group row ml-auto" style="margin: 0;">
+                                                                <label class="col-md-3 label-request">Quota</label>
+                                                                <p class="float-right">:</p>
+                                                                <p class="col-md-6" th:text="${dl[3]}"></p>
+                                                            </div>
+                                                            <div class="form-group row ml-auto" style="margin: 0;">
+                                                                <label class="col-md-3 label-request">Location</label>
+                                                                <p class="float-right">:</p>
+                                                                <p class="col-md-6" th:text="${dl[4]}"></p>
+                                                            </div>
+                                                            <div class="form-group row ml-auto" style="margin: 0;">
+                                                                <label class="col-md-3 label-request">Note</label>
+                                                                <p class="float-right">:</p>
+                                                                <p class="col-md-6" th:text="${dl[7]}"></p>
+                                                            </div>
+                                                            <span th:id=${'checkIdOff'+trn[0]} th:text="${dl[9]}" hidden=""></span>
+                                                            <span th:id=${'idTrOff'+trn[0]} th:text="${trn[0]}" hidden=""></span>
+                                                            <button th:id=${'btnRegistrationOff'+trn[0]} class="btn btn-outline-success float-right" th:onclick="'javascript:registrationOffline(\''+${trn[0]}+'\');'">Registration</button>
+<!--                                                            <div th:if="${trn[0] == dl[9]}">
+                                                                <button class="registered btn btn-outline-success float-right" th:if="${empl_nik == dl[10]}">Registration</button>
+                                                            </div>         
+                                                            <div th:if="${trn[0] != dl[9]}">
+                                                            </div>-->
+                                                            <br>
+                                                            <br>
+                                                        </div>
+                                                        <!-- Modal -->
+                                                        <div class="modal fade" th:id="${'addModalOffline'+trn[0]}">
+                                                            <div class="modal-dialog modal-lg modal-dialog-centered">
+                                                                <div class="modal-content">
+                                                                    <!--Modal Header--> 
+                                                                    <form th:action="${'./Register/' + name + '/' + email + '/' + trn[1]}" method="POST" id="formAdd2" role="form">
+                                                                        <div class="modal-header">
+                                                                            <h4 class="modal-title">Detail Registration</h4>
+                                                                            <button type="button" class="close" data-dismiss="modal" style="color: #4bbbce">&times;</button>
+                                                                        </div>
+                                                                        <!--Modal body--> 
+                                                                        <div class="modal-body">
+                                                                            <ol type="A">
+                                                                                <li>Training Registration Detail</li>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label class="col-md-3 label-request">Date</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${dl[5]}"></p>
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="employee_name" class="col-md-3 label-request">Name</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${name}"></p>
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="employee_nik" class="col-md-3 label-request">NIK</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${empl_nik}"></p>
+                                                                                    <input name="employee_nik" hidden="" type="number" th:value="${empl_nik}" readonly="">
+
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="employee_email" class="col-md-3 label-request">Email</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${email}"></p>
+
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="phone_number" class="col-md-3 label-request">Phone Number</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${hp}"></p>
+
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="employee_position" class="col-md-3 label-request">Position</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${position}"></p>
+
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="employee_allocation" class="col-md-3 label-request">Customer</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${customerName}"></p>   
+                                                                                    <input name="employee_allocation" hidden="" type="text" th:value="${customerName}" readonly="">
+                                                                                </div>
+
+                                                                                <li>Will Attend training on</li>
+
+                                                                                <div class="form-group row ml-auto" style="margin: 0;" hidden="">
+                                                                                    <label for="transaction" class="col-md-3 label-request">transaction</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <input th:value="${trn[0]}" readonly="true" type="text" id="" class="form-control" name="transaction">
+
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="date" class="col-md-3 label-request">Date</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${dl[5]}"></p>
+
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="trainer" class="col-md-3 label-request">Trainer</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${dl[2]}"></p> 
+
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="time" class="col-md-3 label-request">Time</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${dl[6]+' WIB'}"></p>   
+
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="quota" class="col-md-3 label-request">Quota</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${dl[3]}"></p>
+
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="location" class="col-md-3 label-request">Location</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${dl[4]}"></p>
+
+                                                                                </div>
+                                                                                <div class="form-group row ml-auto" style="margin: 0;">
+                                                                                    <label for="requirement" class="col-md-3 label-request">Note</label>
+                                                                                    <p class="float-right">:</p>
+                                                                                    <p class="col-md-6" th:text="${dl[7]}"></p>
+
+                                                                                </div>
+                                                                            </ol>
+                                                                        </div>                                              
+                                                                        <div class="modal-footer"> 
+                                                                            <div class="text-center">
+                                                                                <button type="button" th:id="${'submitForm'+trn[0]}" class="submitForm btn btn-primary mb-2">Submit</button>
+                                                                            </div>                                                        
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div> <!-- end col -->
+                </div> <!-- end row -->
+            </div> <!-- end container -->
+        </div>
+        <!-- end wrapper -->
+        
+        <!-- Footer -->
+        <div th:replace="fragments/footer::footer"></div>
+        <!-- End Footer -->
+
+        <div th:replace="fragments/footer::js"></div>
+        <script th:src="@{/dist/js/session.js}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+        <script>
+            const accordionItemHeaders = document.querySelectorAll(".accordion-item-header");
+
+            accordionItemHeaders.forEach(accordionItemHeader => {
+                accordionItemHeader.addEventListener("click", event => {
+
+                    // Uncomment in case you only want to allow for the display of only one collapsed item at a time!
+
+                    // const currentlyActiveAccordionItemHeader = document.querySelector(".accordion-item-header.active");
+                    // if(currentlyActiveAccordionItemHeader && currentlyActiveAccordionItemHeader!==accordionItemHeader) {
+                    //   currentlyActiveAccordionItemHeader.classList.toggle("active");
+                    //   currentlyActiveAccordionItemHeader.nextElementSibling.style.maxHeight = 0;
+                    // }
+
+                    accordionItemHeader.classList.toggle("active");
+                    const accordionItemBody = accordionItemHeader.nextElementSibling;
+                    if (accordionItemHeader.classList.contains("active")) {
+                        accordionItemBody.style.maxHeight = accordionItemBody.scrollHeight + "px";
+                    }
+                    else {
+                        accordionItemBody.style.maxHeight = 0;
+                    }
+
+                });
+            });
+            
+            function registrationOnline(id) {
+                var checkId = $('#checkId'+id).text();
+                var idTrOn = $('#idTrOn'+id).text();
+                if (checkId === idTrOn) {
+                    Swal.fire({
+                        title: 'You have already registered!',
+                        text: "You can't register again",
+                        icon: 'warning',
+        //                showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ok'
+                    });
+                } else {
+                    $('#editModal'+id).modal("show");
+                    $('#submitForm'+id).on('click', function () {
+                        var form = $(this).parents('form');
+                        console.log(form);
+                        $('#editModal'+id).modal('toggle');
+                        $('#btnRegistration'+id).attr('disabled','disabled');
+                        Swal.fire({
+                            title: 'You have successfully registered!',
+            //                text: "You won't be able to revert this!",
+                            icon: 'success',
+            //                showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Ok'
+                        }).then((result) => {
+                            if (result.value) {
+                                form.submit();
+                            }           
+                        });
+                    });
+                }
+            }
+            
+            function registrationOffline(id) {
+                var checkIdOff = $('#checkIdOff'+id).text();
+                var idTrOff = $('#idTrOff'+id).text();
+                if (checkIdOff === idTrOff) {
+                    Swal.fire({
+                        title: 'You have already registered!',
+                        text: "You can't register again",
+                        icon: 'warning',
+        //                showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ok'
+                    });
+                } else {
+                    $('#addModalOffline'+id).modal("show");
+                    $('#submitForm'+id).on('click', function () {
+                        var form = $(this).parents('form');
+                        console.log(form);
+                        $('#addModalOffline'+id).modal('toggle');
+                        $('#btnRegistrationOff'+id).attr('disabled','disabled');
+                        Swal.fire({
+                            title: 'You have successfully registered!',
+            //                text: "You won't be able to revert this!",
+                            icon: 'success',
+            //                showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Ok'
+                        }).then((result) => {
+                            if (result.value) {
+                                form.submit();
+                            }
+                        });
+                    });
+                }
+            }
+        </script>
+        <script th:inline="javascript">
+    //        //Dari Controller
+
+            $(document).ready(function () {
+                $("#search-filter").on("keyup", function () {
+                    var value = $(this).val().toLowerCase();
+                    console.log(value);
+                    $("#accordion .acc-container").filter(function () {
+                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                    });
+                });
+    //
+    //
+                $("select.filterby option").click(function () {
+                    var filters = $(this).data("filter");
+                    console.log(filters);
+                    console.log($("div#accordion").find(".acc-container"));
+                    $("div#accordion").find(".acc-container").hide();
+                    if (filters) {
+                        $("div#accordion").find(".acc-container" + ".true").show();
+                    } else {
+                        $("div#accordion").find(".acc-container" + ".false").show();
+                    }
+                });
+            })
+                    ;
+        </script>
+    </body>
+</html>

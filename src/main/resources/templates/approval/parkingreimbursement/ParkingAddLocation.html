@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>HRIS - Add location</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- App Icons -->
+        <link rel="shortcut icon" th:href="@{/dist/img/favicon.ico}">
+
+    <div th:replace="fragments/headerAdm::cssAdm"></div>
+
+    <style>
+        table thead{
+            background-color: #4bbbce;
+            color: #fafafa;
+        }
+    </style>
+
+</head>
+<body>
+    <!-- Loader -->
+    <div id="preloader">
+        <div id="status">
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <div class="header-bg">
+
+        <div th:replace="fragments/headerAdm::headerAdm"></div>
+
+        <div class="container-fluid">
+            <!-- Page-Title -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-title-box">
+                        <form class="float-right app-search">
+                            <input type="text" placeholder="Search..." class="form-control">
+                            <button type="submit"><i class="fa fa-search"></i></button>
+                        </form>
+                        <h4 class="page-title"> <i class="dripicons-blog"></i>Add Location</h4>
+                    </div>
+                </div>
+            </div>
+            <!-- end page title end breadcrumb -->
+
+        </div>
+    </div>
+
+
+    <div class="wrapper">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card m-b-20">
+                        <br>
+                        <div class="card-body" style="padding-left: 100px; padding-right: 100px;">
+                            <h4 class="text-center">Parking Location Form</h4>
+                            <br>
+                            <div class="card">
+                                <div class="card-header"><b>Detail Parking Location</b></div>
+                                <form th:action="@{/parking/s/loc}" method="POST" enctype="multipart/form-data">
+                                    <div class="card-body">
+                                        <input th:if="${dataParking!=null}" class="form-control" type="text" th:value="${dataParking[0]}" id="parkid" name="parkid"  readonly hidden="">
+                                        <input th:unless="${dataParking!=null}" class="form-control" type="text" value="0" id="parkid" name="parkid"  readonly hidden="">
+                                        <br><br>
+                                        <!--form input park loc-->
+                                        <div class="form-group row">
+                                            <label for="example-text-input" class="col-md-2 col-form-label">Parking Location</label>
+                                            <span class="float-right col-form-label">:</span>
+                                            <div class="col-md-4">
+                                                <input th:if="${dataParking!=null}" class="form-control" type="text" id="parkloc" name="parkloc" th:value="${dataParking[1]}"  placeholder="Insert parking location">
+                                                <input  th:unless="${dataParking!=null}" class="form-control" type="text" id="parkloc" name="parkloc" value="" placeholder="Insert parking location">
+                                            </div>
+                                        </div>
+                                        <!--form input total payment-->
+                                        <div class="form-group row">
+                                            <label for="example-text-input" class="col-md-2 col-form-label">Type Claim</label>
+                                            <span class="float-right col-form-label">:</span>
+                                            <div class="col-md-4">
+                                                <select th:if="${dataParking==null}" class="form-control"  id="typeClaim" name="typeClaim">
+                                                    <option  selected disabled value="">Select type claim</option>
+                                                    <option value="Daily">Daily</option>
+                                                    <option value="Monthly">Monthly</option> 
+                                                </select>
+                                                <select th:unless="${dataParking==null}" class="form-control"  id="typeClaim" name="typeClaim">
+                                                    <option disabled value="">Select type claim</option>
+                                                    <option th:if="${dataParking[4]}=='Daily'" selected="" value="Daily">Daily</option>
+                                                    <option th:if="${dataParking[4]}=='Daily'" value="Monthly">Monthly</option> 
+                                                    <option th:if="${dataParking[4]}=='Monthly'" value="Daily">Daily</option>
+                                                    <option th:if="${dataParking[4]}=='Monthly'" selected="" value="Monthly">Monthly</option> 
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <!--form inputpark owner-->
+                                        <div class="form-group row">
+                                            <label for="example-text-input" class="col-md-2 col-form-label"> Parking Owner</label>
+                                            <span class="float-right col-form-label">:</span>
+                                            <div class="col-md-4">
+                                                <input  th:if="${dataParking!=null}"  class="form-control" th:value="${dataParking[3]}" type="text" id="parkown" name="parkown" value="" placeholder="Insert parking owner">
+                                                <input  th:unless="${dataParking!=null}"  class="form-control" type="text" id="parkown" name="parkown" value="" placeholder="Insert parking owner">
+                                            </div>
+                                        </div>
+                                        <!--form input Contact person-->
+                                        <div class="form-group row">
+                                            <label for="example-text-input" class="col-md-2 col-form-label">Contact Person</label>
+                                            <span class="float-right col-form-label">:</span>
+                                            <div class="col-md-4">
+                                                <input  th:if="${dataParking!=null}"  class="form-control" th:value="${dataParking[5]}" type="text" id="contactPerson" name="contactPerson" value="" placeholder="Insert contact person">
+                                                <input  th:unless="${dataParking!=null}"  class="form-control" type="text" id="contactPerson" name="contactPerson" value="" placeholder="Insert contact person">
+                                            </div>
+                                        </div>
+                                        <!--form input Park address-->
+                                        <div class="form-group row">
+                                            <label for="example-text-input" class="col-md-2 col-form-label">Parking Address</label>
+                                            <span class="float-right col-form-label">:</span>
+                                            <div class="col-md-4">
+                                                <textarea  th:if="${dataParking!=null}"  class="form-control"  id="parkaddress" name="parkaddress" placeholder="Parking address" th:inline="text">[[${dataParking[2]}]]</textarea>
+                                                <textarea  th:unless="${dataParking!=null}"   class="form-control" id="parkaddress" name="parkaddress"  placeholder="Parking address"></textarea>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="form-group row m-t-20">
+                                            <div class="col-12 text-right pr-5">
+                                                <button id="alertsave" type="button" class="btn btn-primary w-md waves-effect waves-light">Submit</button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+
+                        <!--  Modal content for the above example -->
+                        <div id="editModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title mt-0" id="myModalLabel"><b>Edit Data Customer</b></h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group row ml-2">
+                                                    <label class="col-md-5 label-request">Sales Order Number</label>
+                                                    <span class="float-right">:</span>
+                                                    <span class="col-md-6">2188000000</span>
+                                                </div>
+                                                <div class="form-group row ml-2">
+                                                    <label class="col-md-5 label-request">Customer Name</label>
+                                                    <span class="float-right">:</span>
+                                                    <span class="col-md-6">BANK BTPN TBK</span>
+                                                </div>
+                                                <div class="form-group row ml-2">
+                                                    <label class="col-md-5 label-request">Relationship Manager</label>
+                                                    <span class="float-right">:</span>
+                                                    <span class="col-md-6">-</span>
+                                                </div>
+                                                <div class="form-group row ml-2">
+                                                    <label for="example-text-input" class="col-md-5 col-form-label">Chargeback Status</label>
+                                                    <span class="float-right col-form-label">:</span>
+                                                    <div class="col-md-6">
+                                                        <select class="form-control">
+                                                            <option></option>
+                                                            <option>Dont Invoice</option>
+                                                            <option>Pending Contract</option>
+                                                            <option>Pending PO</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row ml-2">
+                                                    <label for="example-text-input" class="col-md-5 col-form-label">Chargerback Type</label>
+                                                    <span class="float-right col-form-label">:</span>
+                                                    <div class="col-md-6">
+                                                        <select class="form-control">
+                                                            <option></option>
+                                                            <option>Depnaker</option>
+                                                            <option>Hourly Basis</option>
+                                                            <option>Formula Project</option>
+                                                            <option>Management Fee</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row ml-2">
+                                                    <label for="example-text-input" class="col-md-5 col-form-label">Meals Transport Status</label>
+                                                    <span class="float-right col-form-label">:</span>
+                                                    <div class="col-md-6">
+                                                        <select class="form-control">
+                                                            <option></option>
+                                                            <option>Yes</option>
+                                                            <option>No</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row ml-2">
+                                                    <label for="example-text-input" class="col-md-5 col-form-label">Office Hour</label>
+                                                    <span class="float-right col-form-label">:</span>
+                                                    <div class="col-md-6">
+                                                        <select class="form-control">
+                                                            <option></option>
+                                                            <option>SHIFTING</option>
+                                                            <option>NON SHIFTING</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row ml-2">
+                                                    <label for="example-text-input" class="col-md-5 col-form-label">Paid to Staff</label>
+                                                    <span class="float-right col-form-label">:</span>
+                                                    <div class="col-md-6">
+                                                        <select class="form-control">
+                                                            <option></option>
+                                                            <option>DEPNAKER</option>
+                                                            <option>DEPNAKER & FLAT</option>
+                                                            <option>MANAGEMENT FEE</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row ml-2">
+                                                    <label for="example-text-input" class="col-md-5 col-form-label">Rate</label>
+                                                    <span class="float-right col-form-label">:</span>
+                                                    <div class="col-md-3">
+                                                        <label>Weekday</label>
+                                                        <input class="form-control" type="number" id="noHp" name="noHp">
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <label>Weekend</label>
+                                                        <input class="form-control" type="number" id="noHp" name="noHp">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary waves-effect waves-light">Save Changes</button>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
+                    </div>
+                </div>
+            </div> <!-- end col -->
+        </div> <!-- end row -->
+    </div> <!-- end container -->
+</div>
+<!-- end wrapper -->
+
+
+<!-- Footer -->
+<div th:replace="fragments/footerAdm::footerAdm"></div>
+<!-- End Footer -->
+
+<div th:replace="fragments/footer::js"></div>
+<script th:src="@{/dist/js/session.js}"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.all.min.js"></script>
+<script>
+    $('#alertsave').on('click', function () {
+        var form = $(this).parents().find('form');
+        var park_loc = document.getElementById("parkloc").value;
+        var type_claim = document.getElementById("typeClaim").value;
+        var park_own = document.getElementById("parkown").value;
+        var cp = document.getElementById("contactPerson").value;
+        var park_add = document.getElementById("parkaddress").value;
+        var textError = "false";
+        console.log("typecl: ", type_claim)
+        if (isNaN(cp))
+            textError = "Contact person must be a number";
+        else if (cp.length >= 15)
+            textError = "Contact person maximum 15 digit number";
+        else if (cp.length <= 10)
+            textError = "Contact person at least have 10 digit number";
+        else if (park_loc.length < 5)
+            textError = "Parking location at least have 5 digit number";
+        else if (type_claim == "" || type_claim == null)
+            textError = "Select type claim";
+        else if (park_own.length < 5)
+            textError = "Parking owner at least have 5 digit number";
+        else if (park_add.length < 10)
+            textError = "Parking address at least have 10 digit number";
+        else
+            textError = "false";
+
+        if (textError == "false") {
+
+            $.getJSON("/HRIS/parking/ParkLocCheck?loc=" + park_loc, {
+                ajax: 'true'
+            }, function (isAvailable) {
+                if (!isAvailable) {
+                    Swal.fire({
+                        title: 'Are you sure to save this data?',
+                        text: "You won't be able to revert this!",
+                        type: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, submit!'
+                    }).then((result) => {
+                        if (result.value) {
+                            console.log("data:", form)
+                            Swal.fire(
+                                    'Submitted!',
+                                    'Your file has been submitted.',
+                                    'success'
+                                    ).then(res => {
+                                form.submit();
+                            })
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Parking location already registered',
+                        type: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok!'
+                    })
+                }
+            });
+
+
+
+
+
+
+        } else {
+            Swal.fire({
+                title: textError,
+                type: 'warning',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Oke'
+            });
+        }
+
+    });
+
+
+</script>
+</body>
+</html>

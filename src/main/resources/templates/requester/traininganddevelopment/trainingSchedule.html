@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>HRIS - Schedule</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- App Icons -->
+        <link rel="shortcut icon" th:href="@{/dist/img/favicon.ico}">
+
+        <div th:replace="fragments/header::css"></div>
+
+        <link th:href="@{/plugins/datatables/dataTables.bootstrap4.min.css}" rel="stylesheet" type="text/css"/>
+
+        <link th:href="@{/dist/wicked-picker/Big/wickedpicker.css}" rel="stylesheet" type="text/css"/>
+
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+        <!--<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">-->
+
+        <style>
+    /*        .si{
+                font-weight: bold;
+                color: red;
+            }
+
+            .simple{
+                padding: 10px;
+                margin: 10px;
+                background-color: #b9d5ec
+            }*/
+            #search-filter{
+                background-image: url('');
+                background-repeat: no-repeat;
+            }
+            .accordion {
+                width: auto;
+                max-width: 1000px;
+                margin: 2rem auto;
+            }
+            .accordion-item {
+                background-color: #1967a9;
+                color: #fff;
+                margin: 1rem 0;
+                border-radius: 0.5rem;
+                box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.25);
+            }
+
+            .accordion-item-header {
+                padding: 0.5rem 3rem 0.5rem 1rem;
+                min-height: 3.5rem;
+                line-height: 1.25rem;
+                font-weight: bold;
+                display: flex;
+                align-items: center;
+                position: relative;
+                cursor: pointer;
+            }
+
+            .accordion-item-header::after {
+                content: "\002B";
+                font-size: 2rem;
+                position: absolute;
+                right: 1rem;
+            }
+
+            .accordion-item-header.active::after {
+                content: "\2212";
+            }
+
+            .accordion-item-body {
+                background-color: #fff;
+                color: #111;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.2s ease-out;
+            }
+
+            .accordion-item-body-content {
+                padding: 1rem;
+                line-height: 1.5rem;
+                border-top: 1px solid;
+                border-image: linear-gradient(to right, transparent, #34495e, transparent) 1;
+            }
+        </style>
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    </head>
+
+    <body> 
+        <!-- Loader -->
+        <div id="preloader">
+            <div id="status">
+                <div class="spinner"></div>
+            </div>
+        </div>
+
+        <div class="header-bg">
+
+            <div th:replace="fragments/header::header"></div>
+
+            <div class="container-fluid">
+                <!-- Page-Title -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="page-title-box">
+                            <h4 class="page-title">Training Schedule</h4>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title end breadcrumb -->
+            </div>
+        </div>
+
+
+        <div class="wrapper">
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card m-b-20">
+                            <div class="card-body">
+    <!--                            <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="page-title-box">
+                                            <input type="text" placeholder="Search..." id="search-filter" class="float-right app-search">                                        </div>
+                                    </div>
+                                </div>-->
+                                <!--<h5 class="font-weight-bold">List Training</h5>
+                                <hr>
+                                <div class="accordion">
+                                    <div class="accordion-item" th:each="trn : ${trainingList}">
+                                        <div th:if="${dl[0] == trn[0]}" th:each="dl : ${detailList}">
+                                            <div class="accordion-item-header">
+                                                <h5 class="mb-0" th:text="${trn[1]}"></h5> 
+                                                <h6 th:text="${dl[7]}"></h6>
+                                            </div>
+                                            <div class="accordion-item-body">
+                                                <div class="accordion-item-body-content">
+                                                    <div class="form-group row ml-auto">
+                                                        <label class="col-md-3 label-request">Date</label>
+                                                        <p class="float-right">:</p>
+                                                        <p class="col-md-6" th:text="${dl[7]}"></p>
+                                                    </div>
+                                                    <div class="form-group row ml-auto">
+                                                        <label class="col-md-3 label-request">Trainer</label>
+                                                        <p class="float-right">:</p>
+                                                        <p class="col-md-6" th:text="${dl[2]}"></p>
+                                                    </div>
+                                                    <div class="form-group row ml-auto">
+                                                        <label class="col-md-3 label-request">Time</label>
+                                                        <p class="float-right">:</p>
+                                                        <p class="col-md-6" th:text="${dl[8]}"></p>
+                                                    </div>
+                                                    <div class="form-group row ml-auto">
+                                                        <label class="col-md-3 label-request">Quota</label>
+                                                        <p class="float-right">:</p>
+                                                        <p class="col-md-6" th:text="${dl[3]}"></p>
+                                                    </div>
+                                                    <div class="form-group row ml-auto">
+                                                        <label class="col-md-3 label-request">Location</label>
+                                                        <p class="float-right">:</p>
+                                                        <p class="col-md-6" th:text="${dl[4]}"></p>
+                                                    </div>
+                                                    <div class="form-group row ml-auto">
+                                                        <label class="col-md-3 label-request">Need to bring</label>
+                                                        <p class="float-right">:</p>
+                                                        <p class="col-md-6" th:text="${dl[6]}"></p>
+                                                    </div>
+                                                    <div th:if="${trn[0] == dl[9]}">
+                                                        <button class="registered btn btn-outline-success float-right" th:if="${empl_nik == dl[10]}">Registration</button>
+                                                    </div>         
+                                                    <div th:if="${trn[0] != dl[9]}">
+                                                        <button class="btn btn-outline-success float-right" id="edit" data-toggle="modal" th:data-target="${'#editModal'+trn[0]}">Registration</button>
+                                                    </div>
+                                                    <br>
+                                                    <br>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>-->
+
+                                <!--<div class="container my-4">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="page-title-box">
+                                                <input type="text" placeholder="Search..." id="search-filter" class="float-right app-search">          
+                                                <h3 style="color: #ff0000"><b>Today's Event</b></h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h2 class="font-weight-bold">List Training</h2>
+                                    <hr>
+                                    <br>
+                                    Accordion wrapper
+                                    <div class="accordion md-accordion" id="accordionEx" role="tablist" aria-multiselectable="true">
+
+                                         Accordion card 
+                                        <div class="card" th:each="trn : ${trainingList}">
+
+                                            <div th:if="${dl[0] == trn[0]}" th:each="dl : ${detailList}">
+                                                 Card header 
+                                                <div class="card-header" role="tab" id="headingOne1">
+                                                    <a data-toggle="collapse" data-parent="#accordionEx" th:href="${'#akordeon'+trn[0]}" aria-expanded="true">
+                                                        <h5 class="mb-0" th:text="${trn[1]}">
+                                                            Collapsible Group Item #1 <i class="fas fa-angle-down rotate-icon"></i>
+                                                        </h5>
+                                                        <h6 th:text="${dl[7]}"></h6>
+                                                    </a>
+                                                </div>
+
+                                                 Card body 
+                                                <div th:id="${'akordeon'+trn[0]}" class="collapse" role="tabpanel" aria-labelledby="headingOne1"
+                                                     data-parent="#accordionEx">
+                                                    <div class="card-body">
+                                                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3
+                                                        wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum
+                                                        eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla
+                                                        assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred
+                                                        nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer
+                                                        farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus
+                                                        labore sustainable VHS.
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                         Accordion card 
+
+                                    </div>
+                                     Accordion wrapper 
+
+                                </div>-->
+
+                                <!--<div class="container mt-5 mb-5">
+
+                                    <div class="accordion md-accordion accordion-blocks" id="accordionEx78" role="tablist" aria-multiselectable="true">
+                                        <div class="card col-lg-12 table table-bordered hover dt-responsive display responsive nowrap">
+
+                                            <div th:each="trn : ${trainingList}" class="panel-group" id="accordion">
+                                                <div th:if="${dl[0] == trn[0]}" th:each="dl : ${detailList}" class="panel-group">
+                                                    <li type="1"  th:if="${list[1] == type.type}" id="repeater" th:each="list : ${questions}">
+                                                    <div th:class="${'acc-container'+' '+trn[3]}">
+
+                                                        <div th:class="${'s'+' '+'panel'+' '+'panel-primary'+' '+'card-header'+' '+trn[3]}" id="warp" role="tab">
+
+                                                            <div class="panel-heading simple" th:data-target="${'#collapse'+trn[0]}" data-toggle="collapse">
+                                                                <div id="tampungan">
+                                                                    <h4 class="panel-title mt-1 mb-0" id="judul"  th:text="${trn[1]}" aria-expanded="true">
+                                                                        aria-controls="collapseUnfiled">
+                                                                    </h4>
+                                                                    <h6 th:text="${dl[7]}"></h6>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div th:id="${'collapse'+trn[0]}" class="panel-collapse collapse in">
+                                                            <div class="panel-body card-body">
+                                                                <div class="form-group row ml-auto">
+                                                                    <label class="col-md-3 label-request">Date</label>
+                                                                    <p class="float-right">:</p>
+                                                                    <p class="col-md-6" th:text="${dl[7]}"></p>
+                                                                </div>
+                                                                <div class="form-group row ml-auto">
+                                                                    <label class="col-md-3 label-request">Trainer</label>
+                                                                    <p class="float-right">:</p>
+                                                                    <p class="col-md-6" th:text="${dl[2]}"></p>
+                                                                </div>
+                                                                <div class="form-group row ml-auto">
+                                                                    <label class="col-md-3 label-request">Time</label>
+                                                                    <p class="float-right">:</p>
+                                                                    <p class="col-md-6" th:text="${dl[8]}"></p>
+                                                                </div>
+                                                                <div class="form-group row ml-auto">
+                                                                    <label class="col-md-3 label-request">Quota</label>
+                                                                    <p class="float-right">:</p>
+                                                                    <p class="col-md-6" th:text="${dl[3]}"></p>
+                                                                </div>
+                                                                <div class="form-group row ml-auto">
+                                                                    <label class="col-md-3 label-request">Location</label>
+                                                                    <p class="float-right">:</p>
+                                                                    <p class="col-md-6" th:text="${dl[4]}"></p>
+                                                                </div>
+                                                                <div class="form-group row ml-auto">
+                                                                    <label class="col-md-3 label-request">Need to bring</label>
+                                                                    <p class="float-right">:</p>
+                                                                    <p class="col-md-6" th:text="${dl[6]}"></p>
+                                                                </div>
+                                                                <div th:if="${trn[0] == dl[9]}">
+                                                                    <button class="registered btn btn-outline-success float-right" th:if="${empl_nik == dl[10]}">Registration</button>
+                                                                </div>         
+                                                                <div th:if="${trn[0] != dl[9]}">
+                                                                    <button class="btn btn-outline-success float-right" id="edit" data-toggle="modal" th:data-target="${'#editModal'+trn[0]}">Registration</button>
+                                                                </div>
+                                                                <br>
+                                                                <br>
+                                                            </div>
+                                                        </div>
+
+                                                         The Modal 
+                                                        <div class="modal fade" th:id="${'editModal'+trn[0]}">
+                                                            <div class="modal-dialog modal-lg modal-dialog-centered">
+                                                                <div class="modal-content">
+                                                                     Modal Header 
+                                                                    <div class="modal-header">
+                                                                        <h4 class="modal-title">Training Registration Detail</h4>
+                                                                        <button type="button" class="close" data-dismiss="modal" style="color: #4bbbce">&times;</button>
+                                                                    </div>
+                                                                     Modal body 
+                                                                    <div class="modal-body">
+                                                                        <form th:action="${'./Register/' + name + '/' + email + '/' + trn[1]}" method="POST" id="formAdd2" role="form">
+
+                                                                            <div class="form-group row ml-auto">
+                                                                                <label class="col-md-3 label-request">Date</label>
+                                                                                <p class="float-right">:</p>
+                                                                                <p class="col-md-6" th:text="${dl[7]}"></p>
+                                                                            </div>
+
+                                                                            <div class="form-group row ml-auto">
+                                                                                <label for="employee_name" class="col-md-3 label-request">Name</label>
+                                                                                <p class="float-right">:</p>
+                                                                                <p class="col-md-6" th:text="${name}"></p>
+                                                                            </div>
+                                                                            <div class="form-group row ml-auto">
+                                                                                <label for="employee_nik" class="col-md-3 label-request">NIK</label>
+                                                                                <p class="float-right">:</p>
+                                                                                <p class="col-md-6" th:text="${empl_nik}"></p>
+                                                                                <input name="employee_nik" hidden="" type="number" th:value="${empl_nik}" readonly="">
+
+                                                                            </div>
+                                                                            <div class="form-group row ml-auto">
+                                                                                <label for="employee_email" class="col-md-3 label-request">Email</label>
+                                                                                <p class="float-right">:</p>
+                                                                                <p class="col-md-6" th:text="${email}"></p>
+
+                                                                            </div>
+                                                                            <div class="form-group row ml-auto">
+                                                                                <label for="phone_number" class="col-md-3 label-request">Phone Number</label>
+                                                                                <p class="float-right">:</p>
+                                                                                <p class="col-md-6" th:text="${hp}"></p>
+
+                                                                            </div>
+                                                                            <div class="form-group row ml-auto">
+                                                                                <label for="employee_position" class="col-md-3 label-request">Position</label>
+                                                                                <p class="float-right">:</p>
+                                                                                <p class="col-md-6" th:text="${position}"></p>
+
+                                                                            </div>
+                                                                            <div class="form-group row ml-auto">
+                                                                                <label for="employee_allocation" class="col-md-3 label-request">Allocation</label>
+                                                                                <p class="float-right">:</p>
+                                                                                <p class="col-md-6" th:text="${customerName}"></p>   
+                                                                                <input name="employee_allocation" hidden="" type="text" th:value="${customerName}" readonly="">
+                                                                            </div>
+
+                                                                            <h4>
+                                                                                <p>
+                                                                                    Will Attend training on
+                                                                                </p>
+                                                                            </h4>
+
+                                                                            <div class="form-group row ml-auto" hidden="">
+                                                                                <label for="transaction" class="col-md-3 label-request">transaction</label>
+                                                                                <p class="float-right">:</p>
+                                                                                <input th:value="${trn[0]}" readonly="true" type="text" id="" class="form-control" name="transaction">
+
+                                                                            </div>
+                                                                            <div class="form-group row ml-auto">
+                                                                                <label for="date" class="col-md-3 label-request">Date</label>
+                                                                                <p class="float-right">:</p>
+                                                                                <p class="col-md-6" th:text="${dl[7]}"></p>
+
+                                                                            </div>
+                                                                            <div class="form-group row ml-auto">
+                                                                                <label for="trainer" class="col-md-3 label-request">Trainer</label>
+                                                                                <p class="float-right">:</p>
+                                                                                <p class="col-md-6" th:text="${dl[2]}"></p> 
+
+                                                                            </div>
+                                                                            <div class="form-group row ml-auto">
+                                                                                <label for="time" class="col-md-3 label-request">Time</label>
+                                                                                <p class="float-right">:</p>
+                                                                                <p class="col-md-6" th:text="${dl[8]}"></p>   
+
+                                                                            </div>
+                                                                            <div class="form-group row ml-auto">
+                                                                                <label for="quota" class="col-md-3 label-request">Quota</label>
+                                                                                <p class="float-right">:</p>
+                                                                                <p class="col-md-6" th:text="${dl[3]}"></p>
+
+                                                                            </div>
+                                                                            <div class="form-group row ml-auto">
+                                                                                <label for="location" class="col-md-3 label-request">Location</label>
+                                                                                <p class="float-right">:</p>
+                                                                                <p class="col-md-6" th:text="${dl[4]}"></p>
+
+                                                                            </div>
+                                                                            <div class="form-group row ml-auto">
+                                                                                <label for="requirement" class="col-md-3 label-request">Need to bring</label>
+                                                                                <p class="float-right">:</p>
+                                                                                <p class="col-md-6" th:text="${dl[6]}"></p>
+
+                                                                            </div>
+                                                                            <div class="text-center">
+                                                                                <button type="button" id="submitForm" class="submitForm btn btn-primary mb-2">Submit</button>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>                                              
+                                                                    <div class="modal-footer">                                                         
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>                                            
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>-->
+                                <!--end col--> 
+                            </div> 
+                            <!-- end row -->
+                        </div> 
+                        <!-- end container -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end wrapper -->
+
+
+        <!-- Footer -->
+        <div th:replace="fragments/footer::footer"></div>
+        <!-- End Footer -->
+
+        <div th:replace="fragments/footer::js"></div>    
+        <script th:src="@{/dist/js/session.js}"></script>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script th:src="@{/dist/wicked-picker/Big/wickedpicker.js}" type="text/javascript"></script>
+
+        <!--    <script th:src="@{/plugins/datatables/jquery.dataTables.min.js}" type="text/javascript"></script>-->
+        <script th:src="@{/plugins/datatables/dataTables.bootstrap4.min.js}" type="text/javascript"></script>
+
+        <!--<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>-->
+
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
+
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
+        <script>
+            const accordionItemHeaders = document.querySelectorAll(".accordion-item-header");
+
+            accordionItemHeaders.forEach(accordionItemHeader => {
+                accordionItemHeader.addEventListener("click", event => {
+
+                    // Uncomment in case you only want to allow for the display of only one collapsed item at a time!
+
+                    // const currentlyActiveAccordionItemHeader = document.querySelector(".accordion-item-header.active");
+                    // if(currentlyActiveAccordionItemHeader && currentlyActiveAccordionItemHeader!==accordionItemHeader) {
+                    //   currentlyActiveAccordionItemHeader.classList.toggle("active");
+                    //   currentlyActiveAccordionItemHeader.nextElementSibling.style.maxHeight = 0;
+                    // }
+
+                    accordionItemHeader.classList.toggle("active");
+                    const accordionItemBody = accordionItemHeader.nextElementSibling;
+                    if (accordionItemHeader.classList.contains("active")) {
+                        accordionItemBody.style.maxHeight = accordionItemBody.scrollHeight + "px";
+                    }
+                    else {
+                        accordionItemBody.style.maxHeight = 0;
+                    }
+
+                });
+            });
+        </script>
+
+
+        <script>
+            $('.submitForm').on('click', function () {
+                var form = $(this).parents('form');
+                console.log(form);
+                Swal.fire({
+                    title: 'You have successfully registered!',
+    //                text: "You won't be able to revert this!",
+                    icon: 'success',
+    //                showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ok'
+                }).then((result) => {
+                    if (result.value) {
+                        form.submit();
+                    }
+                });
+            });
+        </script>
+
+        <script>
+            $('.registered').on('click', function () {
+                Swal.fire({
+                    title: 'You have already registered!',
+                    text: "You can't register again",
+                    icon: 'warning',
+    //                showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ok'
+                });
+            });
+        </script>
+
+        <script th:inline="javascript">
+    //        //Dari Controller
+
+            $(document).ready(function () {
+                $("#search-filter").on("keyup", function () {
+                    var value = $(this).val().toLowerCase();
+                    console.log(value);
+                    $("#accordion .acc-container").filter(function () {
+                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                    });
+                });
+    //
+    //
+                $("select.filterby option").click(function () {
+                    var filters = $(this).data("filter");
+                    console.log(filters);
+                    console.log($("div#accordion").find(".acc-container"));
+                    $("div#accordion").find(".acc-container").hide();
+                    if (filters) {
+                        $("div#accordion").find(".acc-container" + ".true").show();
+                    } else {
+                        $("div#accordion").find(".acc-container" + ".false").show();
+                    }
+                });
+            })
+                    ;
+        </script>
+    </body>
+</html>

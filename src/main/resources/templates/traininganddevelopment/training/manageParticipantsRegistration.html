@@ -1,0 +1,404 @@
+<!--<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>HRIS - Training</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+         App Icons 
+        <link rel="shortcut icon" th:href="@{/dist/img/favicon.ico}">
+
+    <div th:replace="fragments/headerAdm::cssAdm"></div>
+
+    <link th:href="@{/plugins/datatables/dataTables.bootstrap4.min.css}" rel="stylesheet" type="text/css"/>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <style>
+        table thead{
+            background-color: #4bbbce;
+            color: #fafafa;
+        }
+        .middle {
+            line-height: 70px;
+        }
+        .mark {
+            background-color: #d7ffe7 !important
+        }
+
+        .mark .gsearch{
+            font-size: 20px
+        }
+
+        .unmark {
+            background-color: #e8e8e8 !important
+        }
+        .unmark .gsearch{
+            font-size: 10px
+        }
+
+        .si{
+            font-weight: bold;
+            color: red;
+        }
+
+        .simple{
+            padding: 10px;
+            margin: 10px;
+            background-color: #b9d5ec
+        }
+
+        #search-filter{
+            background-image: url('');
+            background-repeat: no-repeat;
+        }
+
+        #list{
+            list-style-type: none;
+        }
+
+        /*        #list li h4 {
+                    border: 1px solid #ddd;  Add a border to all links 
+                    margin-top: -1px;  Prevent double borders 
+                    background-color: #f6f6f6;  Grey background color 
+                    padding: 12px;  Add some padding 
+                    text-decoration: none;  Remove default text underline 
+                    font-size: 18px;  Increase the font-size 
+                    color: black;  Add a black text color 
+                    display: block;  Make it into a block element to fill the whole list 
+                }*/
+
+        .fa-minus-square{
+            padding-top : 24px;
+            padding-right: 20px;
+
+        }
+        .fa-edit{
+            padding-top : 24px;
+        }
+
+    </style>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body> 
+     Loader 
+    <div id="preloader">
+        <div id="status">
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <div class="header-bg">
+
+        <div th:replace="fragments/headerAdm::headerAdm"></div>
+
+        <div class="container-fluid">
+             Page-Title 
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-title-box">
+                        <h4 class="page-title">Manage Participant Registration</h4>
+                    </div>
+                </div>
+            </div>
+             end page title end breadcrumb 
+        </div>
+    </div>
+
+
+    <div class="wrapper">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card m-b-20">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="page-title-box">
+                                        <input type="text" placeholder="Search..." id="search-filter" class="float-right app-search">
+                                        <h4><a data-toggle="modal" title="Edit Data" data-target="#addModal" style="color: #4bbbce"><i class="fas fa-plus-circle"></i> Add New Training</a></h4> 
+                                    </div>
+                                </div>
+                            </div>
+                            <h5>
+                                <i class="fas fa-filter"></i>
+                                <select id="filter-option" class="filterby">
+                                    <option data-filter="true" value="Active">
+                                        Active
+                                    </option>
+                                    <option data-filter="false" value="Not Active">
+                                        Not Active
+                                    </option>
+                                </select>
+                            </h5>
+
+                            <div class="container mt-5 mb-5">
+                                <div class="accordion md-accordion accordion-blocks" id="accordionEx78" role="tablist" aria-multiselectable="true">
+                                    <div class="card col-lg-12 table table-bordered hover dt-responsive display responsive nowrap">
+                                        <div th:each="trn : ${trainingList}" class="panel-group" id="accordion">
+                                            <div th:class="${'acc-container'+' '+trn[3]}">
+
+                                                <div th:class="${'s'+' '+'panel'+' '+'panel-primary'+' '+'card-header'+' '+trn[3]}" id="warp" role="tab">
+                                                    <form th:action="${'./disabletrainingbyid/'+trn[0]}" method="POST">
+                                                        <button type="button" class="d btn btn-blue-grey float-right"><i class="fas fa-minus-square" aria-hidden="false" style="color: black"></i></button>
+                                                    </form>
+                                                    <a class="btn btn-blue-grey float-right" data-toggle="modal" title="Edit Data" th:data-target="${'#editModal'+trn[0]}" >
+                                                        <i class="fas fa-edit" aria-hidden="true" style="color: black"></i>
+                                                    </a>
+                                                    <div class="panel-heading simple">
+                                                        <div id="tampungan">
+                                                            <h4 class="panel-title mt-1 mb-0" id="judul" th:data-target="${'#collapse'+trn[0]}" data-toggle="collapse" th:text="${trn[1]}" aria-expanded="true"
+                                                                aria-controls="collapseUnfiled">
+                                                            </h4>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div th:id="${'collapse'+trn[0]}" class="panel-collapse collapse in">
+                                                    <div class="panel-body card-body">
+                                                        <div class="form-group row ml-auto">
+                                                            <label class="col-md-3 label-request">Category</label>
+                                                            <p class="float-right">:</p>
+                                                            <p class="col-md-6" th:text="${trn[2]}"></p>
+                                                        </div>
+                                                        <div class="form-group row ml-auto">
+                                                            <label class="col-md-3 label-request">Status </label>
+                                                            <p class="float-right">:</p>
+                                                            <p th:if="${trn[3]}" th:class="${'c'+' '+'col-md-6'+' '+trn[3]}" >Active</p>
+                                                            <p th:unless="${trn[3]}" th:class="${'c'+' '+'col-md-6'+' '+trn[3]}" >Not Active</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                             The Modal 
+                                            <div class="modal fade" th:id="${'editModal'+trn[0]}">
+                                                <div class="modal-dialog modal-lg modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                         Modal Header 
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title"><i class="fas fa-edit"></i> Edit Trainer</h4>
+                                                            <button type="button" class="close" data-dismiss="modal" style="color: #4bbbce">&times;</button>
+                                                        </div>
+                                                         Modal body 
+                                                        <div class="modal-body">
+                                                            <form th:action="${'./saveTraining/'+trn[0]}" method="POST" id="formEdit" role="formEdit">
+                                                                <div class="form-group row">
+                                                                    <label for="judul" class="col-sm-2 col-form-label">Judul</label>
+                                                                    <div class="col-sm-10">
+                                                                        <input type="text" id="judul" class="form-control" th:value="${trn[1]}" name="upJudul" maxlength="200">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group row">
+                                                                    <label for="category" class="col-sm-2 col-form-label">Category</label>
+                                                                    <div class="col-sm-10">
+                                                                        <select class="form-control" id="category" name="upCategory" placeholder="choose one">
+                                                                            <option value="1">
+                                                                                Softskill
+                                                                            </option>
+                                                                            <option value="2">
+                                                                                Technical Skill
+                                                                            </option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="text-center">
+                                                                    <button type="button" id="updateForm" class="t btn btn-primary mb-2">Save Change</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>                                              
+                                                        <div class="modal-footer">                                                         
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>                                            
+                                        </div>
+                                    </div>
+                                     The Modal 
+                                    <div class="modal fade" id="addModal">
+                                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                                            <div class="modal-content">
+                                                 Modal Header 
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Add Training</h4>
+                                                    <button type="button" class="close" data-dismiss="modal" style="color: #4bbbce">&times;</button>
+                                                </div>
+                                                 Modal body 
+                                                <div class="modal-body">
+                                                    <form th:action="@{/saveTraining}" method="POST" id="formAdd" role="form">
+                                                        <div class="form-group row">
+                                                            <label for="judul" class="col-sm-2 col-form-label">Judul</label>
+                                                            <div class="col-sm-10">
+                                                                <input type="text" id="judul" class="form-control" placeholder="Judul" name="reqJudul" maxlength="200">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label for="category" class="col-sm-2 col-form-label">Category</label>
+                                                            <div class="col-sm-10">
+                                                                <select class="form-control" id="category" name="reqCategory" placeholder="choose one">
+                                                                    <option value="1">
+                                                                        Softskill
+                                                                    </option>
+                                                                    <option value="2">
+                                                                        Technical Skill
+                                                                    </option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="text-center">
+                                                            <button type="button" id="submitForm" class="btn btn-primary mb-2">Add To Catalog</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <div class="modal-footer">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>  end col 
+                    </div>  end row 
+                </div>  end container 
+            </div>
+        </div>
+    </div>
+     end wrapper 
+
+
+     Footer 
+    <div th:replace="fragments/footerAdm::footerAdm"></div>
+     End Footer 
+
+    <div th:replace="fragments/footer::js"></div>    
+    <script th:src="@{/dist/js/session.js}"></script>
+    <script th:src="@{/plugins/datatables/jquery.dataTables.min.js}" type="text/javascript"></script>
+    <script th:src="@{/plugins/datatables/dataTables.bootstrap4.min.js}" type="text/javascript"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
+
+        <script>$('#localSearchSimple').jsLocalSearch();</script>
+
+    <script>
+        $(document).ready(function () {
+            $('#accordion').DataTable({
+                responsive: true
+            });
+        });
+    </script>
+
+    <script>
+        $('#submitForm').on('click', function () {
+            var form = $(this).parents().find('form');
+            console.log(form);
+            Swal.fire({
+                title: 'Training is successfully Added!',
+//                text: "You won't be able to revert this!",
+                icon: 'success',
+//                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ok'
+            }).then((result) => {
+                if (result.value) {
+                    form.submit();
+                }
+            });
+        });
+    </script>
+
+    <script>
+        $('.t').on('click', function () {
+            var form = $(this).parents('form');
+            console.log(form);
+            Swal.fire({
+                title: 'Changes Successfully Saved',
+//                text: "You won't be able to revert this!",
+                icon: 'success',
+//                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ok'
+            }).then((result) => {
+                if (result.value) {
+                    form.submit();
+                }
+            });
+        });
+    </script>
+
+    <script>
+        $('.d').on('click', function () {
+            var form = $(this).parents('form');
+            console.log(form);
+
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+
+            Swal.fire({
+                title: 'Are you sure want to disable this training?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, disable it!'
+            }).then((result) => {
+                if (result.value) {
+                    form.submit();
+                } else if (
+                        /* Read more about handling dismissals below */
+                        result.dismiss === Swal.DismissReason.cancel
+                        ) {
+                    swalWithBootstrapButtons.fire(
+                            'Cancelled',
+                            'The Entry is safe :)',
+                            'error'
+                            );
+                }
+            });
+        });
+    </script>
+
+
+    <script th:inline="javascript">
+//        //Dari Controller
+
+        $(document).ready(function () {
+            $("#search-filter").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                console.log(value);
+                $("#accordion .acc-container").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+//
+//
+            $("select.filterby option").click(function () {
+                var filters = $(this).data("filter");
+                console.log(filters);
+                console.log($("div#accordion").find(".acc-container"));
+                $("div#accordion").find(".acc-container").hide();
+                if (filters) {
+                    $("div#accordion").find(".acc-container" + ".true").show();
+                } else {
+                    $("div#accordion").find(".acc-container" + ".false").show();
+                }
+            });
+
+        });
+
+    </script>
+
+</body>
+</html>-->

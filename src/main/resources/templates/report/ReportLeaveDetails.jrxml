@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="850" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="810" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4ab005f1-79dd-45e3-98ff-f396fdb6abcd">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#0000FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFBFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="LeaveDetail" uuid="7719e0cf-542a-404a-9869-90bcac24d43c">
+		<parameter name="id1" class="java.lang.Integer">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[SELECT request_detail.id,leave_type.type,request_detail.startdate,request_detail.enddate,request_detail.notes,request_detail.submitted_date,approval.remarks,request_detail.request_status,request_detail.direct_report, request_detail.isdelete FROM approval approval,
+request_detail
+join leave_type on leave_type.id = request_detail.leave_detail_id
+WHERE approval.request_id = request_detail.id AND approval.id IN (SELECT MAX(approval.id) FROM approval WHERE request_id IN (SELECT request_detail.id FROM request_detail WHERE nik IN (SELECT nik FROM requester_information WHERE source_nik IN (SELECT source_nik FROM requester_information WHERE nik =$P{id1} ))) GROUP BY approval.request_id) ORDER BY request_detail.submitted_date DESC]]>
+		</queryString>
+		<field name="id" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="type" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="startdate" class="java.sql.Date">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="enddate" class="java.sql.Date">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="notes" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="submitted_date" class="java.sql.Timestamp">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="remarks" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="request_status" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="direct_report" class="java.lang.Integer">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="isdelete" class="java.lang.Boolean">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+	</subDataset>
+	<parameter name="id" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT request_detail.id,request_detail.leave_detail_id,request_detail.startdate,request_detail.enddate,request_detail.notes,request_detail.submitted_date,approval.remarks,request_detail.request_status,request_detail.direct_report, request_detail.isdelete FROM approval approval, request_detail WHERE approval.request_id = request_detail.id AND approval.id IN (SELECT MAX(approval.id) FROM approval WHERE request_id IN (SELECT request_detail.id FROM request_detail WHERE nik IN (SELECT nik FROM requester_information WHERE source_nik IN (SELECT source_nik FROM requester_information WHERE nik = $P{id} ))) GROUP BY approval.request_id) ORDER BY request_detail.submitted_date DESC]]>
+	</queryString>
+	<field name="id" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="leave_detail_id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="startdate" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="enddate" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="notes" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="submitted_date" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="remarks" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="request_status" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="direct_report" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="isdelete" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="43" splitType="Stretch">
+			<staticText>
+				<reportElement x="113" y="0" width="555" height="29" uuid="659eb20e-e376-40bf-9c26-39437c998d56"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Detail Employee Leave]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="125" splitType="Stretch">
+			<componentElement>
+				<reportElement key="table" style="table" x="0" y="0" width="794" height="79" uuid="771f8634-3449-4f0d-8352-516fd1ec3343"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="LeaveDetail" uuid="a187e8a9-af3c-454d-9c5e-6345003773c8">
+						<datasetParameter name="id1">
+							<datasetParameterExpression><![CDATA[$P{id}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="41" uuid="b189ef88-a445-4719-ae7f-da91bfb7f8c6">
+						<jr:tableHeader style="table_CH" height="32" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="41" height="30" uuid="ebf13688-1afb-4fac-a2a5-3fb025406605"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[No]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="table_TD" height="30" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="41" height="30" uuid="ff488ddd-43e9-4364-b27d-040876e1a2c4"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="78" uuid="c9e03faf-b7ed-4ab2-b691-5799f1d1ef58">
+						<jr:tableHeader style="table_CH" height="32" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="78" height="32" uuid="8df5bcc7-a9c6-446a-88e1-d4c87c3318d0"/>
+								<textElement verticalAlignment="Middle"/>
+								<text><![CDATA[Req. Number]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="table_TD" height="30" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="78" height="30" uuid="8f250584-5cb5-4ac8-9002-0626b997f553"/>
+								<textElement verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="74" uuid="d85e45b8-6ffa-46f5-b3fd-010750fe08dd">
+						<jr:tableHeader style="table_CH" height="32" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="74" height="32" uuid="98a13edd-2c96-4151-8fb4-5979223f669b"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Type]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="table_TD" height="30" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="74" height="30" uuid="259ea865-6abb-40d0-8765-66a48dddd06a"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{type}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="83" uuid="71721e0c-be6e-4554-b444-9782956de140">
+						<jr:tableHeader style="table_CH" height="32" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="83" height="30" uuid="ef58f151-6b24-4838-a607-3c8492cc36f8"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[From]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="table_TD" height="30" rowSpan="1">
+							<textField pattern="dd MMMMM yyyy">
+								<reportElement x="0" y="0" width="83" height="30" uuid="64e7843a-c05e-4be4-a8b3-b96e540d5a23"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{startdate}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="677597c8-81e8-4835-9a69-4947458c439f">
+						<jr:tableHeader style="table_CH" height="32" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="240641d8-c513-4ed5-9c2f-5c0d167a3c03"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[To]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="table_TD" height="30" rowSpan="1">
+							<textField pattern="dd MMMMM yyyy">
+								<reportElement x="0" y="0" width="90" height="30" uuid="30c3e756-9494-4ed4-9e18-d8fa709323b2"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{enddate}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="103" uuid="d4f63141-eed2-403b-8f59-6174a68740c6">
+						<jr:tableHeader style="table_CH" height="32" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="103" height="30" uuid="48de5f5f-b42a-4f35-887b-143592f0e276"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Notes]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="table_TD" height="30" rowSpan="1">
+							<textField pattern="">
+								<reportElement x="0" y="0" width="103" height="30" uuid="fb82ce11-0924-45cd-ad28-ec026c0b35f2"/>
+								<textElement verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{notes}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="109" uuid="3155657d-36b7-46ec-b96f-6ed3186ef68d">
+						<jr:tableHeader style="table_CH" height="32" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="109" height="30" uuid="d34efb86-e8f6-475b-aa24-df801aba5708"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Remarks]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="table_TD" height="30" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="109" height="30" uuid="bf9bad5f-a95b-4615-b292-d0194187c0bc"/>
+								<textElement verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{remarks}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="100" uuid="67fa66a0-c640-4d68-b1a9-1c3b44981bde">
+						<jr:tableHeader style="table_CH" height="32" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="91" height="30" uuid="56b69768-458f-43aa-a604-d15457b332f8"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Approval]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="table_TD" height="30" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="100" height="30" uuid="3d184c85-757d-4db6-b190-98f2491dd2cb"/>
+								<textElement verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{request_status}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="108" uuid="396189ed-d7ae-4279-88ef-62edde930cad">
+						<jr:tableHeader style="table_CH" height="32" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="108" height="30" uuid="1b0a37cb-b5c2-4af5-8e1b-2ac132f92d53"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Submited]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="table_TD" height="30" rowSpan="1">
+							<textField pattern="dd MMMMM yyyy">
+								<reportElement x="0" y="0" width="108" height="30" uuid="ccbc9bee-bf19-42f5-862b-7ac6fe278a02"/>
+								<textElement verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{submitted_date}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</summary>
+</jasperReport>

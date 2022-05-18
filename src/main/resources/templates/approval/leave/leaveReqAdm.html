@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>HRIS - Approval</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- App Icons -->
+        <link rel="shortcut icon" th:href="@{/dist/img/favicon.ico}">
+
+    <div th:replace="fragments/headerAdm::cssAdm"></div>
+
+    <link th:href="@{/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css}" rel="stylesheet" type="text/css" />
+
+    <style>
+        table thead{
+            background-color: #4bbbce;
+            color: #fafafa;
+        }
+    </style>
+
+</head>
+<body>
+    <!-- Loader -->
+    <div id="preloader">
+        <div id="status">
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <div class="header-bg">
+
+        <div th:replace="fragments/headerAdm::headerAdm"></div>
+
+        <div class="container-fluid">
+            <!-- Page-Title -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-title-box">
+                        <h4 class="page-title"> <i class="dripicons-blog"></i> Leave Request</h4>
+                    </div>
+                </div>
+            </div>
+            <!-- end page title end breadcrumb -->
+
+        </div>
+    </div>
+
+
+    <div class="wrapper">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card m-b-20">
+                        <div class="card-body" style="padding-left: 100px; padding-right: 100px;">
+                            <br>
+                            <h4>Requester Information</h4>
+                            <hr>
+                            <div class="form-group row">
+                                <label class="col-md-4 label-request">Requester :</label>
+                                <span class="col-md-7" th:text="${nikEmp + ' - ' + namaEmp}">1234 - Name</span>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-4 label-request">Company :</label>
+                                <span class="col-md-7" th:text="${customerId + ' - ' + customer}">0000000001 - PT. METRODATA Electronics Tbk</span>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-4 label-request">Department :</label>
+                                <span class="col-md-7" th:text="${department}">N/A</span>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-4 label-request">Position :</label>
+                                <span class="col-md-7" th:text="${position}">POSITION</span>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-4 label-request">Available Leave (Last Year) :</label>
+                                <span class="col-md-7" th:text="${lastYear + ' days left (expire date: ' + expireDate + ')'}">0 days left (expire date: 30-06-2020)</span>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-4 label-request">Available Leave (Current Year) :</label>
+                                <span class="col-md-7" th:text="${currentYear + ' days left (expire date: ' + currentExp + ')'}">-2 days left (expire date: 16-06-2021)</span>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-4 label-request">Total Available Leave :</label>
+                                <span class="col-md-7" th:text="${totalLeave + ' days'}">-2 days</span>
+                            </div>
+
+                            <br>
+
+                            <div class="card">
+                                <div class="card-header">Leave Request Detail</div>
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <label for="example-text-input" class="col-md-4 col-form-label">Request
+                                            Number :</label>
+                                        <div class="col-md-7 col-form-label">
+                                            <span th:text="${id}">LEAVE-1411820204A</span>
+                                            <input id="leaveId" hidden="" th:value="${id}">
+                                            <input id="emailRM" hidden="" th:value="${email}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="example-text-input" class="col-md-4 col-form-label">Leave
+                                            Type :</label>
+                                        <div class="col-md-7 col-form-label">
+                                            <span th:text="${reqDetail.leaveDetailId.type}">Type Leave</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="example-text-input" class="col-md-4 col-form-label">From :
+                                        </label>
+                                        <div class="col-md-7 col-form-label">
+                                            <span th:text="${#dates.format(reqDetail.startdate, 'dd-MM-yyyy')}">01-01-2020</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="example-text-input" class="col-md-4 col-form-label">To :
+                                        </label>
+                                        <div class="col-md-7 col-form-label">
+                                            <span th:text="${#dates.format(reqDetail.enddate, 'dd-MM-yyyy')}">31-12-2020</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="example-text-input" class="col-md-4 col-form-label">Phone
+                                            Number :</label>
+                                        <div class="col-md-7 col-form-label">
+                                            <span th:text="${noHp}">6289622888959</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="example-text-input" class="col-md-4 col-form-label">Notes :
+                                        </label>
+                                        <div class="col-md-7 col-form-label">
+                                            <span th:text="${reqDetail.notes}">Notes</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="example-text-input" class="col-md-4 col-form-label">Leave
+                                            Days :</label>
+                                        <div class="col-md-4 col-form-label">
+                                            <span th:text="${reqDetail.leaveDays}">-</span> days
+                                        </div>
+                                        <label for="example-text-input" class="col-md-2 col-form-label">Holidays :
+                                        </label>
+                                        <div class="col-md-2 col-form-label">
+                                            <span th:text="${reqDetail.holiday}">-</span> days
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="example-text-input" class="col-md-4 col-form-label">Leave
+                                            From Give Leave Type :</label>
+                                        <div class="col-md-7 col-form-label">
+                                            <span th:text="${reqDetail.leaveGiven}">-</span> days
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="example-text-input" class="col-md-4 col-form-label">Total Leave
+                                            Deduction :</label>
+                                        <div class="col-md-7 col-form-label">
+                                            <span th:text="${reqDetail.reduceLast}">-</span> day(s) from last Year, <span th:text="${reqDetail.reduceCurrent}">-</span> day(s) from current Year
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-md-4 col-form-label">Remarks :</label>
+                                        <div class="col-md-7" th:if="${reqDetail.requestStatus == 'NotYet'}">
+                                            <textarea id="remarks" name="remarks" class="form-control" maxlength="225" rows="3"
+                                                      placeholder="This notes has a limit of 225 chars."></textarea>
+                                        </div>
+                                        <div class="col-md-7" th:if="${reqDetail.requestStatus == 'Accepted'}">
+                                            <span th:text="${IsiRemark}"></span>
+                                        </div>
+                                        <div class="col-md-7" th:if="${reqDetail.requestStatus == 'Rejected'}">
+                                            <span th:text="${IsiRemark}"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="example-text-input" class="col-md-4 col-form-label">Backup Employee :
+                                        </label>
+                                        <div class="col-md-7 col-form-label">
+                                            <span th:if="${reqDetail.needbackupStatus == false}">No Need</span>
+                                            <span th:if="${reqDetail.needbackupStatus == true}"> Need Backup Employee</span>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row m-t-20">
+                                    <div class="col-12 text-center pr-5" th:if="${reqDetail.requestStatus == 'NotYet'}">
+                                        <button id="btnAccept" class="btn btn-success w-md waves-effect waves-light" type="button">Accept</button>
+                                        <button id="btnReject" class="btn btn-primary w-md waves-effect waves-light" type="button">Reject</button>
+                                    </div>
+                                    <div class="col-12 text-center pr-5" th:if="${reqDetail.requestStatus == 'Accepted'}">
+                                        <p>Accepted</p>
+                                        <span class="direct-chat-timestamp" th:text="${reqDetail.submittedDate}">11/12/1234,
+                                            09;10;30</span>
+                                    </div>
+                                    <div class="col-12 text-center pr-5" th:if="${reqDetail.requestStatus == 'Rejected'}">
+                                        <p>Accepted</p>
+                                        <span class="direct-chat-timestamp" th:text="${reqDetail.submittedDate}">31/12/1234,
+                                            12;59;59</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+
+                            <h4><strong><i class="fa fa-history"></i> Approval History</strong></h4>
+                            <div class="table-responsive">
+                                <table id="" class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Lv</th>
+                                            <th>Name</th>
+                                            <th>Status</th>
+                                            <th>Modified Date</th>
+                                            <th>Remarks</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- end col -->
+            </div> <!-- end row -->
+        </div> <!-- end container -->
+    </div>
+    <!-- end wrapper -->
+
+
+    <!-- Footer -->
+    <div th:replace="fragments/footerAdm::footerAdm"></div>
+    <!-- End Footer -->
+
+    <div th:replace="fragments/footer::js"></div>
+    <script th:src="@{/dist/js/session.js}"></script>
+
+    <script th:src="@{/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+    <script>
+        $("#btnAccept").on('click', function () {
+            var remarks = $("#remarks").val();
+            var leaveId = $("#leaveId").val();
+            var userId = $("#idUser").val();
+            var username = $("#emailRM").val();
+            if (remarks.length < 1) {
+                Swal.fire(
+                        'Oops...',
+                        'Sorry, remarks cannot be left blank!',
+                        'warning'
+                        );
+            } else if (remarks.length >= 1 && remarks.length < 5) {
+                Swal.fire(
+                        'Oops...',
+                        'Sorry, please type min 5 characters!',
+                        'warning',
+                        );
+            } else {
+                Swal.fire({
+                    title: 'Accept this ' + leaveId + ' ?',
+                    text: "You won't be able to revert this!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, Accept it!',
+                    cancelButtonText: 'No, cancel please!'
+
+                }).then((result) => {
+                    if (result.value) {
+                        Swal.fire({
+                            title: "Accepted",
+                            text: "This request has been accepted!",
+                            type: "success",
+                            showConfirmButton: false
+                        });
+                        $.ajax({
+                            url: "/HRIS/accepted?id=" + leaveId + "&remarks=" + remarks + "&userId=" + userId,
+                            type: "GET"
+                        });
+                        setTimeout(function () {
+                            window.location = "/HRIS/approvalRm/" + username;
+                        }, 550)
+                    } else {
+                        Swal.fire('Cancelled', 'Request is safe :)', 'error');
+                    }
+                });
+            }
+        });
+
+        $("#btnReject").on('click', function () {
+            var remarks = $("#remarks").val();
+            var leaveId = $("#leaveId").val();
+            var userId = $("#idUser").val();
+            var username = $("#emailRM").val();
+            if (remarks.length < 1) {
+                Swal.fire(
+                        'Oops...',
+                        'Sorry, remarks cannot be left blank!',
+                        'warning'
+                        );
+            } else if (remarks.length >= 1 && remarks.length < 5) {
+                Swal.fire(
+                        'Oops...',
+                        'Sorry, please type min 5 characters!',
+                        'warning',
+                        );
+            } else {
+                Swal.fire({
+                    title: 'Reject this ' + leaveId + ' ?',
+                    text: "You will not be able to recover this file!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, Reject it!',
+                    cancelButtonText: 'No, cancel please!'
+
+                }).then((result) => {
+                    if (result.value) {
+                        Swal.fire({
+                            title: "Rejected",
+                            text: "This request has been rejected!",
+                            type: "success",
+                            showConfirmButton: false
+                        });
+                        $.ajax({
+                            url: "/HRIS/rejected?id=" + leaveId + "&remarks=" + remarks + "&userId=" + userId,
+                            type: "GET"
+                        });
+                        setTimeout(function () {
+                            window.location = "/HRIS/approvalRm/" + username;
+                        }, 550)
+                    } else {
+                        Swal.fire('Cancelled', 'Request is safe :)', 'error');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

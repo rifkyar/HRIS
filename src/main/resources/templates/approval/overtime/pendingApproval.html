@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>HRIS - Pending Approval</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- App Icons -->
+        <link rel="shortcut icon" th:href="@{/dist/img/favicon.ico}">
+
+    <div th:replace="fragments/headerAdm::cssAdm"></div>
+
+    <link th:href="@{/plugins/datatables/dataTables.bootstrap4.min.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{/plugins/datatables/responsive.bootstrap4.min.css}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+
+    <style>
+        table thead{
+            background-color: #4bbbce;
+            color: #fafafa;
+        }
+    </style>
+
+</head>
+<body>
+    <!-- Loader -->
+    <div id="preloader">
+        <div id="status">
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <div class="header-bg">
+
+        <div th:replace="fragments/headerAdm::headerAdm"></div>
+
+        <div class="container-fluid">
+            <!-- Page-Title -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-title-box">
+                                               <h4 class="page-title"> <i class="dripicons-blog"></i> Pending Approval</h4>
+                    </div>
+                </div>
+            </div>
+            <!-- end page title end breadcrumb -->
+
+        </div>
+    </div>
+
+
+    <div class="wrapper">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card m-b-20">
+                        <br>
+                        <form id="formEditCust" class="form-horizontal" method="GET">
+                            <table id="pendingApprovalTb" class="table table-bordered hover dt-responsive nowrap"
+                                   style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                <thead class="text-center">
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Sales Order Number</th>
+                                        <th>Customer Name</th>
+                                        <th>View</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="text-center" th:each="pendding: ${penddingList}" th:data-thing="${pendding.requestOvertimeID.soId.soId}">
+                                        <td></td>
+                                        <td th:text="${pendding.requestOvertimeID.soId.soId}"></td>
+                                        <td th:text="${pendding.requestOvertimeID.soId.customerName}"></td>
+                                        <td>
+                                            <a th:href="@{'/detailCustomerAdm/' + ${pendding.requestOvertimeID.soId.soId}}" data-toggle="detail" title="Detail Customer"><i class="fa fa-search-plus" aria-hidden="true"></i></a>
+                                            <!--                                            <a th:onclick="'javascript:sendID(\''+${pendding.requestOvertimeID.soId.soId}+'\');'" role="button" data-toggle="detail" title="Detail Customer">
+                                                                                            <i class="fa fa-search-plus" aria-hidden="true"></i>
+                                                                                        </a>-->
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </form>
+                        <br>
+                    </div>
+                </div> <!-- end col -->
+            </div> <!-- end row -->
+        </div> <!-- end container -->
+    </div>
+    <!-- end wrapper -->
+
+
+    <!-- Footer -->
+    <div th:replace="fragments/footerAdm::footerAdm"></div>
+    <!-- End Footer -->
+
+    <div th:replace="fragments/footer::js"></div>
+
+    <script th:src="@{/dist/js/session.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+    <script th:src="@{/plugins/datatables/jquery.dataTables.min.js}" type="text/javascript"></script>
+    <script th:src="@{/plugins/datatables/dataTables.bootstrap4.min.js}" type="text/javascript"></script>
+    <script th:src="@{/plugins/datatables/dataTables.responsive.min.js}" type="text/javascript"></script>
+    <script th:src="@{/plugins/datatables/responsive.bootstrap4.min.js}" type="text/javascript"></script>
+
+    <script>
+        $(document).ready(function () {
+            var t = $('#pendingApprovalTb').DataTable({
+                "ordering": false,
+                "columnDefs": [{
+                        "searchable": false,
+                        "orderable": false,
+                        "targets": 0
+                    }],
+                "order": [
+                    [1, 'asc']
+                ]
+            });
+
+            t.on('order.dt search.dt', function () {
+                t.column(0, {
+                    search: 'applied',
+                    order: 'applied'
+                }).nodes().each(function (cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();
+        });
+    </script>
+    <script>
+//        $(document).ready(function () {
+//            $.ajax({
+//                type: "POST",
+//                url: "/HRIS/detailCustomerAdm/" + id,
+//                data: "JSON",
+//                contentType: "application/json; charset=utf-8",
+//                dataType: "json",
+//                success: function (a) {
+//                  
+//                }
+//            });
+//        });
+
+//        function sendID(id) {
+//            $.ajax({
+//                url: "/HRIS/detailCustomerAdm/" + id, // ini mapping ke controller
+//                data: "",
+//                cache: false,
+//                success: function (data) {
+//                    var a = data.requestId;
+//                    var b = data.nik;
+//                    var c = data.staffName;
+//                    var d = data.status
+//                    var e = data.periode;
+//                    var f = data.createDat;
+//
+//                    console.log(statusshifting);
+//                    $('#getIdAllocate').val(a); 
+//                    $('#getsdAllocate').val(b);
+//                    $('#getedAllocate').val(c);
+//                    $('#soIdEdit').val(d);
+//                    $('#soIdEditSelected').val(e);
+//                    $('#companyEdit').val(f);
+//                    $('#getcity').val(g);
+//                    
+//                    if (statusshifting === false) {
+//                        $("#getstatusshiftingnon").prop('checked', true);
+//                        console.log('true');
+//                    } else {
+//                        console.log('false');
+//                        $('#getstatusshiftingyes').prop('checked', true);
+//                    }
+//                }
+//            });
+//        }
+    </script>
+</body>
+</html>

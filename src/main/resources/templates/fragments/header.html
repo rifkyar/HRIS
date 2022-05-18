@@ -1,0 +1,191 @@
+<div th:fragment="css">
+    <link rel="stylesheet" th:href="@{/dist/css/bootstrap.min.css}">
+    <link th:href="@{/dist/css/icons.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/dist/css/style.css}" rel="stylesheet" type="text/css" />
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+</div>
+
+<div th:fragment="header">
+    <!-- Navigation Bar-->
+    <header id="topnav">    
+        <div class="topbar-main">
+            <div class="container-fluid">
+
+                <!-- Logo container-->
+                <div class="logo">
+                    <!-- Text Logo -->
+                    <a th:href="@{/home}" class="logo">
+                        <img width="30px" alt=""> HRIS
+                    </a>
+                </div>
+                <!-- End Logo container-->
+
+
+                <div class="menu-extras topbar-custom navbar p-0">
+
+                    <ul class="list-inline ml-auto mb-0">
+
+
+                        <!-- User-->
+                        <li class="list-inline-item dropdown notification-list">
+                            <a class="nav-link dropdown-toggle arrow-none waves-effect nav-user"
+                               data-toggle="dropdown" href="#" role="button" aria-haspopup="false"
+                               aria-expanded="false">
+                                <img th:src="@{/dist/img/users/avatar-1.jpg}" alt="user" class="rounded-circle">
+                                <span class="ml-1" id="username">Username <i class="mdi mdi-chevron-down"></i> </span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-animated profile-dropdown ">
+                                <a class="dropdown-item" th:href="@{'/profile/' + ${nik}}"><i class="dripicons-user text-muted"></i>
+                                    Profile</a>
+                                <a class="dropdown-item" href="#"><i
+                                        class="dripicons-gear text-muted"></i> Settings</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" th:href="@{/logout}"><i class="dripicons-exit text-muted"></i>
+                                    Logout</a>
+                            </div>
+                        </li>
+                        <li class="menu-item list-inline-item">
+                            <!-- Mobile menu toggle-->
+                            <a class="navbar-toggle nav-link">
+                                <div class="lines">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </a>
+                            <!-- End mobile menu toggle-->
+                        </li>
+
+                    </ul>
+                </div>
+                <!-- end menu-extras -->
+
+                <div class="clearfix"></div>
+
+            </div> <!-- end container -->
+        </div>
+        <!-- end topbar-main -->
+
+        <!-- MENU Start -->
+        <div class="navbar-custom">
+            <div class="container-fluid">
+                <div id="navigation">
+                    <!-- Navigation Menu-->
+                    <ul class="navigation-menu">
+
+                        <li class="has-submenu">
+                            <a th:href="@{/home}"><i class="dripicons-device-desktop"></i>Home</a>
+                        </li>
+
+                        <li class="has-submenu">
+                            <a href="#"><i class="dripicons-suitcase"></i>Leave <i
+                                    class="mdi mdi-chevron-down mdi-drop"></i></a>
+                            <ul class="submenu megamenu">
+                                <li>
+                                    <ul>
+                                        <li class="active"><a th:href="@{'/requestLeave/' + ${nik}}">Leave Request</a></li>
+                                        <li><a th:href="@{'/historyLeave/' + ${nik}}">History Request</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="has-submenu">
+                            <a href="#"><i class="dripicons-clock"></i>Overtime <i
+                                    class="mdi mdi-chevron-down mdi-drop"></i></a>
+                            <ul class="submenu">
+                                <li>
+                                    <a th:href="@{'/requestOvertime/'+${nik}}">Overtime Request</a>
+                                </li>
+                                <li>
+                                    <a th:href="@{'/historyOvertime/' +${nik}}">History Request</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="has-submenu">
+                            <a href="#"><i class="dripicons-to-do"></i>Document <i
+                                    class="mdi mdi-chevron-down mdi-drop"></i></a>
+                            <ul class="submenu">
+                                <li th:if="${roles == '[ROLE_EMPLOYEE]'}">
+                                    <a th:href="@{/saveDocumentRequest}">Document Request Form</a>
+                                </li>
+                                <li th:if="${roles == '[ROLE_MANAGER]'}">
+                                    <a th:href="@{/FormRequester}">Document Request Form</a>
+                                </li>
+                                <li th:if="${roles == '[ROLE_EMPLOYEE]'}">
+                                    <a th:href="@{/historyDocumentRequest}">Request History</a>
+                                </li>
+                                <li th:if="${roles == '[ROLE_MANAGER]'}">
+                                    <a th:href="@{/historyRM}">Request History</a>
+                                    <span th:text="${roles}" hidden=""></span>
+                                </li>
+                            </ul>
+                        </li>
+                        <!--Parking reimbursement Navigation Bar-->
+                        <li class="has-submenu">
+                            <a href="#"><i class="dripicons-to-do"></i>Parking Reimbursement <i
+                                    class="mdi mdi-chevron-down mdi-drop"></i></a>
+                            <ul class="submenu">
+                                <li>
+                                    <a th:href="@{/parking/request}">Form Request</a>
+                                </li>
+                                <li>
+                                    <a th:href="@{/parking/history}">History</a>
+                                </li>
+                                <li>
+                                    <a th:href="@{/parking/transport}">Transport List</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="has-submenu">
+                            <a href="#"><i class="fas fa-chalkboard-teacher"></i>Training and Development<i
+                                    class="mdi mdi-chevron-down mdi-drop"></i></a>
+                            <ul class="submenu">
+                                <li>
+                                    <a th:href="@{/trainingSchedule}">Training Schedule</a>
+                                </li>
+                                <li>
+                                    <a th:href="@{/requestTraining}">Training Request</a>
+                                </li>
+                                <li>
+                                    <a th:href="@{/viewTrainingHistory}">Training History</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="has-submenu">
+                            <a href="#"><i class="fas fa-syringe"></i>Vaccine<i
+                                    class="mdi mdi-chevron-down mdi-drop"></i></a>
+                            <ul class="submenu">
+                                <li>
+                                    <a th:href="@{/vaksin}">Submit Vaccine</a>
+                                </li>
+                                <li>
+                                    <a th:href="@{/historyVaksin}">History Vaccine</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="has-submenu">
+                            <a href="#"><i class="fas fa-hands-helping"></i>Help<i
+                                    class="mdi mdi-chevron-down mdi-drop"></i></a>
+                            <ul class="submenu">
+                                <li>
+                                    <a th:href="@{/faq}">FAQ</a>
+                                </li>
+                                <li>
+                                    <a th:href="@{/termAndCondition}">Term and Condition </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <!--end parking reimbursement navigation bar-->
+<!--                        <li>
+                            <a th:href="@{/termAndCondition}"><i class="dripicons-align-justify"></i>Term and Condition </a>
+                        </li>-->
+                    </ul>   
+                    <!-- End navigation menu -->
+                </div> <!-- end #navigation -->
+            </div> <!-- end container -->
+        </div> <!-- end navbar-custom -->
+    </header>
+    <!-- End Navigation Bar-->
+</div>
+

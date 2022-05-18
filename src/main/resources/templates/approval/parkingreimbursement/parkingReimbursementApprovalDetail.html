@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>HRIS - Requester</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- App Icons -->
+        <link rel="shortcut icon" th:href="@{/dist/img/favicon.ico}">
+        <link th:href="@{/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css}" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <div th:replace="fragments/headerAdm::cssAdm"></div>
+    <style>
+        table thead{
+            background-color: #4bbbce;
+            color: #fafafa;
+        }
+        .disabled{
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Loader -->
+    <div id="preloader">
+        <div id="status">
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <div class="header-bg">
+
+        <div th:replace="fragments/headerAdm::headerAdm"></div>
+
+        <div class="container-fluid">
+            <!-- Page-Title -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-title-box">
+                        <form class="float-right app-search">
+                            <input type="text" placeholder="Search..." class="form-control">
+                            <button type="submit"><i class="fa fa-search"></i></button>
+                        </form>
+                        <h4 class="page-title"> <i class="dripicons-blog"></i> Form Claim Request</h4>
+                    </div>
+                </div>
+            </div>
+            <!-- end page title end breadcrumb -->
+
+        </div>
+    </div>
+
+
+    <div class="wrapper">
+        <div class="container-fluid">
+            <!--Reimbursement division-->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card m-b-20">
+                        <div class="card-body" style="padding-left: 100px; padding-right: 100px;">
+                            <h4 class="text-center">Formulir Pengajuan Claim Parkir</h4>
+                            <br>
+                            <div class="card">
+                                <div class="card-header"><b>Employee Detail</b></div>
+                                <form  th:action="@{/parking/pending/checkpage}"  method="POST" enctype="multipart/form-data">
+                                    <div id="formValidSubmit"></div>
+                                    <div id="formValidSubmitImage"></div>
+                                    <div class="card-body" >
+                                        <div class="form-group row">
+                                            <label class="col-md-2 label-request">ID Request</label>
+                                            <span class="float-right">:</span>
+                                            <span th:text="${dataREIM[0]}" class="col-md-4">N/A</span>
+                                            <input  class="form-control" type="text" id="IDREQ" name="IDREQ" th:value="${dataREIM[0]}" hidden="">
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-2 label-request">Nama</label>
+                                            <span class="float-right">:</span>
+                                            <span th:text="${dataREIM[6]}" class="col-md-4">N/A</span>
+                                            <input class="form-control" type="text" id="nama_requester" name="nama_requester" th:value="${nama_requester}" hidden="">
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-2 label-request">NIK</label>
+                                            <span class="float-right">:</span>
+                                            <span th:text="${dataREIM[1]}" class="col-md-4">N/A</span>
+                                            <input class="form-control" type="text" id="nik_requester" name="nik_requester" th:value="${dataREIM[1]}" hidden="">
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-2 label-request">Nomor SO</label>
+                                            <span class="float-right">:</span>
+                                            <span th:text="${dataREIM[7]}" class="col-md-4">N/A</span>
+                                            <input class="form-control" type="text" id="so_id" name="so_id" th:value="${so_id}" hidden="">
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-2 label-request">Customer Name</label>
+                                            <span class="float-right">:</span>
+                                            <span th:text="${dataREIM[8]}" class="col-md-4">N/A</span>
+                                            <input class="form-control" type="text" id="customer_requester" name="customer_requester" th:value="${customer_requester}" hidden="">
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-2 label-request">Relation Manager</label>
+                                            <span class="float-right">:</span>
+                                            <span th:unless="${RMName==null}" th:text="${RMName}" class="col-md-4">N/A</span>
+                                            <input th:unless="${RMName==null}" class="form-control" type="text" id="nikRM" name="nikRM" th:value="${NIKRM}" placeholder="input nik RM" hidden="">
+                                            <div th:if="${RMName==null}" class="col-md-4">
+                                                <input class="form-control getRM" type="text" id="namaRM" name="namaRM" value="" placeholder="input nama RM">
+                                                <input class="form-control" type="text" id="nikRM" name="nikRM" value="" placeholder="input nik RM" hidden="">
+                                            </div>
+                                        </div>
+                                        <!--form input periode-->
+                                        <div class="form-group row">
+                                            <label for="example-text-input" class="col-md-2 col-form-label">Start Date</label>
+                                            <span class="float-right col-form-label">:</span>
+                                            <div class="col-md-4 input-group">
+                                                <input class="form-control periode" th:value="${dataREIM[3]}" type="text" id="periodestartview" name="periodestartview" disabled>
+                                                <input class="form-control periode" th:value="${dataREIM[3]}" type="text" id="periodestart" name="periodestart" hidden="">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--form input periode-->
+                                        <div class="form-group row">
+                                            <label for="example-text-input" class="col-md-2 col-form-label">End Date</label>
+                                            <span class="float-right col-form-label">:</span>
+                                            <div class="col-md-4 input-group">
+                                                <input class="form-control periode" th:value="${dataREIM[4]}" type="text" id="periodeendview" name="periodeendview" disabled>
+                                                <input class="form-control periode" th:value="${dataREIM[4]}" type="text" id="periodeend" name="periodeend" hidden="">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <!--<div class="card-header"><b>Parking Detail</b></div>-->
+                                    <div >
+                                        <div >
+                                            <div th:each="dataDetail : ${detailREIM}">
+                                                <div class="card-header sumrep"><b>Detail Parking</b></div>
+                                                <div class="card-body" >
+                                                    <input class="form-control getLoc" type="text" id="detailID" name="detailID"  th:value="${dataDetail[0]}" hidden="" >
+                                                    <!--Input nomor polisi-->
+                                                    <div class="form-group row">
+                                                        <label for="example-text-input" class="col-md-2 col-form-label">Police Number</label>
+                                                        <span class="float-right col-form-label">:</span>
+                                                        <div class="col-md-4">
+                                                            <input class="form-control" disabled th:id="${dataDetail[2]}" type="text" name="Police Number" th:value="${dataDetail[2]}" placeholder="Police Number">
+                                                        </div>
+                                                    </div>
+                                                    <!--Input customer building-->
+                                                    <div class="form-group row">
+                                                        <label for="example-text-input" class="col-md-2 col-form-label">Customer Building</label>
+                                                        <span class="float-right col-form-label">:</span>
+                                                        <div class="col-md-4">
+                                                            <input class="form-control" disabled th:id="customerBuilding" type="text" name="customerBuilding" th:value="${dataDetail[4]}" placeholder="customerBuilding">
+                                                        </div>
+                                                    </div>
+                                                    <!--form input lokasi parkir-->
+                                                    <div class="form-group row">
+                                                        <label for="example-text-input" class="col-md-2 col-form-label">Parking Location</label>
+                                                        <span class="float-right col-form-label">:</span>
+                                                        <div class="col-md-4">
+                                                            <input onclick="myfunction(this)" class="form-control getLoc" type="text" th:id="${dataDetail[0]}" name="parkLoc"  th:value="${dataDetail[6]}" placeholder="Input Parking Location" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <!--Form input nama pengelola-->
+                                                    <div class="form-group row">
+                                                        <label for="example-text-input" class="col-md-2 col-form-label">Parking Owner</label>
+                                                        <span class="float-right col-form-label">:</span>
+                                                        <div class="col-md-4">
+                                                            <input class="form-control" disabled th:id="${'park_own'+dataDetail[0]}" type="text" name="pengelola" th:value="${dataDetail[7]}" placeholder="Nama pengelola">
+                                                            <input class="form-control" type="text" th:id="${'park_id'+dataDetail[0]}" name="park_id" th:value="${dataDetail[5]}" placeholder="Nama park_id" hidden="">
+                                                        </div>
+                                                    </div>
+                                                    <!--form input telepon pengelola-->
+                                                    <div class="form-group row">
+                                                        <label for="example-text-input" class="col-md-2 col-form-label">No. Parking Owner</label>
+                                                        <span class="float-right col-form-label">:</span>
+                                                        <div class="col-md-4">
+                                                            <input class="form-control" disabled type="text" th:id="${'park_tel'+dataDetail[0]}" name="noTelp"  th:value="${dataDetail[8]}" placeholder="Nomor telepon pengelola">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="example-text-input" class="col-md-2 col-form-label">Harga Rate</label>
+                                                        <span class="float-right col-form-label">:</span>
+                                                        <div class="col-md-4">
+                                                            <input class="form-control" type="text" id="rate" name="rate"  th:value="${dataDetail[3]}" placeholder="Masukan harga rate" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="example-text-input" class="col-md-2 col-form-label">Attachment</label>
+                                                        <span class="float-right col-form-label">:</span>
+                                                        <div class="col-md-4">
+                                                            <a  class="btn btn-download" th:data-id="${dataDetail[0]}">
+                                                                <!--<img width="100" class="img-box" th:src="*{'data:image/png;base64,'+dataDetail[1]}" alt="gambar ticket" />-->
+                                                                <img width="100" class="img-box" th:src="@{/dist/img/pdf.png}" alt="gambar ticket" />
+                                                                <p th:text="${dataREIM[0]+'_'+dataDetail[0]+'.pdf'}" ></p>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                    <!--                                                    <div class="form-group row">
+                                                                                                            <label for="example-text-input" class="col-md-2 col-form-label">Download Link</label>
+                                                                                                            <span class="float-right col-form-label">:</span>
+                                                                                                            <button th:data-id="${dataDetail[0]}" type="button" id="download" class="btn btn-download" style="color: blue">Download PDF</button>
+                                                                                                        </div>-->
+                                                    <br>
+                                                    <div class="text-right">
+                                                        <!--<button id="alertsave" type="button" class="btn btn-primary w-md waves-effect waves-light">Submit</button>-->
+                                                        <button th:data-id="${dataDetail[0]}" type="button" id="alertAcc" class="btn btn-danger btn-acc">Accept</button>
+                                                        <button th:data-id="${dataDetail[0]}" type="button" id="alertReject" class="btn btn-danger btn-reject" style="background-color: red">Reject</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br>
+                                        </div>
+
+                                        <br>
+                                        <!--                                        <div class="text-center">
+                                                                                    <button id="alertsave" type="button" class="btn btn-primary w-md waves-effect waves-light">Submit</button>
+                                                                                    <button type="button" id="alertsave" class="btn btn-info">Add/Save</button>
+                                        
+                                                                                </div>-->
+                                        </form>
+
+
+                                        <!--form repeat-->
+                                        <!--                                <div class="repeater">
+                                                                            <div data-repeatable>
+                                                                                <fieldset>
+                                                                                    <label for="field">Field</label>
+                                                                                    <input type="text" name="field" id="field">
+                                                                                </fieldset>
+                                        
+                                                                                <fieldset>
+                                                                                    <label for="another-field">Another Field</label>
+                                                                                    <input type="text" name="another-field" id="another-field">
+                                                                                </fieldset>
+                                                                            </div>
+                                        
+                                                                            <a href="#" class="button">Add Fields</a>
+                                                                        </div>-->
+                                        <!--form repeat-->
+                                        <hr>
+
+                                        <!--<button type="button" id="alertsave" class="btn btn-info">Add/Save</button>-->
+                                    </div>
+                            </div>
+
+                        </div>
+                    </div> <!-- end col -->
+                </div> <!-- end row -->
+            </div> <!-- end container -->
+
+            <!--End reimbursemnet-->
+            <!--</div>-->
+        </div> <!-- end container -->
+    </div>
+    <!-- end wrapper -->
+
+
+    <!-- Footer -->
+    <div th:replace="fragments/footerAdm::footerAdm"></div>
+    <!-- End Footer -->
+
+    <div th:replace="fragments/footer::js"></div>
+    <script th:src="@{/dist/js/session.js}"></script>  
+
+    <!-- App js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script th:src="@{/dist/js/dropzone.js}"></script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.all.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script>
+                                                                $('.btn-reject').on('click', function () {
+                                                                    var reim_detail_id = this.getAttribute("data-id");
+                                                                    var reqid = document.getElementById("IDREQ").value;
+                                                                    var nik = document.getElementById("nik_requester").value;
+                                                                    console.log("Data; ", nik)
+                                                                    var form = $(this).parents().find('form');
+                                                                    Swal.fire({
+                                                                        title: 'Fill the reason',
+                                                                        input: 'textarea',
+                                                                        inputAttributes: {
+                                                                            autocapitalize: 'on'
+                                                                        },
+                                                                        showCloseButton: true
+                                                                    }).then((result) => {
+                                                                        if (result.value.length >= 5) {
+                                                                            console.log("red", result)
+                                                                            $.ajax({
+                                                                                url: "/HRIS/parking/pending/r?id=" + reim_detail_id + "&reason=" + result.value + "&nik=" + nik + "&reqid=" + reqid + "&status=9",
+                                                                            }).then((res) => {
+                                                                                if (res) {
+                                                                                    Swal.fire(
+                                                                                            'Updated!',
+                                                                                            'Reject Success.',
+                                                                                            'success'
+                                                                                            );
+                                                                                    form.submit();
+                                                                                } else {
+                                                                                    Swal.fire(
+                                                                                            'Not Updated!',
+                                                                                            'Reject failed.',
+                                                                                            'error'
+                                                                                            );
+                                                                                }
+                                                                            })
+
+                                                                        } else if (result.value == ""||result.value == null) {
+                                                                            Swal.fire({
+                                                                                title: 'Reason cannot be blank',
+                                                                                type: 'warning',
+                                                                                confirmButtonColor: '#3085d6',
+                                                                                confirmButtonText: 'Ok'
+                                                                            })
+                                                                        } else if (result.value.length < 5) {
+                                                                            Swal.fire({
+                                                                                title: 'The reason must have minimum 5 characters',
+                                                                                type: 'warning',
+                                                                                confirmButtonColor: '#3085d6',
+                                                                                confirmButtonText: 'Ok'
+                                                                            })
+                                                                        }else{
+                                                                            Swal.fire({
+                                                                                title: 'Reason cannot be blank',
+                                                                                type: 'warning',
+                                                                                confirmButtonColor: '#3085d6',
+                                                                                confirmButtonText: 'Ok'
+                                                                            })
+                                                                        }
+                                                                    });
+
+                                                                });
+    </script>
+    <script>
+        $('.btn-acc').on('click', function () {
+            var reim_detail_id = this.getAttribute("data-id");
+            var reqid = document.getElementById("IDREQ").value;
+            var nik = document.getElementById("nik_requester").value;
+            var form = $(this).parents().find('form');
+            Swal.fire({
+                title: 'Are you sure want to approve?',
+                text: "You won't be able to revert this!",
+                type: 'warning',
+                showCancelButton: true,
+                cancelButtonColor: '#d33',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Yes'
+            }).then((result) => {
+                if (result.value) {
+                    console.log("red", result);
+                    var comment = "Approved";
+                    $.ajax({
+                        url: "/HRIS/parking/pending/r?id=" + reim_detail_id + "&reason=" + comment + "&nik=" + nik + "&reqid=" + reqid + "&status=8",
+                    }).then((res) => {
+                        if (res) {
+                            Swal.fire(
+                                    'Updated!',
+                                    'Approval Success.',
+                                    'success'
+                                    );
+                            form.submit();
+                        } else {
+                            Swal.fire(
+                                    'Not Updated!',
+                                    'Approval failed.',
+                                    'error'
+                                    );
+                        }
+                    })
+                }
+            });
+
+        });
+    </script>
+
+    <script>
+        $('.btn-download').on('click', function () {
+            var reim_detail_id = this.getAttribute("data-id");
+            var reqid = document.getElementById("IDREQ").value;
+            location.href = "/HRIS/parking/pending/ticket/download/" + reim_detail_id + "/" + reqid;
+        });
+    </script>
+
+</body>
+</html>
+
+

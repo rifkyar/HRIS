@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="com.springboot_HRISNEW_jar_0.0.1-SNAPSHOTPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>com.springboot.HRISNEW.entities.Notifications</class>
+    <class>com.springboot.HRISNEW.entities.TrRequestovertime</class>
+    <class>com.springboot.HRISNEW.entities.RequesterInformation</class>
+    <class>com.springboot.HRISNEW.entities.RequestDetail</class>
+    <class>com.springboot.HRISNEW.entities.LeaveDetail</class>
+    <class>com.springboot.HRISNEW.entities.TrSoovertime</class>
+    <class>com.springboot.HRISNEW.entities.MOfficehour</class>
+    <class>com.springboot.HRISNEW.entities.Holidays</class>
+    <class>com.springboot.HRISNEW.entities.MLog</class>
+    <class>com.springboot.HRISNEW.entities.MOthers</class>
+    <class>com.springboot.HRISNEW.entities.LeaveType</class>
+    <class>com.springboot.HRISNEW.entities.MPaidtostaff</class>
+    <class>com.springboot.HRISNEW.entities.TrRequestovertimedetail</class>
+    <class>com.springboot.HRISNEW.entities.MReportovertime</class>
+    <class>com.springboot.HRISNEW.entities.Approval</class>
+    <class>com.springboot.HRISNEW.entities.TrLog</class>
+    <class>com.springboot.HRISNEW.entities.TempSo</class>
+    <class>com.springboot.HRISNEW.entities.MChargebackstatus</class>
+    <class>com.springboot.HRISNEW.entities.MChargebacktype</class>
+    <class>com.springboot.HRISNEW.entities.TrainingCatalogTrainers</class>
+    <class>com.springboot.HRISNEW.entities.TrainingCatalogs</class>
+    <class>com.springboot.HRISNEW.entities.TrainingCategories</class>
+    <class>com.springboot.HRISNEW.entities.TbTrEmployeeFormDetails</class>
+    <class>com.springboot.HRISNEW.entities.TbMForm</class>
+    <class>com.springboot.HRISNEW.entities.TbMStatus</class>
+    <class>com.springboot.HRISNEW.entities.TbTrApprovalDocumentRequest</class>
+    <class>com.springboot.HRISNEW.entities.TbTrEmployeeForm</class>
+    <class>com.springboot.HRISNEW.entities.TbMParameter</class>
+    <class>com.springboot.HRISNEW.entities.TrainingFeedbackQuestions</class>
+    <class>com.springboot.HRISNEW.entities.TrainingFeedbackType</class>
+    <class>com.springboot.HRISNEW.entities.TrainingUserRequests</class>
+    <class>com.springboot.HRISNEW.entities.TrainingTransactions</class>
+    <class>com.springboot.HRISNEW.entities.TrainingCatalogTransactions</class>
+    <class>com.springboot.HRISNEW.entities.TrainingFeedbackResponse</class>
+    <class>com.springboot.HRISNEW.entities.TrainingUserRegistration</class>
+    <class>com.springboot.HRISNEW.entities.TbMEmployeeTransportation</class>
+    <class>com.springboot.HRISNEW.entities.TbMParkingLocation</class>
+    <class>com.springboot.HRISNEW.entities.TbTrReimburse</class>
+    <class>com.springboot.HRISNEW.entities.TbTrReimburseDetail</class>
+    <class>com.springboot.HRISNEW.entities.TbTrApprovalReimburse</class>
+    <class>com.springboot.HRISNEW.entities.TbMEmployee</class>
+    <class>com.springboot.HRISNEW.entities.TbTrLogEmployee</class>
+    <class>com.springboot.HRISNEW.entities.TbTrAnnouncement</class>
+    <class>com.springboot.HRISNEW.entities.FaqQuestion</class>
+    <class>com.springboot.HRISNEW.entities.FaqAnswer</class>
+    <class>com.springboot.HRISNEW.entities.TbTrWorkassignment</class>
+    <class>com.springboot.HRISNEW.entities.TbTrProject</class>
+    <class>com.springboot.HRISNEW.entities.TbTrTraining</class>
+    <class>com.springboot.HRISNEW.entities.TbMCertificateType</class>
+    <class>com.springboot.HRISNEW.entities.TbTrCertification</class>
+    <class>com.springboot.HRISNEW.entities.TbTrTechnical</class>
+    <class>com.springboot.HRISNEW.entities.TbMCategory</class>
+    <class>com.springboot.HRISNEW.entities.TbMSkill</class>
+    <class>com.springboot.HRISNEW.entities.TbMDosesType</class>
+    <class>com.springboot.HRISNEW.entities.TbTrVaccine</class>
+    <class>com.springboot.HRISNEW.entities.TbMVaccineType</class>
+    <class>com.springboot.HRISNEW.entities.Division</class>
+    <!--<class>com.springboot.HRISNEW.repositories.TbMMejakerja</class>-->
+    <class>com.springboot.HRISNEW.entities.TbMMejakerja</class>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/hris_db?zeroDateTimeBehavior=convertToNull"/>
+      <property name="javax.persistence.jdbc.user" value="root"/>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.password" value=""/>
+    </properties>
+  </persistence-unit>
+</persistence>

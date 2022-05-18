@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>HRIS - Requester</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- App Icons -->
+        <link rel="shortcut icon" th:href="@{/dist/img/favicon.ico}">
+
+    <div th:replace="fragments/header::css"></div>
+
+    <link th:href="@{/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css}" rel="stylesheet" type="text/css" />
+
+    <style>
+        table thead{
+            background-color: #007ac0;
+            color: #fafafa;
+        }
+    </style>
+
+</head>
+<body>
+
+    <!-- Loader -->
+    <div id="preloader">
+        <div id="status">
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <div class="header-bg">
+
+        <div th:replace="fragments/header::header"></div>
+
+        <div class="container-fluid">
+            <!-- Page-Title -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-title-box">
+                        <form class="float-right app-search">
+                            <input type="text" placeholder="Search..." class="form-control">
+                            <button type="submit"><i class="fa fa-search"></i></button>
+                        </form>
+                        <h4 class="page-title"> <i class="dripicons-blog"></i> Document Request</h4>
+                    </div>
+                </div>
+            </div>
+            <!-- end page title end breadcrumb -->
+
+        </div>
+    </div>
+
+
+    <div class="wrapper">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card m-b-20">
+                        <div class="card-body" style="padding-left: 100px; padding-right: 100px;">
+                            <br>
+                            <h4>Requester Information</h4>
+                            <hr>
+
+                            <form id="formDocumentRequest" th:action="@{/saveDocumentRequest}" method="POST" enctype="multipart/form-data">
+                                <div class="form-group row">
+                                    <label for="example-text-input" class="col-md-4 col-form-label">NIK</label>
+                                    <span class="float-right col-form-label">:</span>
+                                    <div class="col-md-7 col-form-label">
+                                        <span class="col-md-7" th:text="${data_employee[4]}"></span> 
+                                        <input id="empl_nik" name="empl_nik" th:value="${data_employee[4]}" style="visibility: hidden;">
+                                        <input id="gender" name="gender" th:value="${data_employee[9]}" style="visibility: hidden;">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-md-4 col-form-label">Employee Name</label>
+                                    <span class="float-right col-form-label">:</span>
+                                    <div class="col-md-7">
+                                        <span class="col-md-7" th:text="${data_employee[3]}"></span> 
+                                        <input id="name" name="name" th:value="${data_employee[3]}" style="visibility: hidden;">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-md-4 col-form-label">Customer Name</label>
+                                    <span class="float-right col-form-label">:</span>
+                                    <div class="col-md-7">
+                                        <span class="col-md-7" th:text="${data_employee[2]}"></span> 
+                                        <input id="customer_name" name="customer_name" th:value="${data_employee[2]}" style="visibility: hidden;" >
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-4 col-form-label">Position</label>
+                                    <span class="float-right col-form-label">:</span>
+                                    <div class="col-md-7">
+                                        <span class="col-md-7" th:text="${data_employee[0]}"></span> 
+                                        <input id="position" name="position" th:value="${data_employee[0]}" style="visibility: hidden;">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="example-text-input" class="col-md-4 col-form-label">Place/Birth of Date</label>
+                                    <span class="float-right col-form-label">:</span>
+                                    <div class="col-md-7">
+                                        &nbsp;&nbsp;&nbsp;&nbsp;<span th:text="${data_employee[6]}"></span>, <span th:text="${tanggallahir}"></span>
+
+                                        <input id="placeofbirth" name="placeofbirth" th:value="${data_employee[6]}" style="visibility: hidden;">
+                                        <input id="tmpTgl" name="tmpTgl" th:value="${tglLahirDB}" style="visibility: hidden;">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="example-text-input" class="col-md-4 col-form-label">KTP No.</label>
+                                    <span class="float-right col-form-label">:</span>
+                                    <div class="col-md-7">
+                                        <span class="col-md-7" th:text="${data_employee[1]}"></span>
+                                        <input id="no_ktp" name="no_ktp" th:value="${data_employee[1]}" style="visibility: hidden;">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="example-text-input" class="col-md-4 col-form-label">Join Date</label>
+                                    <span class="float-right col-form-label">:</span>
+                                    <div class="col-md-7">
+                                        <span class="col-md-7" th:text="${join_date}"></span>
+                                        <input id="join_date" name="join_date" th:value="${joinDateDb}" style="visibility: hidden;">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="example-text-input" class="col-md-4 col-form-label">Address <span style="color: #d9534f">*</span></label>
+                                    <span class="float-right col-form-label">:</span>
+                                    <div class="col-md-7">
+                                        <input class="form-control" type="input" id="address" name="address" placeholder="Input your address" th:value="${data_employee[5]}">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row tipe">
+                                    <label for="example-text-input" class="col-md-4 col-form-label">Type <span style="color: #d9534f">*</span></label>
+                                    <span class="float-right col-form-label">:</span>
+                                    <div class="col-md-7">
+                                        <select class="form-control" name="type" id="type" onchange="ganti()" required>
+                                            <option value="" disabled selected>Choose</option>
+                                            <option th:each="obj,rowStat :${DocumentList}"
+                                                    th:if="${rowStat.count>2}"
+                                                    th:text="${obj.name}"
+                                                    th:value="${obj.id}"
+                                                    >
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row" >
+                                    <label for="example-text-input" class="col-md-4 col-form-label" >Passport No.<span id="foreach"></span></label>
+                                    <span class="float-right col-form-label">:</span>
+                                    <div class="col-md-7">
+                                        <input class="form-control" type="input" id="passport" name="passport" placeholder="Passport number">
+                                    </div>
+                                </div>
+
+                                <input class="form-control" type="input" id="nikApproveBy" name="nikApproveBy" th:value="${nikApproveBy}" hidden="">
+                                <input class="form-control" type="input" id="emailAdm" name="emailAdm" th:value="${emailAdm}" hidden="">
+
+                                <div class="form-group row">
+                                    <label class="col-md-4 col-form-label">Description <span style="color: #d9534f">*</span> </label>
+                                    <span class="float-right col-form-label">:</span>
+                                    <div class="col-md-7">
+                                        <textarea id="notes" name="notes" class="form-control" maxlength="225" rows="3"
+                                                  placeholder="Type description min 5 characters"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group row m-t-20">
+                                    <div class="col-12 text-right pr-5">
+                                        <button id="alertsave" type="button" class="btn btn-primary w-md waves-effect waves-light">Submit</button>
+                                    </div>
+                                </div>
+                                <span style="color: #d9534f">* </span><label style="color: #d9534f">Required</label>
+                            </form>
+
+                            <br>
+                        </div>
+                    </div>
+                </div> <!-- end col -->
+            </div> <!-- end row -->
+        </div> <!-- end container -->
+    </div>
+    <!-- end wrapper -->
+
+
+
+    <!-- Footer -->
+    <div th:replace="fragments/footer::footer"></div>
+    <!-- End Footer -->
+
+    <div th:replace="fragments/footer::js"></div>
+    <script th:src="@{/dist/js/session.js}"></script>
+    <script th:src="@{/dist/js/jquery.validate.min.js}"></script>
+    <script th:src="@{/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js}"></script>
+    <script th:src="@{/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
+
+    <script>
+                                            $('#alertsave').on('click', function () {
+
+                                                var form = $(this).parents().find('form');
+                                                var address = document.getElementsByName("address")[0].value;
+                                                var type = document.getElementsByName("type")[0].value;
+                                                var passport = document.getElementsByName("passport")[0].value;
+                                                var notes = $('#notes').val();
+                                                var errorText = "false";
+
+
+                                                if (address === null || address === "") {
+                                                    errorText = "Please enter valid address";
+                                                } else if (type === "") {
+                                                    errorText = "Please choose the type";
+                                                } else if (notes === null || notes === "") {
+                                                    errorText = "You must fill the description!";
+                                                } else if (notes.length < 5) {
+                                                    errorText = "You must fill the notes more than 5 characters!";
+                                                } else if (type == "13" && passport === "") {
+                                                    errorText = "You must fill the passport number!";
+                                                }
+
+                                                if (errorText !== "false") {
+                                                    Swal.fire(
+                                                            'Warning',
+                                                            errorText,
+                                                            'warning');
+                                                } else {
+                                                    Swal.fire({
+                                                        title: 'Are you sure want to submit this data?',
+                                                        text: "",
+                                                        icon: 'warning',
+                                                        showCancelButton: true,
+                                                        confirmButtonColor: '#2DB736',
+                                                        cancelButtonColor: '#d9534f',
+                                                        confirmButtonText: 'Yes'
+
+                                                    }).then((result) => {
+                                                        if (result.value) {
+                                                            form.submit();
+                                                            Swal.fire(
+                                                                    'Submitted!',
+                                                                    'Form has been submitted.',
+                                                                    'success'
+                                                                    )
+                                                        }
+                                                    });
+                                                }
+                                            });
+    </script>
+
+    <script>
+        function ganti() {
+            var x = document.getElementById("type").value;
+            if (x == "13") {
+                document.getElementById('passport').required = true;
+                var div1 = document.createElement('span');
+                div1.innerHTML =
+                        "<span style='color: #d9534f'> *</span>";
+                document.getElementById("foreach").appendChild(div1);
+            } else {
+                document.getElementById('passport').required = false;
+                div1 = document.getElementById('foreach');
+                div1.innerHTML =
+                        "";
+                document.getElementById("foreach").removeChild(div1);
+            }
+        }
+    </script>
+
+</body>
+</html>

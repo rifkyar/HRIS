@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>HRIS - Requester</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- App Icons -->
+        <link rel="shortcut icon" th:href="@{/dist/img/favicon.ico}">
+        <link th:href="@{/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css}" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <style>
+            .ui-datepicker-calendar {
+                display: none;
+            }​
+        </style>
+    <div th:replace="fragments/header::css"></div>
+</head>
+<body>
+
+    <!-- Loader -->
+    <div id="preloader">
+        <div id="status">
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <div class="header-bg">
+
+        <div th:replace="fragments/header::header"></div>
+
+        <div class="container-fluid">
+            <!-- Page-Title -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-title-box">
+                        <form class="float-right app-search">
+                            <input type="text" placeholder="Search..." class="form-control">
+                            <button type="submit"><i class="fa fa-search"></i></button>
+                        </form>
+                        <h4 class="page-title"> <i class="dripicons-blog"></i> Form Claim Request</h4>
+                    </div>
+                </div>
+            </div>
+            <!-- end page title end breadcrumb -->
+
+        </div>
+    </div>
+
+
+    <div class="wrapper">
+        <div class="container-fluid">
+            <!--Reimbursement division-->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card m-b-20">
+                        <div class="card-body" style="padding-left: 100px; padding-right: 100px;">
+                            <h4 class="text-center">Formulir Pengajuan Claim Parkir</h4>
+                            <br>
+                            <div class="card">
+                                <div class="card-header"><b>Employee Detail</b></div>
+                                <form th:action="@{/parking/s/form}"  method="POST" enctype="multipart/form-data">
+                                    <div id="formValidSubmit"></div>
+                                    <div id="formValidSubmitImage"></div>
+                                    <div class="card-body" >
+                                        <div class="form-group row">
+                                            <label class="col-md-2 label-request">ID Request</label>
+                                            <span class="float-right">:</span>
+                                            <span th:text="${requestID}" class="col-md-4">N/A</span>
+                                            <input class="form-control" type="text" id="IDREQ" name="IDREQ" th:value="${requestID}" hidden="">
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-2 label-request">Nama</label>
+                                            <span class="float-right">:</span>
+                                            <span th:text="${nama_requester}" class="col-md-4">N/A</span>
+                                            <input class="form-control" type="text" id="nama_requester" name="nama_requester" th:value="${nama_requester}" hidden="">
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-2 label-request">NIK</label>
+                                            <span class="float-right">:</span>
+                                            <span th:text="${nik_requester}" class="col-md-4">N/A</span>
+                                            <input class="form-control" type="text" id="nik_requester" name="nik_requester" th:value="${nik_requester}" hidden="">
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-2 label-request">Nomor SO</label>
+                                            <span class="float-right">:</span>
+                                            <span th:text="${so_id}" class="col-md-4">N/A</span>
+                                            <input class="form-control" type="text" id="so_id" name="so_id" th:value="${so_id}" hidden="">
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-2 label-request">Customer Name</label>
+                                            <span class="float-right">:</span>
+                                            <span th:text="${customer_requester}" class="col-md-4">N/A</span>
+                                            <input class="form-control" type="text" id="customer_requester" name="customer_requester" th:value="${customer_requester}" hidden="">
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-2 label-request">Relation Manager</label>
+                                            <span class="float-right">:</span>
+                                            <span th:unless="${RMName==null}" th:text="${RMName}" class="col-md-4">N/A</span>
+                                            <input th:unless="${RMName==null}" class="form-control" type="text" id="nikRM" name="nikRM" th:value="${NIKRM}" placeholder="input nik RM" hidden="">
+                                            <div th:if="${RMName==null}" class="col-md-4">
+                                                <input class="form-control getRM" type="text" id="namaRM" name="namaRM" value="" placeholder="input nama RM">
+                                                <input class="form-control" type="text" id="nikRM" name="nikRM" value="" placeholder="input nik RM" hidden="">
+                                            </div>
+                                        </div>
+                                        <!--form input periode-->
+                                        <div class="form-group row">
+                                            <label for="example-text-input" class="col-md-2 col-form-label">Start Period</label>
+                                            <span class="float-right col-form-label">:</span>
+                                            <div class="col-md-4 input-group">
+                                                <input class="form-control periode" type="text" id="periodestartview" name="periodestartview">
+                                                <input class="form-control periode" type="text" id="periodestart" name="periodestart" hidden="">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--form input periode-->
+                                        <div class="form-group row">
+                                            <label for="example-text-input" class="col-md-2 col-form-label">End Period</label>
+                                            <span class="float-right col-form-label">:</span>
+                                            <div class="col-md-4 input-group">
+                                                <input class="form-control periode" type="text" id="periodeendview" name="periodeendview">
+                                                <input class="form-control periode" type="text" id="periodeend" name="periodeend" hidden="">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <!--<div class="card-header"><b>Parking Detail</b></div>-->
+                                    <div class="repeater">
+                                        <div data-repeater-list="formDynamic">
+                                            <div data-repeater-item style="display:none;">
+                                                <div class="card-header sumrep"><b>Detail Parking</b></div>
+                                                <div class="card-body">
+                                                    <!--Input nomor polisi-->
+                                                    <div class="form-group row">
+                                                        <label for="example-text-input" class="col-md-2 col-form-label">Police Number</label>
+                                                        <span class="float-right col-form-label">:</span>
+                                                        <div class="col-md-4">
+                                                            <select class="form-control" id="policNumber" name="policNumber" >
+                                                                <option value="" selected="" disabled="">Choose Police Number</option>
+                                                                <option th:each="datatrans : ${listTransportation}" th:data-thing="${datatrans[0]}"  th:value="${datatrans[0]}" th:text="${datatrans[0]}">N/A</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <!--Input customer building-->
+                                                    <div class="form-group row">
+                                                        <label for="example-text-input" class="col-md-2 col-form-label">Customer Building</label>
+                                                        <span class="float-right col-form-label">:</span>
+                                                        <div class="col-md-4">
+                                                            <select class="form-control" id="customerBuilding" name="customerBuilding" >
+                                                                <option value="" selected="" disabled="">Choose Customer Building</option>
+                                                                <option value="Gedung Sewa">Gedung Sewa</option>
+                                                                <option value="Gedung Sendiri">Gedung Sendiri</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <!--form input lokasi parkir-->
+                                                    <div class="form-group row">
+                                                        <label for="example-text-input" class="col-md-2 col-form-label">Parking Location</label>
+                                                        <span class="float-right col-form-label">:</span>
+                                                        <div class="col-md-4">
+                                                            <input class="form-control getLoc" type="text" id="parkLoc" name="parkLoc" placeholder="Input Parking Location">
+                                                        </div>
+                                                    </div>
+                                                    <!--Form input nama pengelola-->
+                                                    <div class="form-group row">
+                                                        <label for="example-text-input" class="col-md-2 col-form-label">Parking Owner</label>
+                                                        <span class="float-right col-form-label">:</span>
+                                                        <div class="col-md-4">
+                                                            <input class="form-control" disabled type="text" id="pengelola" name="pengelola" value="" placeholder="Nama pengelola">
+                                                            <input class="form-control" type="text" id="park_id" name="park_id" value="" placeholder="Nama park_id" hidden="">
+                                                        </div>
+                                                    </div>
+                                                    <!--form input telepon pengelola-->
+                                                    <div class="form-group row">
+                                                        <label for="example-text-input" class="col-md-2 col-form-label">No. Parking Owner</label>
+                                                        <span class="float-right col-form-label">:</span>
+                                                        <div class="col-md-4">
+                                                            <input class="form-control" type="number" id="noTelp" name="noTelp" value="" placeholder="Nomor telepon pengelola">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="example-text-input" class="col-md-2 col-form-label">Upload Ticket</label>
+                                                        <span class="float-right col-form-label"></span>
+                                                        <div class="col-md-6">
+                                                            <div class="dropzone-wrapper">
+                                                                <div class="form-group" >
+                                                                    <div class="preview-zone hidden" >
+                                                                        <div class="box box-solid">
+                                                                            <div class="box-header with-border">
+                                                                                <div class="box-tools pull-right">
+                                                                                    <button type="button" class="btn btn-danger btn-xs remove-preview">
+                                                                                        <i class="fa fa-times"></i>
+                                                                                    </button>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="box-body"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="dropzone-desc">
+                                                                        <i class="glyphicon glyphicon-download-alt"></i>
+                                                                        <div>Choose an image file or drag it here.</div>
+                                                                    </div>
+                                                                    <input type="file" onchange="readFile(this)" name="foto_ticket" id="foto_ticket" class="dropzone" />
+                                                                    <input type="text" name="foto_confirm" id="foto_confirm" value="false" hidden="" class="fotoconfirm"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="dropzone-errortext"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="example-text-input" class="col-md-2 col-form-label">Harga Rate</label>
+                                                        <span class="float-right col-form-label">:</span>
+                                                        <div class="col-md-4">
+                                                            <input class="form-control" type="text" id="rate" name="rate" value="" placeholder="Masukan harga rate">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br>
+                                        </div>
+                                        <div class="card-header text-center">
+                                            <a data-repeater-create href="#anotherClaim" id="anotherClaim" class="button">
+                                                <i class="fa fa-plus-circle"></i> <b>Add Another Claim</b>
+                                            </a>
+                                        </div>
+                                        <br>
+                                        <div class="text-center">
+                                            <button type="button" id="alertsave" class="btn btn-info">Add/Save</button>
+                                        </div>
+                                </form>
+                                <hr>
+                            </div>
+                        </div>
+
+                    </div>
+                </div> <!-- end col -->
+            </div> <!-- end row -->
+        </div> <!-- end container -->
+    </div> <!-- end container -->
+</div>
+<!-- end wrapper -->
+
+
+<!-- Footer -->
+<div th:replace="fragments/footer::footer"></div>
+<!-- End Footer -->
+
+<div th:replace="fragments/footer::js"></div>
+<script th:src="@{/dist/js/session.js}"></script>  
+
+<!-- App js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>-->
+<!--<script th:src="@{/dist/js/jquery.dropzone.js}"></script>-->
+<!--<script th:src="@{/dist/js/app.js}"></script>-->
+<script th:src="@{/dist/js/dropzone.js}"></script>
+<script th:src="@{/dist/js/jquery.repeater.js}"></script>
+<script th:inline="javascript">
+                                                                        /*<![CDATA[*/
+
+                                                                        var counter = /*[[${counterDetail}]]*/ 'default';
+                                                                        console.log("Detailconute:", counter);
+
+
+                                                                        /*]]>*/
+</script>
+<script>
+    $(document).ready(function () {
+        'use strict';
+        $('.repeater').repeater({
+            show: function () {
+                $(this).slideDown();
+//                console.log('this:',this)
+                var sumRepeater = document.getElementsByClassName("sumrep").length;
+                console.log(sumRepeater);
+                $(".remove-preview").on("click", function () {
+                    var dropzoneinput = $(this)
+                            .parents(".form-group")
+                            .find(".fotoconfirm");
+                    //remove image
+                    var res = dropzoneinput[0].name.split("formDynamic[");
+                    var res = res[1].split("][foto_confirm]");
+                    var isInputIDAV = document.getElementById("fotoTicketData" + res[0]);
+                    isInputIDAV.remove();
+
+                    document.getElementsByName(dropzoneinput[0].name)[0].value = "false";
+                    var descZone = $(this)
+                            .parents(".form-group")
+                            .find(".dropzone-desc");
+                    console.log(descZone);
+                    var boxZone = $(this)
+                            .parents(".preview-zone")
+                            .find(".box-body");
+                    var previewZone = $(this).parents(".preview-zone");
+                    var dropzone = $(this)
+                            .parents(".form-group")
+                            .find(".dropzone");
+                    descZone.removeClass("hidden2");
+                    console.log(boxZone)
+                    boxZone.empty();
+                    previewZone.addClass("hidden");
+                    reset(dropzone);
+                });
+                $(".getLoc").autocomplete({
+                    source: "getListParking",
+                    select: function (event, ui) {
+                        var formID = this.name.split("[parkLoc]")[0];
+                        document.getElementsByName(formID + "[pengelola]")[0].value = ui.item.owner;
+                        document.getElementsByName(formID + "[noTelp]")[0].value = ui.item.contact;
+                        document.getElementsByName(formID + "[park_id]")[0].value = ui.item.park_id;
+                    }
+                });
+
+            },
+            hide: function (deleteElement) {
+                if (confirm('Are you sure you want to delete this element?')) {
+                    $(this).slideUp(deleteElement);
+
+                }
+            },
+            ready: function (setIndexes) {
+
+            }
+        });
+    });</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.all.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<!--<script src="https://code.jquery.com/jquery-3.5.0.js"></script>-->
+<script>
+
+    $('#alertsave').on('click', function () {
+        var form = $(this).parents().find('form');
+        //for delete kalau dia refresh atau resubmit
+        var deleteThis = document.getElementById("formValidSubmit").innerHTML = ""
+        //checking banyaknya repeater
+        var sumRepeater = document.getElementsByClassName("sumrep").length;
+        console.log(sumRepeater);
+        var errorText = "false"
+        var parkLocation;
+        //checking for untuk police number
+        for (var i = 1, max = sumRepeater; i < max; i++) {
+            var div1 = document.createElement('div');
+            var valuePolice = document.getElementsByName("formDynamic[" + i + "][policNumber]")[0].value;
+            var customerBuilding = document.getElementsByName("formDynamic[" + i + "][customerBuilding]")[0].value;
+            parkLocation = document.getElementsByName("formDynamic[" + i + "][parkLoc]")[0].value;
+            var foto_ticket = document.getElementsByName("formDynamic[" + i + "][foto_confirm]")[0].value;
+            var foto_ticket_img = document.getElementsByName("formDynamic[" + i + "][foto_ticket]")[0].value;
+            var rate = document.getElementsByName("formDynamic[" + i + "][rate]")[0].value;
+            var noTelp = document.getElementsByName("formDynamic[" + i + "][noTelp]")[0].value;
+            var pengelola = document.getElementsByName("formDynamic[" + i + "][pengelola]")[0].value;
+            var park_ID = document.getElementsByName("formDynamic[" + i + "][park_id]")[0].value;
+            console.log("Data: ", valuePolice);
+
+            if (valuePolice == null || valuePolice == "")
+                errorText = "Please select police number";
+            else if (customerBuilding == null || customerBuilding == "")
+                errorText = "Please select customer building";
+            else if (parkLocation == null || parkLocation == "")
+                errorText = "Please select parking location";
+            else if (noTelp == null || noTelp == "") {
+                errorText = "Please enter number telphone parking owner";
+            } else if (foto_ticket == null || foto_ticket == "")
+                errorText = "Please input ticket file";
+            else if (foto_ticket == "nopdf") {
+                errorText = "Please upload PDF file";
+            } else if (foto_ticket == "filelarge") {
+                errorText = "File size exceeds 3 MB";
+            } else if (isNaN(rate))
+                errorText = "Price can only be number";
+            else if (rate == null || rate == "")
+                errorText = "Please input rate price";
+            else if (rate.length > 6)
+                errorText = "Rate cannot exceeds 1 million";
+            else {
+                console.log("parkLocation: ", parkLocation)
+                $.ajax({
+                    url: "/HRIS/parking/getListParking?term=" + parkLocation,
+                    dataType: 'json',
+                    success: (hasil) => {
+                        if (hasil.length === 0) {
+                            Swal.fire(
+                                    'Warning',
+                                    'Parking location  not found!',
+                                    'warning');
+                        } else {
+                            div1.innerHTML = "<input type='text' name='policeNumberData' value='" + valuePolice + "' />" +
+                                    "<input type='text' name='customerBuildingData' value='" + customerBuilding + "' />" +
+                                    "<input type='text' name='park_id' value='" + park_ID + "' />" +
+//                        "<input type='file' name='fotoTicketData' value='" + foto_ticket_img + "' disable />" +
+                                    "<input type='text' name='rateData' value='" + rate + "' />" +
+                                    "<input type='text' name='noTelpData' value='" + noTelp + "' />" +
+                                    "<input type='text' name='pengelolaData' value='" + pengelola + "' />";
+                            console.log(document.getElementById("formValidSubmit"))
+                            document.getElementById("formValidSubmit").appendChild(div1);
+                        }
+                    }
+                });
+            }
+            if ($('#periodestartview').val() === "")
+                errorText = "Please select start periode";
+            else if ($('#periodeendview').val() === "")
+                errorText = "Please select end periode";
+            if (errorText != "false") {
+                Swal.fire(
+                        'Warning',
+                        errorText,
+                        'warning');
+            } else {
+                Swal.fire({
+                    title: 'Are you sure to save this data?',
+                    text: "You won't be able to revert this!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, submit!'
+                }).then((result) => {
+                    if (result.value) {
+                        form.submit();
+                        Swal.fire(
+                                'Submitted!',
+                                'Your file has been submitted.',
+                                'success'
+                                )
+                    }
+                });
+            }
+        }
+    });</script>
+<!--<script th:src="@{/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js}"></script>-->
+<!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/eonasdan-bootstrap-datetimepicker/3.1.4/js/bootstrap-datetimepicker.min.js"></script>-->
+
+<script>
+    var MinumumDate = "";
+    $('#periodestartview').datepicker({
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'MM yy',
+        altField: '#periodestart',
+        altFormat: 'yy-mm-dd',
+        minDate: "0M",
+        maxDate: "+1M",
+        onClose: function () {
+            var iMonth = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+            var iYear = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+            $(this).datepicker('setDate', new Date(iYear, iMonth, 10));
+        },
+
+        beforeShow: function () {
+            if ((selDate = $(this).val()).length > 0)
+            {
+                iYear = selDate.substring(selDate.length - 4, selDate.length);
+                iMonth = jQuery.inArray(selDate.substring(0, selDate.length - 5), $(this).datepicker('option', 'monthNames'));
+                $(this).datepicker('option', 'defaultDate', new Date(iYear, iMonth, 1));
+                $(this).datepicker('setDate', new Date(iYear, iMonth, 10));
+            }
+        }
+    });
+</script>
+<script>
+    $('#periodeendview').datepicker({
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'MM yy',
+        altField: '#periodeend',
+        altFormat: 'yy-mm-dd',
+        minDate: "-1M",
+        maxDate: "+1M",
+        onClose: function () {
+            var iMonth = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+            var iYear = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+            $(this).datepicker('setDate', new Date(iYear, iMonth, 10));
+        },
+        beforeShow: function () {
+            console.log("Data: ", $('#periodestart'))
+            if ($('#periodestart').val() === "")
+            {
+                $(this).datepicker('option', 'minDate', "-1M");
+                $(this).datepicker('option', 'maxDate:', "+1M");
+            } else {
+                var dataTanggal = $('#periodestart').val()
+                $(this).datepicker('option', 'minDate', new Date(dataTanggal));
+//                $(this).datepicker('option', 'minDate', $('#periodestartview').val());
+                $(this).datepicker('option', 'maxDate:', "+1M");
+                console.log("LOL", new Date(dataTanggal))
+            }
+            if ((selDate = $(this).val()).length > 0)
+            {
+                iYear = selDate.substring(selDate.length - 4, selDate.length);
+                iMonth = jQuery.inArray(selDate.substring(0, selDate.length - 5), $(this).datepicker('option', 'monthNames'));
+                $(this).datepicker('option', 'defaultDate', new Date(iYear, iMonth, 1));
+                $(this).datepicker('setDate', new Date(iYear, iMonth, 10));
+            }
+        }
+    });
+</script>
+</body>
+</html>
+
+

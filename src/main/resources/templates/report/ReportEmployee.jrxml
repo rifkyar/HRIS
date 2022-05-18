@@ -1,0 +1,504 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b5f69ea7-aaff-427c-99d9-5e2c74bb3d3b">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="192"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="HIstoryEmployee" uuid="fa743870-7b5f-443b-8f2f-1fadd1b7a54e">
+		<parameter name="nik" class="java.lang.String">
+			<defaultValueExpression><![CDATA[$P{nik}]]></defaultValueExpression>
+		</parameter>
+		<parameter name="periode" class="java.lang.String"/>
+		<queryString>
+			<![CDATA[SELECT * FROM tr_requestovertimedetail r 
+JOIN tr_requestovertime s on r.RequestOvertimeID = s.RequestOvertimeID 
+WHERE s.employee_nik IN (SELECT nik FROM requester_information WHERE source_nik IN (SELECT source_nik FROM requester_information WHERE nik = $P{nik}))
+AND s.period like $P{periode}
+AND r.RequestStatus like 'Done%']]>
+		</queryString>
+		<field name="OvertimeDetail" class="java.lang.Integer">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="RequestOvertimeID" class="java.lang.Integer">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="TicketNumber" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="StartDate" class="java.sql.Date">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="DateType" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="StartTime" class="java.sql.Time">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="EndDate" class="java.sql.Date">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="EndTime" class="java.sql.Time">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="Total" class="java.lang.Float">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="lokasi" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="Task" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="PMorLeader" class="java.lang.Boolean">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="RM" class="java.lang.Boolean">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="MSFC" class="java.lang.Boolean">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="RequestStatus" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="CreateBy" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="CreateDate" class="java.sql.Timestamp">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="UpdateBy" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="UpdateDate" class="java.sql.Timestamp">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="employee_nik" class="java.lang.Integer">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="EmployeeName" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="EmployeePosition" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="contract_status" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="so_id" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="period" class="java.sql.Date">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="JobDesc" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="JobTargetOther" class="java.lang.Integer">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="PICName" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="PICPosition" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="TotalOvertime" class="java.lang.Float">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="Location" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="NextApproval" class="java.lang.Integer">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="CreatedBy" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+	</subDataset>
+	<parameter name="nik" class="java.lang.String"/>
+	<parameter name="periode" class="java.lang.String"/>
+	<parameter name="picname" class="java.lang.String"/>
+	<parameter name="picpos" class="java.lang.String"/>
+	<parameter name="monthPeriode" class="java.lang.String"/>
+	<parameter name="custName" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select 1 from dual]]>
+	</queryString>
+	<field name="1" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="82" splitType="Stretch">
+			<staticText>
+				<reportElement x="271" y="0" width="326" height="29" uuid="f0498815-5ba6-46ed-8d00-4a076816603b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="20" isBold="false" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[OVERTIME RECAP FORM]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="325" y="33" width="226" height="20" uuid="717364f9-7544-436f-b567-6ee7b87b87af"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{custName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="325" y="58" width="126" height="20" uuid="2c9497e0-5fcf-48a4-80e5-a88ed1d54cac"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Submission Periode :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="451" y="58" width="100" height="20" uuid="f7db3be6-caa2-4615-82d5-27e8022503f4"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{monthPeriode}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="14" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="74" splitType="Stretch">
+			<staticText>
+				<reportElement x="1" y="11" width="155" height="20" uuid="b87c7d9d-b5ff-4955-9ebc-f0a9791184a2"/>
+				<text><![CDATA[Nama PIC                                      :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="51" width="156" height="20" uuid="f8ddd4dc-02e8-4050-a5f6-78440825cb00"/>
+				<text><![CDATA[Pilihan Cut Off Submission           :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="31" width="156" height="20" uuid="de456064-42c3-46e1-8544-e881c47a417b"/>
+				<text><![CDATA[Posisi PIC                                      :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="171" y="11" width="100" height="20" uuid="9d36d734-5c1d-4c21-9090-49dd5bd3ccb6"/>
+				<textFieldExpression><![CDATA[$P{picname}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="171" y="31" width="100" height="20" uuid="502945f9-5caa-42e7-b7fe-081cec1886a3"/>
+				<textFieldExpression><![CDATA[$P{picpos}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="92" splitType="Stretch">
+			<componentElement>
+				<reportElement key="table 1" style="table 1" x="0" y="0" width="802" height="92" uuid="0b43ff3b-7238-4ab8-b0b9-b796fc148a6e"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="HIstoryEmployee" uuid="2218cca0-3747-4a20-8ae5-67074cf54de0">
+						<datasetParameter name="nik">
+							<datasetParameterExpression><![CDATA[$P{nik}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="periode">
+							<datasetParameterExpression><![CDATA[$P{periode}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="41" uuid="c2a008e3-252f-4089-b114-3eea8fb6e531">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="41" height="30" uuid="c5377c18-1459-4fa7-b074-9f30aee0b7b5"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Staff ID]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="41" height="30" uuid="7d5121d4-32cf-4c4e-add7-135350805f22"/>
+								<textFieldExpression><![CDATA[$F{employee_nik}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="76" uuid="bcaef6e7-3610-45a4-b492-9795e7a1ed38">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="76" height="30" uuid="61e17323-2e60-4027-8653-600a423304b0"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Staff Name]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="76" height="30" uuid="0bafdc66-47fd-4c6b-a091-f4f4018c5331"/>
+								<textFieldExpression><![CDATA[$F{EmployeeName}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="5ae5b6d9-a3df-43e6-b9cf-8654064afac7">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="d37ed038-8c2d-4c74-a26b-5ed9f5550346"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Status Staff]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="30" uuid="dfa06a2a-6b62-44c9-ae31-7c9425d22d39"/>
+								<textFieldExpression><![CDATA[$F{contract_status}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="71" uuid="8b6d21ca-ed27-457d-8932-d1ac80f21977">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="71" height="30" uuid="a090bd1c-22ff-4633-853a-251d31faa915"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Start Date]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="71" height="30" uuid="93358f41-7e83-412f-b4c4-46411b8bcb2d"/>
+								<textFieldExpression><![CDATA[$F{StartDate}.toString()]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="71" uuid="b6e9bb08-6219-474d-8bfa-93434d7714d8">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="71" height="30" uuid="f82b3a2b-b132-4f13-9392-528d33fbd4ac"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[End Date]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="71" height="30" uuid="102fe79f-eab9-4d49-b845-cc96c247ecf2"/>
+								<textFieldExpression><![CDATA[$F{EndDate}.toString()]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="71" uuid="04c3e7b0-3ab1-435e-a101-e4eb8533f72e">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="71" height="30" uuid="b545777d-cbbf-4bb2-a80a-95a6348d04af"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Start Hour]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="71" height="30" uuid="b6367624-bb2b-49d4-83ba-83dbde72556d"/>
+								<textFieldExpression><![CDATA[$F{StartTime}.toString()]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="71" uuid="d7aaf83c-0f83-4b0e-b620-3582a7a78e26">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="71" height="30" uuid="a24e6408-fb1e-4f0d-a477-b61241c93a75"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[End Hour]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="71" height="30" uuid="8ad12fac-811b-4c43-a0e3-54dec98e2820"/>
+								<textFieldExpression><![CDATA[$F{EndTime}.toString()]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="35" uuid="774335c0-6ad4-420a-a8fc-e380fbbbcf99">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="35" height="30" uuid="2c7417f2-8d25-4b77-802f-57c959071805"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Total Hour]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="35" height="30" uuid="d9bd9519-0244-430f-a5dc-a802588c826b"/>
+								<textFieldExpression><![CDATA[$F{Total}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="45" uuid="686be495-e637-43df-8d48-03c3a406126d">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="45" height="30" uuid="2ca9fd22-9c87-40b3-9da9-0d1c4028494d"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Tipe Day]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="45" height="30" uuid="e0eccd51-40e4-4e25-bfe5-15cc97b4240a"/>
+								<textFieldExpression><![CDATA[$F{DateType}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="41" uuid="66931ebd-554e-4d10-a42e-78cce22d0cb9">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="41" height="30" uuid="0c53af90-1883-4d0a-8e05-452f3fa81e7c"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Process]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="41" height="30" uuid="c0670a6b-76e8-49d8-9024-03d8738e965c"/>
+								<textFieldExpression><![CDATA[$F{Total}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="8f6e336e-129d-4647-ab38-2d87cd5de04a">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="0ecdce7f-d6d3-48c3-9fc4-9e400b484d08"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Overtime Description]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="30" uuid="85712fc2-698c-457c-85ea-39c4238b8c9f"/>
+								<textFieldExpression><![CDATA[$F{Task}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="c82fd4a3-83c1-458b-a3ef-e30e3f207ffa">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="e98bba91-397d-44b5-96dc-bc3f58ab2857"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Job Tittle]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 1_TD" height="30" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="30" uuid="46afe642-3423-4d88-a73c-c662e5ed1227"/>
+								<textFieldExpression><![CDATA[$F{EmployeePosition}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="115" splitType="Stretch">
+			<staticText>
+				<reportElement x="232" y="10" width="100" height="20" uuid="a44cdbfc-921a-487d-8962-47a88662c4b0"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Request By,]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="334" y="10" width="100" height="20" uuid="11b4b2c1-8fed-4888-8228-0ad672be3b70"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Review By,]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="436" y="10" width="100" height="20" uuid="86841500-f49f-4973-b67c-b918096215ba"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Approved By,]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="539" y="10" width="100" height="20" uuid="5b1c39aa-a63e-4c3b-a74d-e998ffcbaab1"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Approved By,]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="232" y="32" width="100" height="68" uuid="2fd283a1-1320-492e-b735-3afe476475ed"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font isBold="true" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Staff]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="334" y="32" width="100" height="68" uuid="db751a45-0d4b-4a4e-899b-baa78a08c7de"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font isBold="true" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[PM / Leader]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="436" y="32" width="100" height="68" uuid="abd07908-737a-4de9-b875-65bd4582cf91"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font isBold="true" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Customer]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="539" y="32" width="100" height="68" uuid="89d7b93f-023f-4a40-97df-76d65acefc30"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font isBold="true" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Relation Manager]]></text>
+			</staticText>
+		</band>
+	</columnFooter>
+</jasperReport>

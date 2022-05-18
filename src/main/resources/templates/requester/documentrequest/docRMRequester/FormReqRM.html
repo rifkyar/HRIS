@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <title>HRIS - Requester</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- App Icons -->
+        <link rel="shortcut icon" th:href="@{/dist/img/favicon.ico}">
+
+    <div th:replace="fragments/header::css"></div>
+
+    <link th:href="@{/plugins/datatables/dataTables.bootstrap4.min.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/plugins/datatables/responsive.bootstrap4.min.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/eonasdan-bootstrap-datetimepicker/3.1.4/css/bootstrap-datetimepicker.min.css" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+
+    
+    <style>
+        table thead {
+            background-color: #007ac0;
+            color: #fafafa;
+        }
+
+        .disabled {
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header-bg">
+
+        <div th:replace="fragments/header::header"></div>
+
+        <div class="container-fluid">
+            <!-- Page-Title -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-title-box">
+                        <form class="float-right app-search">
+                            <input type="text" placeholder="Search..." class="form-control">
+                            <button type="submit"><i class="fa fa-search"></i></button>
+                        </form>
+                        <h4 class="page-title"> <i class="dripicons-blog"></i>Document Request</h4>
+                    </div>
+                </div>
+            </div>
+            <!-- end page title end breadcrumb -->
+        </div>
+    </div>
+
+    <div class="wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card m-b-20">
+                        <br>
+                        <div class="card-body" style="padding-left: 100px; padding-right: 100px;">
+                            <br>
+                            <h4>Form Request</h4>
+                            <hr>
+                            <form id="formRmrReq" th:action="@{/SubmitEmployee}" method="POST" enctype="multipart/form-data">
+
+                                <input class="form-control" id="employeenik" name="employeenik" th:value="${id}" hidden>
+                                <input class="form-control" id="Userlogin" name="Userlogin" th:value="${userlog}" hidden>
+                                <div class="form-group row">
+                                    <label for="example-text-input" class="col-md-4 col-form-label">Admin <span style="color: #d9534f">* </span></label>
+                                    <span class="float-right col-form-label">:</span>
+                                    <div class="col-md-7 col-form-label">
+                                        <select class="form-control" name="adminName" id="adminName" required>
+                                            <option value="" disabled selected>Choose</option>
+                                            <option th:each="adminName : ${adminName}"
+                                                    th:value="${adminName}"
+                                                    th:text="${adminName}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="example-text-input" class="col-md-4 col-form-label">Type <span style="color: #d9534f">* </span></label>
+                                    <span class="float-right col-form-label">:</span>
+                                    <div class="col-md-7">
+                                        <select class="form-control" name="type" id="type" required>
+                                            <option value="" disabled selected>Choose</option>
+                                            <option th:each="obj,rowStat :${DocumentTP}"
+                                                    th:if="${rowStat.count<3}"
+                                                    th:text="${obj.name}"
+                                                    th:value="${obj.id}"
+                                                    >
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="example-text-input" class="col-md-4 col-form-label">Employee <span style="color: #d9534f">* </span></label>
+                                    <span class="float-right col-form-label">:</span>
+                                    <div class="col-md-7 col-form-label">
+                                        <input id="term" type="search"  name="term" placeholder="Search" class="form-control deletable" required="true">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-md-4 col-form-label">Start Date <span style="color: #d9534f">* </span></label>
+                                    <span class="float-right col-form-label">:</span>
+                                    <div class="col-md-7">
+                                        <!--<input type="date" id="startDate" name="startDate" class="form-control datepicker">-->
+                                        <input id="startDate" placeholder="dd/mm/yyyy" type="text" class="form-control datepicker" name="startDate" required="true">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="example-text-input" class="col-md-4 col-form-label">End Date <span style="color: #d9534f">*</span></label>
+                                    <span class="float-right col-form-label">:</span>
+                                    <div class="col-md-7">
+                                        <!--<input type="date" id="EndDate" name="EndDate" class="form-control datepicker">-->
+                                        <input id="EndDate" placeholder="dd/mm/yyyy" type="text" class="form-control datepicker" name="EndDate" required="true">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-md-4 col-form-label">Description <span style="color: #d9534f">*</span> </label>
+                                    <span class="float-right col-form-label">:</span>
+                                    <div class="col-md-7">
+                                        <textarea id="description" name="description" class="form-control" maxlength="225" rows="3"
+                                                  placeholder="Type description min 5 characters"></textarea>
+                                    </div>
+                                </div>
+                                <hr>
+
+                                <br>
+                                <h4>Data Employee</h4>
+                                <table id="tblreq" class="table table-bordered hover dt-responsive display responsive nowrap"
+                                       style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                    <thead class="text-center">
+                                        <tr>
+                                            <th>No</th>
+                                            <th>NIK</th>
+                                            <th>Name</th>
+                                            <th>Customer Name</th>
+                                            <th>Position</th>
+                                            <th>KTP No.</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="foreach">
+                                        <tr>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="form-group row m-t-20">
+                                    <div class="col-12 text-right pr-5">
+                                        <button id="alertsave" type="button" class="btn btn-primary w-md waves-effect waves-light">Submit</button>
+                                    </div>
+                                </div>
+                                <span style="color: #d9534f">* </span><label style="color: #d9534f">Required</label>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- end col -->
+        </div> <!-- end row -->
+    </div> <!-- end container -->
+
+    <!-- Footer -->
+    <div th:replace="fragments/footer::footer"></div>
+    <!-- End Footer -->
+
+    <div th:replace="fragments/footer::js"></div>
+    <script th:src="@{/dist/js/session.js}"></script>
+    <!-- App js -->
+    <script th:src="@{/dist/js/jquery.validate.min.js}"></script>
+    <script th:src="@{/plugins/datatables/jquery.dataTables.min.js}" type="text/javascript"></script>
+    <script th:src="@{/plugins/datatables/dataTables.bootstrap4.min.js}" type="text/javascript"></script>
+    <script th:src="@{/plugins/datatables/dataTables.responsive.min.js}" type="text/javascript"></script>
+    <script th:src="@{/plugins/datatables/responsive.bootstrap4.min.js}" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script th:src="@{/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js}"></script>
+    <script th:src="@{/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js}"></script>
+
+    <script type="text/javascript">
+        var counter = 0;
+        var ids_c = 0;
+        var arr_name = [];
+        $(function () {
+            $("#term").autocomplete({
+                source: "employeeAutoComplete",
+                minLength: 3,
+                select: function (event, ui) {
+                    var isGood = false;
+
+                    if (counter == 0) {
+                        arr_name.push(ui.item.name);
+                        console.log(arr_name);
+                        isGood = true;
+                    } else {
+                        for (var i = 0; i < counter; i++) {
+                            if (arr_name[i] == ui.item.name) {
+                                isGood = false;
+                            } else {
+                                arr_name.push(ui.item.name);
+                                console.log(arr_name);
+                                isGood = true;
+                            }
+                        }
+                    }
+                    if (isGood) {
+                        var div1 = document.createElement('TR');
+                        counter++;
+                        ids_c++;
+                        div1.setAttribute("id", "tr" + ids_c);
+//                        div1.setAttribute("onclick", "apus('tr" + ids_c + "')");
+                        div1.innerHTML =
+                                "<td>" + counter + "<input type='text' name='Nik' value='" + ui.item.Nik + "' hidden />" + "</td>" +
+                                "<td>" + ui.item.Nik + "<input type='text' name='name' value='" + ui.item.name + "' hidden />" + "</td>" +
+                                "<td>" + ui.item.name + "<input type='text' name='customerName' value='" + ui.item.customerName + "' hidden />" + "</td>" +
+                                "<td>" + ui.item.customerName + "<input type='text' name='Posisi' value='" + ui.item.Posisi + "' hidden />" + "</td>" +
+                                "<td>" + ui.item.Posisi + "<input type='text' name='ktp' value='" + ui.item.noktp + "' hidden />" + "</td>" +
+                                "<td>" + ui.item.noktp + "</td>" +
+                                '<td> <button id="clear" type="button"  class="btn"><i class="fa fa-trash" style="color: rgb(0, 89, 255)"></i></button> </td>';
+                        document.getElementById("foreach").appendChild(div1);
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Name already exist!'
+                        });
+                    }
+                }
+            });
+
+            $("table").on("click", "#clear", function () {
+                $(this).closest('tr').remove();
+            });
+        });
+    </script>
+
+    <script>
+//         $('#tr1').on('click', function () {
+//             console.log(this)
+//         });
+        function apus(input) {
+            div = document.getElementById(input);
+            counter--;
+            console.log(div);
+            div.innerHTML = "";
+//            document.getElementById(div1).innerHTML = "";
+        }
+    </script>
+
+    <script>
+        $('#alertsave').on('click', function () {
+
+            var form = $(this).parents().find('form');
+            var adminName = $('#adminName').val();
+            var type = $('#type').val();
+            var type = document.getElementsByName("type")[0].value;
+            var description = $('#description').val();
+            var startDate = $('#startDate').val();
+            var EndDate = $('#EndDate').val();
+            var term = $('#term').val();
+
+
+            var errorText = "false";
+
+
+            if (adminName === null || adminName === "") {
+                errorText = "Please choose the admin!";
+            } else if (type === "") {
+                errorText = "Please choose the type";
+            } else if (description === null || description === "") {
+                errorText = "You must fill the description!";
+            } else if (description.length < 5) {
+                errorText = "You must fill the description more than 5 characters!";
+            } else if (startDate === null || startDate === "") {
+                errorText = "Please choose the start date!";
+            } else if (EndDate === null || EndDate === "") {
+                errorText = "Please choose the end date!";
+            } else if (term === null || term === "") {
+                errorText = "Please choose the employee!";
+            }
+
+            if (errorText !== "false") {
+                Swal.fire(
+                        'Warning',
+                        errorText,
+                        'warning');
+            } else {
+                Swal.fire({
+                    title: 'Are you sure want to submit this data?',
+                    text: "",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#2DB736',
+                    cancelButtonColor: '#d9534f',
+                    confirmButtonText: 'Yes'
+
+                }).then((result) => {
+                    if (result.value) {
+                        form.submit();
+                        Swal.fire(
+                                'Submitted!',
+                                'Form has been submitted.',
+                                'success'
+                                )
+                    }
+                });
+            }
+        });
+    </script>
+
+    <!--    <script>
+            $(document).ready(function () {
+                $("#formRmrReq").validate({
+                    rules: {
+                        description: {
+                            required: true,
+                            minlength: 5,
+                            maxlength: 255
+                        }
+                    },
+                    messages: {
+                        description: {
+                            required: "Please enter a notes",
+                            minlength: "Your notes must consist of at least 5 characters"
+                        }
+                    }
+                });
+            });
+        </script>-->
+
+    <script type="text/javascript">
+        $(function () {
+            $(".datepicker").datepicker({
+                format: 'dd-mm-yyyy',
+                autoclose: true,
+                todayHighlight: true,
+            });
+
+            var newDate = new Date();
+            var dateObject = $(this).datepicker(newDate);
+            var today = new Date(dateObject);
+            var dd = today.getDate();
+            var mm = today.getMonth();
+
+            var yyyy = today.getFullYear();
+            var today = dd + '-' + mm + '-' + yyyy;
+
+            $("#startDate").datepicker('setStartDate', today);
+
+            $("#startDate").on('changeDate', function (selected) {
+                var startDate = new Date(selected.date.valueOf());
+                $("#EndDate").datepicker('setStartDate', startDate);
+                if ($("#startDate").val() > $("#EndDate").val()) {
+                    $("#EndDate").val($("#startDate").val());
+                }
+            });
+        });
+    </script>
+
+    <!--    <script>
+            $(function () {
+                $('#datepicker').datepicker({
+                    minDate: 0,
+                    onSelect: function () {
+                        var dateObject = $(this).datepicker('getDate');
+                        console.log("Date gg", Date.parse(dateObject));
+                        var today = new Date(dateObject);
+                        var dd = today.getDate();
+                        var mm = today.getMonth() + 1;
+    
+                        var yyyy = today.getFullYear();
+                        if (dd < 10) {
+                            dd = '0' + dd;
+                        }
+                        if (mm < 10) {
+                            mm = '0' + mm;
+                        }
+                        var today = yyyy + '-' + mm + '-' + dd;
+                        document.getElementById("testa").value = today;
+                    },
+                    dateFormat: 'dd-mm-yy'
+                }).val();
+            });
+        </script>-->
+
+</body>
+
+</html>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>HRIS - Schedule</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- App Icons -->
+        <link rel="shortcut icon" th:href="@{/dist/img/favicon.ico}">
+
+    <div th:replace="fragments/headerAdm::cssAdm"></div>
+
+    <link th:href="@{/plugins/datatables/dataTables.bootstrap4.min.css}" rel="stylesheet" type="text/css"/>
+
+    <link th:href="@{/dist/wicked-picker/Big/wickedpicker.css}" rel="stylesheet" type="text/css"/>
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+    <style>
+        table thead{
+            background-color: #4bbbce;
+            color: #fafafa;
+        }
+        .middle {
+            line-height: 70px;
+        }
+        .mark {
+            background-color: #d7ffe7 !important
+        }
+
+        .mark .gsearch{
+            font-size: 20px
+        }
+
+        .unmark {
+            background-color: #e8e8e8 !important
+        }
+        .unmark .gsearch{
+            font-size: 10px
+        }
+
+        .si{
+            font-weight: bold;
+            color: red;
+        }
+
+        .simple{
+            padding: 10px;
+            margin: 10px;
+            background-color: #b9d5ec
+        }
+
+        #search-filter{
+            background-image: url('');
+            background-repeat: no-repeat;
+        }
+
+        #list{
+            list-style-type: none;
+        }
+
+        .fa-minus-square{
+            padding-top : 24px;
+            padding-right: 20px;
+
+        }
+        .fa-edit{
+            padding-top : 24px;
+        }
+
+        .wickedpicker{
+            position: absolute;
+            z-index:1151 !important;
+        }
+
+        a:link{
+            text-decoration: none;
+            color: #000;
+        }
+
+        a:visited{
+            text-decoration: none;
+            color: #000;
+        }
+
+    </style>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+</head>
+
+<body> 
+    <!-- Loader -->
+    <div id="preloader">
+        <div id="status">
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <div class="header-bg">
+
+        <div th:replace="fragments/headerAdm::headerAdm"></div>
+
+        <div class="container-fluid">
+            <!-- Page-Title -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-title-box">
+                        <h4 class="page-title">Training History</h4>
+
+                    </div>
+                </div>
+            </div>
+            <!-- end page title end breadcrumb -->
+        </div>
+    </div>
+
+
+    <div class="wrapper">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card m-b-20">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="page-title-box">
+                                        <input type="text" placeholder="Search..." id="search-filter" class="float-right app-search">          
+                                        <!--<h3 style="color: #ff0000"><b>Today's Event</b></h3>-->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="container mt-5 mb-5">
+                                <div class="accordion md-accordion accordion-blocks" id="accordionEx78" role="tablist" aria-multiselectable="true">
+                                    <div class="card col-lg-12 table table-bordered hover dt-responsive display responsive nowrap">
+                                        <div th:each="hL : ${historyList}" class="panel-group" id="accordion">
+                                            <div th:if="${hD[0] == hL[0]}" th:each="hD : ${historyDetail}" class="panel-group">                                                
+                                                <div th:class="${'acc-container'+' '+hL[0]}">
+                                                    <div th:class="${'s'+' '+'panel'+' '+'panel-primary'+' '+'card-header'+' '+hL[0]}" id="warp" role="tab">
+                                                        <div class="panel-heading simple" th:data-target="${'#collapse'+hL[0]}" data-toggle="collapse" aria-expanded="true"
+                                                                 aria-controls="collapseUnfiled">
+                                                            <div id="tampungan">
+                                                               
+                                                                <h4 class="panel-title mt-1 mb-0">
+                                                                    <a th:href="${'./manageHistory/' + hL[0] + '/' + hL[1]}" th:text="${hL[1]}"></a>
+                                                                </h4>
+                                                                <h6 th:text="${hD[2]}"></h6>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div th:id="${'collapse'+hL[0]}" class="panel-collapse collapse in">
+                                                        <!--<a th:href="${'./manageHistory/' + hL[0] + '/' + hL[1]}" th:text="${hL[1]}"></a>-->
+                                                        <div class="panel-body card-body">
+                                                            <div class="form-group row ml-auto">
+                                                                <label class="col-md-3 label-request">Judul</label>
+                                                                <p class="float-right">:</p>
+                                                                <p class="col-md-6" th:text="${hD[1]}"></p>
+                                                            </div>
+                                                            <div class="form-group row ml-auto">
+                                                                <label class="col-md-3 label-request">Tanggal</label>
+                                                                <p class="float-right">:</p>
+                                                                <p class="col-md-6" th:text="${hD[2]}"></p>
+                                                            </div>
+                                                            <div class="form-group row ml-auto">
+                                                                <label class="col-md-3 label-request">Trainer</label>
+                                                                <p class="float-right">:</p>
+                                                                <p class="col-md-6" th:text="${hD[4]}"></p>
+                                                            </div>
+                                                            <div class="form-group row ml-auto">
+                                                                <label class="col-md-3 label-request">Waktu</label>
+                                                                <p class="float-right">:</p>
+                                                                <p class="col-md-6" th:text="${hD[7]}"></p>
+                                                            </div>
+                                                            <div class="form-group row ml-auto">
+                                                                <label class="col-md-3 label-request">Quota</label>
+                                                                <p class="float-right">:</p>
+                                                                <p class="col-md-6" th:text="${hD[3]}"></p>
+                                                            </div>
+                                                            <div class="form-group row ml-auto">
+                                                                <label class="col-md-3 label-request">Lokasi</label>
+                                                                <p class="float-right">:</p>
+                                                                <p class="col-md-6" th:text="${hD[5]}"></p>
+                                                            </div>
+                                                            <div class="form-group row ml-auto">
+                                                                <label class="col-md-3 label-request">Kebutuhan Training</label>
+                                                                <p class="float-right">:</p>
+                                                                <p class="col-md-6" th:text="${hD[6]}"></p>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <!-- end col -->
+                        </div> <!-- end row -->
+                    </div> <!-- end container -->
+                </div>
+            </div>
+        </div>
+        <!-- end wrapper -->
+
+
+        <!-- Footer -->
+        <div th:replace="fragments/footerAdm::footerAdm"></div>
+        <!-- End Footer -->
+
+        <div th:replace="fragments/footer::js"></div>    
+        <script th:src="@{/dist/js/session.js}"></script>
+        <script th:src="@{/dist/wicked-picker/Big/wickedpicker.js}" type="text/javascript"></script>
+        <!--<script th:src="@{/plugins/datatables/dataTables.bootstrap4.min.js}" type="text/javascript"></script>-->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+        <script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
+        <script type='text/javascript'>
+            function display(e) {
+                console.log(e);
+                var el = e.target;
+                console.log(el);
+                console.log(el.options);
+                var div = document.getElementById('parseName');
+//                var value = el.options[el.options.selectedIndex].value;
+                var text = el.options[el.options.selectedIndex].text;
+
+                div.value = text;
+            }
+//            document.getElementById('trinerList').addEventListener('change', display, false);
+        </script>
+
+        <!--        <script>
+                    $(document).ready(function () {
+                        $('#accordion').DataTable({
+                            responsive: true
+                        });
+                    });
+                </script>-->
+
+        <script th:inline="javascript">
+            //        //Dari Controller
+
+            $(document).ready(function () {
+                $("#search-filter").on("keyup", function () {
+                    var value = $(this).val().toLowerCase();
+                    console.log(value);
+                    $("#accordion .acc-container").filter(function () {
+                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                    });
+                });
+                //
+                //
+                $("select.filterby option").click(function () {
+                    var filters = $(this).data("filter");
+                    console.log(filters);
+                    console.log($("div#accordion").find(".acc-container"));
+                    $("div#accordion").find(".acc-container").hide();
+                    if (filters) {
+                        $("div#accordion").find(".acc-container" + ".true").show();
+                    } else {
+                        $("div#accordion").find(".acc-container" + ".false").show();
+                    }
+                });
+            })
+                    ;
+        </script>
+
+</body>
+</html>

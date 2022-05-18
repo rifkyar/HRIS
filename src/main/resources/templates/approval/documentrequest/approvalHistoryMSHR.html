@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>HRIS - Requester</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- App Icons -->
+        <link rel="shortcut icon" th:href="@{/dist/img/favicon.ico}">
+
+    <div th:replace="fragments/headerAdm::cssAdm"></div>
+
+    <link th:href="@{/plugins/datatables/dataTables.bootstrap4.min.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{/plugins/datatables/responsive.bootstrap4.min.css}" rel="stylesheet" type="text/css"/>
+
+    <style>
+        table thead{
+            background-color: #4bbbce;
+            color: #fafafa;
+        }
+        .middle {
+            line-height: 70px;
+        }
+        .donlot {
+            margin-left: 45px;
+        }
+    </style>
+
+</head>
+<body> 
+    <!-- Loader -->
+    <div id="preloader">
+        <div id="status">
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <div class="header-bg">
+
+        <div th:replace="fragments/headerAdm::headerAdm"></div>
+
+        <div class="container-fluid">
+            <!-- Page-Title -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-title-box">
+                        <form class="float-right app-search">
+                            <input type="text" placeholder="Search..." class="form-control">
+                            <button type="submit"><i class="fa fa-search"></i></button>
+                        </form>
+                        <h4 class="page-title"> <i class="dripicons-blog"></i>Approval History</h4>
+                    </div>
+                </div>
+            </div>
+            <!-- end page title end breadcrumb -->
+
+        </div>
+    </div>
+
+
+    <div class="wrapper">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card m-b-20">
+                        <br>
+                        <div class="table-responsive">
+                            <table id="docReqHistory" class="table table-bordered hover dt-responsive display responsive nowrap"
+                                   style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                <thead class="text-center">
+                                    <tr>
+                                        <th class="all">No</th>
+                                        <th class="all">Request ID</th>
+                                        <th class="all">NIK</th>
+                                        <th class="all">Employee</th>
+                                        <th class="all">Customer Name</th>
+                                        <th class="all">Type</th>
+                                        <th class="all">Submitted</th>
+                                        <th class="all">Action</th>
+                                        <th class="none" ></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="app : ${DocumentApproval}" th:if="${adminMSHR == 'ROLE_MSHR_ADMIN'}">
+                                        <td></td>
+                                        <td th:text="${app[0]}"></td>
+                                        <td th:text="${app[1]}"></td>
+                                        <td th:text="${app[2]}"></td>
+                                        <td th:text="${#strings.abbreviate(app[3],15)}"></td>
+                                        <td th:text="${app[4]}"></td>
+                                        <td th:text="${#dates.format(app[6], 'dd-MM-yyyy HH:mm:ss')}"></td>
+
+                                        <td>
+                                            <div class="row">
+                                                <a class="btn donlot" id="download" th:href="${'./surat/mshr/download/Visa/' + app[0]}"  th:if="${app[4] == 'VISA'}"><i class="fa fa-download" style="color: #3254DC"></i></a>
+
+                                                <a class="btn donlot" id="download" th:href="${'./surat/mshr/download/Others/' + app[0]}"  th:if="${app[4] != 'VISA'}"><i class="fa fa-download" style="color: #3254DC"></i></a>
+
+                                                <a title="View" class="btn view" id="view" th:href="${'./viewDocumentRequestAdm/'+app[0]}">
+                                                    <i class="fa fa-info-circle" style="color: #3254DC"></i>
+                                                </a>
+
+                                                <span th:text="${nikApproveBy}" hidden=""></span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <form th:action="@{/uploadFileMSHR}" method="POST" enctype="multipart/form-data" onsubmit="return Validate(this);">
+                                                <input type="file" th:id="${app[0]}" name="fileUpload" onchange="ValidateSize(this)">
+                                                <span name="status" th:value="${app[7]}" hidden=""></span>
+                                                <button title="Upload" id="resubmit" type="submit" class="btn submit" ><i class="fa fa-upload" style="color: rgb(0, 89, 255)"></i></button>
+                                                <input th:id="${app[0]}" name="reqID" th:value="${app[0]}" hidden="">
+                                                <input th:id="${app[2]}" name="nameRequester" th:value="${app[2]}" hidden="">
+                                            </form>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <br>
+                        </div>
+                    </div>
+                </div> <!-- end col -->
+            </div> <!-- end row -->
+        </div> <!-- end container -->
+    </div>
+    <!-- end wrapper -->
+
+
+    <!-- Footer -->
+    <div th:replace="fragments/footerAdm::footerAdm"></div>
+    <!-- End Footer -->
+
+    <div th:replace="fragments/footer::js"></div>
+
+    <script th:src="@{/dist/js/session.js}"></script>
+    <script th:src="@{/dist/js/jquery.validate.min.js}"></script>
+    <script th:src="@{/plugins/datatables/jquery.dataTables.min.js}" type="text/javascript"></script>
+    <script th:src="@{/plugins/datatables/dataTables.bootstrap4.min.js}" type="text/javascript"></script>
+    <script th:src="@{/plugins/datatables/dataTables.responsive.min.js}" type="text/javascript"></script>
+    <script th:src="@{/plugins/datatables/responsive.bootstrap4.min.js}" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
+
+    <script>
+                                                    $(document).ready(function () {
+                                                        var t = $('#docReqHistory').DataTable({
+                                                            "columnDefs": [{
+                                                                "searchable": false,
+                                                                "orderable": true,
+                                                                "targets": 0
+                                                            }]
+                                                        });
+
+                                                        t.on('order.dt search.dt', function () {
+                                                            t.column(0, {
+                                                                search: 'applied',
+                                                                order: 'applied'
+                                                            }).nodes().each(function (cell, i) {
+                                                                cell.innerHTML = i + 1;
+                                                            });
+                                                        }).draw();
+                                                    });
+    </script>
+
+    <script>
+        var _validFileExtensions = [".pdf"];
+        function Validate(oForm) {
+            var arrInputs = oForm.getElementsByTagName("input");
+            for (var i = 0; i < arrInputs.length; i++) {
+                var oInput = arrInputs[i];
+                if (oInput.type == "file") {
+                    var sFileName = oInput.value;
+                    if (sFileName.length > 0) {
+                        var blnValid = false;
+                        for (var j = 0; j < _validFileExtensions.length; j++) {
+                            var sCurExtension = _validFileExtensions[j];
+                            if (sFileName.substr(sFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() == sCurExtension.toLowerCase()) {
+                                blnValid = true;
+                                break;
+                            }
+                        }
+
+                        if (!blnValid) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Sorry, allowed file type only .pdf!',
+                            });
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+    </script>
+
+    <script>
+        function ValidateSize(file) {
+            var FileSize = file.files[0].size / 1024 / 1024; // in MB
+            if (FileSize > 1) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'File size exceeds 1 MB!',
+//                    showConfirmButton: false,
+                    footer: 'Choose file under 1 MB'
+                });
+//                setTimeout(function () {
+//                    location.reload();
+//                }, 2000)
+            } else {
+
+            }
+        }
+    </script>
+</body>
+</html>

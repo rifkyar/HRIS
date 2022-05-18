@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>HRIS - Requester</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- App Icons -->
+        <link rel="shortcut icon" th:href="@{/dist/img/favicon.ico}">
+
+    <div th:replace="fragments/headerAdm::cssAdm"></div>
+
+    <link th:href="@{/plugins/datatables/dataTables.bootstrap4.min.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{/plugins/datatables/responsive.bootstrap4.min.css}" rel="stylesheet" type="text/css"/>
+
+    <style>
+        table thead{
+            background-color: #4bbbce;
+            color: #fafafa;
+        }
+        .middle {
+            line-height: 70px;
+        }
+        .donlot {
+            margin-left: 20px;
+        }
+        .notallowed{
+            cursor: not-allowed;
+        }
+    </style>
+
+</head>
+<body> 
+    <!-- Loader -->
+    <div id="preloader">
+        <div id="status">
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <div class="header-bg">
+
+        <div th:replace="fragments/headerAdm::headerAdm"></div>
+
+        <div class="container-fluid">
+            <!-- Page-Title -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-title-box">
+                        <form class="float-right app-search">
+                            <input type="text" placeholder="Search..." class="form-control">
+                            <button type="submit"><i class="fa fa-search"></i></button>
+                        </form>
+                        <h4 class="page-title"> <i class="dripicons-blog"></i>Pending Approval</h4>
+                    </div>
+                </div>
+            </div>
+            <!-- end page title end breadcrumb -->
+
+        </div>
+    </div>
+
+
+    <div class="wrapper">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card m-b-20">
+                        <br>
+                        <div class="table-responsive">
+                            <table id="docReqHistoryRm" class="table table-bordered hover dt-responsive display responsive nowrap"
+                                   style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                <thead class="text-center">
+                                    <tr>
+                                        <th class="all">No</th>
+                                        <th class="all">Request ID</th>
+                                        <th class="all">Relation Manager</th>
+                                        <th class="all">Customer Name</th>
+                                        <th class="all">Description</th>
+                                        <th class="all">Submitted</th>
+                                        <th class="all">Action</th>
+                                        <th class="none"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="pen : ${documentApprovalRm}" th:if="${adminMSHR != 'ROLE_MSHR_ADMIN'}">
+                                        <td></td>
+                                        <td th:text="${pen[1]}"></td>
+                                        <td th:text="${pen[5]}"></td>
+                                        <td th:text="${#strings.abbreviate(pen[3],15)}"></td>
+                                        <td th:text="${pen[7]}"></td>
+                                        <td th:text="${#dates.format(pen[4], 'dd-MM-yyyy HH:mm:ss')}"></td>
+
+                                        <td>
+                                            <div th:if="${pen[8] == 'Waiting For Confirmation' || pen[8] == 'Resubmit' || pen[8] == 'Rejected'}" class="row">
+                                                <form th:action="${'./surat/penugasan/download/' + pen[1]}" enctype="multipart/form-data">
+                                                    <button title="Download!" id="download" type="submit" class="btn donlot notallowed" th:disabled="${pen[8]== 'Waiting For Confirmation'}" ><i class="fa fa-download" style="color: rgb(0, 89, 255)"></i></button>
+                                                </form>
+                                                <a title="View" class="btn view" id="view" th:href="${'./viewDetailsDocumentRequestRmAdm/'+pen[1]}">
+                                                    <i class="fa fa-info-circle" style="color: rgb(0, 89, 255)"></i>
+                                                </a>
+                                                <span th:text="${nikApproveBy}" hidden=""></span>
+                                            </div>
+                                            <div th:if="${pen[8] == 'Done' || pen[8] == 'In Progress'}" class="row">
+                                                <form th:action="${'./surat/penugasan/download/' + pen[1]}" enctype="multipart/form-data">
+                                                    <button title="Download!" id="download" type="submit" class="btn donlot notallowed"><i class="fa fa-download" style="color: rgb(0, 89, 255)"></i></button>
+                                                </form>
+                                                <a title="View" class="btn view" id="view" th:href="${'./viewDetailsDocumentRequestRmAdm/'+pen[1]}">
+                                                    <i class="fa fa-info-circle" style="color: rgb(0, 89, 255)"></i>
+                                                </a>
+                                                <span th:text="${nikApproveBy}" hidden=""></span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <form th:action="@{/uploadFile/}" method="POST" enctype="multipart/form-data" onsubmit="return Validate(this);">
+                                                <span name="status" th:value="${pen[8]}" hidden=""></span>
+                                                <span th:if="${pen[8] == 'Done'}">File Already Uploaded</span>
+                                                <input type="file" th:id="${pen[1]}" name="myfile" th:if="${pen[8] != 'Done'}" onchange="ValidateSize(this)">
+                                                <button title="Upload" id="uploadFile" type="submit" class="btn submit notallowed" th:disabled="${pen[8] == 'Waiting For Confirmation'}"><i class="fa fa-upload" style="color: #3254DC"></i></button>
+                                                <input th:id="${pen[1]}" name="reqID" th:value="${pen[1]}" hidden="">
+                                            </form>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <br>
+                        </div>
+                    </div>
+                </div> <!-- end col -->
+            </div> <!-- end row -->
+        </div> <!-- end container -->
+    </div>
+    <!-- end wrapper -->
+
+
+    <!-- Footer -->
+    <div th:replace="fragments/footerAdm::footerAdm"></div>
+    <!-- End Footer -->
+
+    <div th:replace="fragments/footer::js"></div>
+
+    <script th:src="@{/dist/js/session.js}"></script>
+    <script th:src="@{/dist/js/jquery.validate.min.js}"></script>
+    <script th:src="@{/plugins/datatables/jquery.dataTables.min.js}" type="text/javascript"></script>
+    <script th:src="@{/plugins/datatables/dataTables.bootstrap4.min.js}" type="text/javascript"></script>
+    <script th:src="@{/plugins/datatables/dataTables.responsive.min.js}" type="text/javascript"></script>
+    <script th:src="@{/plugins/datatables/responsive.bootstrap4.min.js}" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
+
+    <script>
+                                                    $(document).ready(function () {
+                                                        var t = $('#docReqHistoryRm').DataTable({
+                                                            "columnDefs": [{
+                                                                    "searchable": false,
+                                                                    "orderable": false,
+                                                                    "targets": 0
+                                                                }],
+                                                            "order": [
+                                                                [0, 'desc']
+                                                            ]
+                                                        });
+
+                                                        t.on('order.dt search.dt', function () {
+                                                            t.column(0, {
+                                                                search: 'applied',
+                                                                order: 'applied'
+                                                            }).nodes().each(function (cell, i) {
+                                                                cell.innerHTML = i + 1;
+                                                            });
+                                                        }).draw();
+                                                    });
+    </script>
+
+    <script>
+        var _validFileExtensions = [".pdf"];
+        function Validate(oForm) {
+            var arrInputs = oForm.getElementsByTagName("input");
+            for (var i = 0; i < arrInputs.length; i++) {
+                var oInput = arrInputs[i];
+                if (oInput.type == "file") {
+                    var sFileName = oInput.value;
+                    if (sFileName.length > 0) {
+                        var blnValid = false;
+                        for (var j = 0; j < _validFileExtensions.length; j++) {
+                            var sCurExtension = _validFileExtensions[j];
+                            if (sFileName.substr(sFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() == sCurExtension.toLowerCase()) {
+                                blnValid = true;
+                                break;
+                            }
+                        }
+
+                        if (!blnValid) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Sorry, allowed file type only .pdf!',
+                            });
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            return true;
+        }
+    </script>
+
+    <script>
+        function ValidateSize(file) {
+            var FileSize = file.files[0].size / 1024 / 1024; // in MB
+            if (FileSize > 1) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'File size exceeds 1 MB!',
+//                    showConfirmButton: false,
+                    footer: 'Choose file under 1 MB'
+                });
+//                setTimeout(function () {
+//                    location.reload();
+//                }, 2000)
+            } else {
+
+            }
+        }
+    </script>
+
+</body>
+</html>

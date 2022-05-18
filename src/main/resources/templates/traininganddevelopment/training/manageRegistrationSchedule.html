@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>HRIS - Schedule</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- App Icons -->
+    <link rel="shortcut icon" th:href="@{/dist/img/favicon.ico}">
+    <div th:replace="fragments/headerAdm::cssAdm"></div>
+    <style>
+        .accordion {
+            width: auto;
+            max-width: 1000px;
+            margin: 2rem auto;
+        }
+        .accordion-item {
+            background-color: #4bbbce;
+            color: #fff;
+            margin: 1rem 0;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.25);
+        }
+
+        .accordion-item-header {
+            padding: 0.5rem 3rem 0.5rem 1rem;
+            min-height: 3.5rem;
+            line-height: 1.25rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            position: relative;
+            cursor: pointer;
+        }
+
+        a:link{
+            text-decoration: none;
+            color: #fff;
+        }
+
+        a:visited{
+            text-decoration: none;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body> 
+    <!-- Loader -->
+    <div id="preloader">
+        <div id="status">
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <div class="header-bg">
+
+        <div th:replace="fragments/headerAdm::headerAdm"></div>
+
+        <div class="container-fluid">
+            <!-- Page-Title -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-title-box">
+                        <h4 class="page-title"> <i class="dripicons-blog"></i> Manage Participants Registration </h4>
+                    </div>
+                </div>
+            </div>
+            <!-- end page title end breadcrumb -->
+
+        </div>
+    </div>
+
+    <!-- start wrapper -->
+    <div class="wrapper">
+        <!-- start container -->
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card m-b-20">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <h4 class="font-weight-bold float-left">List Training</h4>
+                                </div>
+                                <div class="col-sm-6">
+                                    <input type="text" placeholder="Search..." id="search-filter" class="float-right app-search">
+                                </div>
+                            </div>
+                            <hr>
+                            
+                            <ul class="nav nav-tabs nav-tabs-custom nav-justified" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="#onlineClass" role="tab">
+                                        <span class="d-none d-md-block">Online Class</span><span class="d-block d-md-none"><i class="dripicons-suitcase h5"></i></span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#offlineClass" role="tab">
+                                        <span class="d-none d-md-block">Offline Class</span><span class="d-block d-md-none"><i class="dripicons-clock h5"></i></span>
+                                    </a>
+                                </li>
+                            </ul>
+                            
+                            <div class="tab-content">
+                                <div class="tab-pane active p-3" id="onlineClass" role="tabpanel">
+                                    <div class="accordion">
+                                        <div class="accordion-item" th:each="trn : ${trainingListOnline}" id="accordion">
+                                            <div class="acc-container" th:if="${dl[0] == trn[0]}" th:each="dl : ${detailListOnline}">
+                                                <div class="accordion-item-header">
+                                                    <div class="panel-heading simple">
+                                                        <h4 class="panel-title mt-1 mb-0" id="judul" aria-expanded="true"
+                                                            aria-controls="collapseUnfiled">
+                                                            <a th:href="${'./manageRegistration/'+trn[0]}" th:text="${trn[1]}"></a>
+                                                        </h4>
+                                                        <h6 th:text="${dl[4]}"></h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane p-3" id="offlineClass" role="tabpanel">
+                                    <div class="accordion">
+                                        <div class="accordion-item" th:each="trn : ${trainingListOffline}" id="accordion">
+                                            <div class="acc-container" th:if="${dl[0] == trn[0]}" th:each="dl : ${detailListOffline}">
+                                                <div class="accordion-item-header">
+                                                    <div class="panel-heading simple">
+                                                        <h4 class="panel-title mt-1 mb-0" id="judul" aria-expanded="true"
+                                                            aria-controls="collapseUnfiled">
+                                                            <a th:href="${'./manageRegistration/'+trn[0]}" th:text="${trn[1]}"></a>
+                                                        </h4>
+                                                        <h6 th:text="${dl[5]}"></h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+<!--                            <div class="accordion">
+                                <div class="accordion-item" th:each="trn : ${trainingList}" id="accordion">
+                                    <div class="acc-container" th:if="${dl[0] == trn[0]}" th:each="dl : ${detailList}">
+                                        <div class="accordion-item-header">
+                                            <div class="panel-heading simple">
+                                                <h4 class="panel-title mt-1 mb-0" id="judul" aria-expanded="true"
+                                                    aria-controls="collapseUnfiled">
+                                                    <a th:href="${'./manageRegistration/'+trn[0]}" th:text="${trn[1]}"></a>
+                                                </h4>
+                                                <h6 th:text="${dl[5]}"></h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>-->
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+        <!-- end container -->
+    </div>
+    <!-- end wrapper -->
+
+
+    <!-- Footer -->
+    <div th:replace="fragments/footerAdm::footerAdm"></div>
+    <!-- End Footer -->
+
+    <div th:replace="fragments/footer::js"></div>
+
+    <script th:src="@{/dist/js/session.js}"></script>
+    <script type='text/javascript'>
+            function display(e) {
+                console.log(e);
+                var el = e.target;
+                console.log(el);
+                console.log(el.options);
+                var div = document.getElementById('parseName');
+//                var value = el.options[el.options.selectedIndex].value;
+                var text = el.options[el.options.selectedIndex].text;
+
+                div.value = text;
+            }
+            document.getElementById('trinerList').addEventListener('change', display, false);
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('#accordion').DataTable({
+                responsive: true
+            });
+        });
+    </script>
+
+    <script th:inline="javascript">
+        //        //Dari Controller
+
+        $(document).ready(function () {
+            $("#search-filter").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                console.log(value);
+                $("#accordion .acc-container").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+            //
+            //
+            $("select.filterby option").click(function () {
+                var filters = $(this).data("filter");
+                console.log(filters);
+                console.log($("div#accordion").find(".acc-container"));
+                $("div#accordion").find(".acc-container").hide();
+                if (filters) {
+                    $("div#accordion").find(".acc-container" + ".true").show();
+                } else {
+                    $("div#accordion").find(".acc-container" + ".false").show();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

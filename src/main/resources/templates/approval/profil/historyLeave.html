@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>HRIS - Requester</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- App Icons -->
+        <link rel="shortcut icon" th:href="@{/dist/img/favicon.ico}">
+
+    <div th:replace="fragments/headerAdm::cssAdm"></div>
+
+    <link th:href="@{/plugins/datatables/dataTables.bootstrap4.min.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{/plugins/datatables/responsive.bootstrap4.min.css}" rel="stylesheet" type="text/css"/>
+
+    <style>
+        table thead{
+            background-color: #4bbbce;
+            color: #fafafa;
+        }
+        .middle {
+            line-height: 70px;
+        }
+        .dropbtn {
+            color: #3c8dbc;
+            background-color: transparent;
+            font-size: 16px;
+            border: none;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f1f1f1;
+            min-width: 90px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {background-color: #ddd;}
+
+        .dropdown:hover .dropdown-content {display: block;}
+    </style>
+
+</head>
+<body> 
+    <!-- Loader -->
+    <div id="preloader">
+        <div id="status">
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <div class="header-bg">
+
+        <div th:replace="fragments/headerAdm::headerAdm"></div>
+
+        <div class="container-fluid">
+            <!-- Page-Title -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-title-box">
+                        <h4 class="page-title"> <i class="dripicons-blog"></i>Employee Leave History</h4>
+                    </div>
+                </div>
+            </div>
+            <!-- end page title end breadcrumb -->
+
+        </div>
+    </div>
+
+
+    <div class="wrapper">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card m-b-20">
+                        <br>
+                        <div class="row">
+                            <div class="col-sm-12" style="text-align: right; padding-right: 50px">
+                                <div class="dropdown">
+                                    <button class="dropbtn "><i class="fa fa-download fa-2x"> </i></button>
+                                    <div class="dropdown-content">
+                                        <a th:href="@{/leaveHistory/{id}/ExportDetails(id=${nikEmp})}" target="_blank"><i class="fa fa-file-excel-o text-success"></i> EXCEL</a>
+                                    </div>
+                                </div>
+<!--                                <span hidden th:text = "${nikEmp}"></span>
+                                <form th:action="@{/leaveHistory/{id}/ExportDetails(id=${nikEmp})}" method="GET" target="_blank">
+                                    <button type="submit" class="btn" style="border: 0px;background: #fff;" ><i class="fa fa-file-excel-o fa-2x" style="color: #228B22;" ></i><p>EXCEL</p></button>
+                                </form>-->
+                            </div>
+                        </div>
+                        &nbsp;
+                        <div class="table-responsive">
+                            <table id="historyLeaveEmployee" class="table table-bordered hover dt-responsive display responsive nowrap"
+                                   style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                <thead class="text-center">
+                                    <tr>
+                                        <th rowspan="2" class="middle">Request Number</th>
+                                        <th colspan="3">Leave</th>
+                                        <th rowspan="2" class="middle">Notes</th>
+                                        <th rowspan="2" class="middle">Remarks</th>
+                                        <th rowspan="2" class="middle">Approval</th>
+                                        <th rowspan="2" class="middle">Submited</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Type</th>
+                                        <th>From</th>
+                                        <th>To</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="historyLeave : ${listLeaveHistory}">
+                                        <td th:text="${historyLeave[0]}"></td>
+                                        <td th:text="${historyLeave[1]}"></td>
+                                        <td th:text="${historyLeave[2]}"></td>
+                                        <td th:text="${historyLeave[3]}"></td>
+                                        <td th:text="${historyLeave[4]}"></td>
+                                        <td th:text="${historyLeave[6]}"></td>
+                                        <td th:text="${historyLeave[7]}"></td>
+                                        <td th:text="${historyLeave[5]}"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <br>
+                        </div>
+                    </div>
+                </div> <!-- end col -->
+            </div> <!-- end row -->
+        </div> <!-- end container -->
+    </div>
+    <!-- end wrapper -->
+
+
+    <!-- Footer -->
+    <div th:replace="fragments/footerAdm::footerAdm"></div>
+    <!-- End Footer -->
+
+    <div th:replace="fragments/footer::js"></div>
+
+    <script th:src="@{/dist/js/session.js}"></script>
+    <script th:src="@{/dist/js/jquery.validate.min.js}"></script>
+    <script th:src="@{/plugins/datatables/jquery.dataTables.min.js}" type="text/javascript"></script>
+    <script th:src="@{/plugins/datatables/dataTables.bootstrap4.min.js}" type="text/javascript"></script>
+    <script th:src="@{/plugins/datatables/dataTables.responsive.min.js}" type="text/javascript"></script>
+    <script th:src="@{/plugins/datatables/responsive.bootstrap4.min.js}" type="text/javascript"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#historyLeaveEmployee').DataTable({
+                responsive: true,
+                order: false
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Dashboard</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- App Icons -->
+        <link rel="shortcut icon" th:href="@{/dist/img/favicon.ico}">
+        <link rel="stylesheet" th:href="@{/dist/css/bootstrap.min.css}">
+        <link th:href="@{/dist/css/icons.css}" rel="stylesheet" type="text/css" />
+        <link th:href="@{/dist/css/styleDashboardAdm.css}" rel="stylesheet" type="text/css" />
+        <!--<link th:href="@{/dist/css/morris.css}" rel="stylesheet" type="text/css" />-->
+        <link th:href="@{/plugins/datatables/dataTables.bootstrap4.min.css}" rel="stylesheet" type="text/css"/>
+        <!--<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">-->
+        <!--<link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.min.css">-->
+        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+        <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+        <style>
+            .page-title-box .page-title {
+                font-size: 28px;
+                text-transform: none;
+                /*vertical-align:*/ 
+            }
+
+            .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+                background: none;
+            }
+
+            .nav-tabs-custom > li > a.active {
+                color: #2d95a7  !important;
+            }
+
+            .nav-tabs-custom > li > a::after {
+                background: #3fb2c5;
+            }
+
+            .text-white {
+                color: #fafafa;
+            }
+
+            .mini-stats .mini-stats-content-a {
+                background: #6a11cb;
+                background: -webkit-linear-gradient(45deg, #6a11cb, #2575fc)!important;
+                background:  linear-gradient(45deg, #6a11cb , #2575fc)!important;
+            }
+            .mini-stats .mini-stats-content-b {
+                background: #00b09b;
+                background: -webkit-linear-gradient(45deg, #00b09b, #96c93d)!important;
+                background:  linear-gradient(45deg, #00b09b, #96c93d)!important;
+            }
+            .mini-stats .mini-stats-content-c {
+                background: #fc4a1a;
+                background: -webkit-linear-gradient(45deg, #fc4a1a, #f7b733)!important;
+                background:  linear-gradient(45deg, #fc4a1a, #f7b733)!important;
+
+            }
+            .mini-stats .mini-stats-content-d {
+                background: #ee0979;
+                background: -webkit-linear-gradient(45deg, #ee0979, #ff6a00)!important;
+                background: linear-gradient(45deg, #ee0979, #ff6a00)!important;
+            }
+
+            /*            .bg-tb {
+                            background-image: linear-gradient(45deg, #6a11cb , #2575fc)!important
+                            color: #fafafa;
+                        }*/
+        </style>
+
+    </head>
+    <body>
+        <!-- Loader -->
+        <div id="preloader">
+            <div id="status">
+                <div class="spinner"></div>
+            </div>
+        </div>
+
+
+        <div class="header-bg">
+            <!-- Navigation Bar-->
+            <header id="topnav">
+                <div class="topbar-main">
+                    <div class="container-fluid">
+
+                        <!-- Logo container-->
+                        <div class="logo">
+                            <!-- Text Logo -->
+                            <a th:href="@{/homeAdm}" class="logo">
+                                <img width="30px" alt=""> HRIS
+                            </a>
+                        </div>
+                        <!-- End Logo container-->
+
+                        <div class="menu-extras topbar-custom navbar p-0">
+
+                            <!-- Search input -->
+                            <div class="search-wrap" id="search-wrap">
+                                <div class="search-bar">
+                                    <input class="search-input" type="search" placeholder="Search" />
+                                    <a href="#" class="close-search toggle-search" data-target="#search-wrap">
+                                        <i class="mdi mdi-close-circle"></i>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <ul class="list-inline ml-auto mb-0">
+
+                                <!-- notification-->
+                                <!--                                <li class="list-inline-item dropdown notification-list">
+                                                                    <a class="nav-link dropdown-toggle arrow-none waves-effect" data-toggle="dropdown"
+                                                                       href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                                                                        <i class="ti-bell noti-icon"></i>
+                                                                        <span class="badge badge-info badge-pill noti-icon-badge">3</span>
+                                                                    </a>
+                                                                    <div class="dropdown-menu dropdown-menu-right dropdown-arrow dropdown-menu-lg">
+                                                                         item
+                                                                        <div class="dropdown-item noti-title">
+                                                                            <h5>Notification (3)</h5>
+                                                                        </div>
+                                
+                                                                         item
+                                                                        <a href="javascript:void(0);" class="dropdown-item notify-item">
+                                                                            <div class="notify-icon bg-warning"><i class="mdi mdi-message"></i></div>
+                                                                            <p class="notify-details"><b>New Message received</b><small
+                                                                                    class="text-muted">You have 1 unread messages</small></p>
+                                                                        </a>
+                                
+                                                                         All
+                                                                        <a href="javascript:void(0);" class="dropdown-item notify-item">
+                                                                            View All
+                                                                        </a>
+                                
+                                                                    </div>
+                                                                </li>-->
+                                <!-- User-->
+                                <li class="list-inline-item dropdown notification-list">
+                                    <a class="nav-link dropdown-toggle arrow-none waves-effect nav-user"
+                                       data-toggle="dropdown" href="#" role="button" aria-haspopup="false"
+                                       aria-expanded="false">
+                                        <img th:src="@{/dist/img/users/avatar-1.jpg}" alt="user" class="rounded-circle">
+                                        <span class="ml-1" id="username">Username <i class="mdi mdi-chevron-down"></i> </span>
+                                        <input type="hidden" id="idUser">
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
+                                        <a class="dropdown-item" href="#"><i class="dripicons-user text-muted"></i>
+                                            Profile</a>
+                                        <a class="dropdown-item" href="#"><i
+                                                class="dripicons-gear text-muted"></i> Settings</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" th:href="@{/logout}"><i class="dripicons-exit text-muted"></i>
+                                            Logout</a>
+                                    </div>
+                                </li>
+                                <li class="menu-item list-inline-item">
+                                    <!-- Mobile menu toggle-->
+                                    <a class="navbar-toggle nav-link">
+                                        <div class="lines">
+                                            <span></span>
+                                            <span></span>
+                                            <span></span>
+                                        </div>
+                                    </a>
+                                    <!-- End mobile menu toggle-->
+                                </li>
+
+                            </ul>
+
+                        </div>
+                        <!-- end menu-extras -->
+
+                        <div class="clearfix"></div>
+
+                    </div> <!-- end container -->
+                </div>
+                <!-- end topbar-main -->
+
+                <!-- MENU Start -->
+                <div class="navbar-custom">
+                    <div class="container-fluid">
+                        <!-- Logo-->
+                        <div class="d-none d-lg-block">
+                            <!-- Text Logo
+                                <a href="index.html" class="logo">
+                                    Foxia
+                                </a>
+                            -->
+                            <!-- Image Logo -->
+                            <a href="index.html" class="logo">
+                                <!-- <img src="assets/images/logo-sm.png" alt="" height="22" class="logo-small"> -->
+                                <img src="assets/images/logo.png" alt="" height="20" class="logo-large">
+                            </a>
+
+                        </div>
+                        <!-- End Logo-->
+                        <div id="navigation">
+
+                            <!-- Navigation Menu-->
+                            <ul class="navigation-menu">
+
+                                <li class="has-submenu">
+                                    <a th:href="@{/homeAdm}"><i class="dripicons-device-desktop"></i>Home</a>
+                                </li>
+
+                                <li class="has-submenu">
+                                    <a href="#"><i class="dripicons-suitcase"></i>Leave <i
+                                            class="mdi mdi-chevron-down mdi-drop"></i></a>
+                                    <ul class="submenu megamenu">
+                                        <li>
+                                            <ul>
+                                                <li>
+                                                    <a th:href="@{'/approvalRm/' + ${email}}">Employee Leave Request</a>
+                                                </li>
+                                                <li>
+                                                    <a th:href="@{'/leaveHistoryAdm/' + ${email}}">Employee Leave History</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li class="has-submenu">
+                                    <a href="#"><i class="dripicons-to-do"></i>Overtime <i
+                                            class="mdi mdi-chevron-down mdi-drop"></i></a>
+                                    <ul class="submenu">
+                                        <li>
+                                            <a th:href="@{'/dataCustomer/' + ${nik}}">Data Customer</a>
+                                        </li>
+                                        <li>
+                                            <a th:href="@{'/pendingapproval/' + ${nik}}">Pending Approval</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="has-submenu" th:if="${adminMSHR == 'ROLE_MSHR_ADMIN' || adminMSHR == 'ROLE_MSPM_ADMIN' || adminMSHR == 'ROLE_RM' || adminMSHR=='ROLE_MSCS_ADMIN' ||adminMSHR =='ROLE_MSAD_ADMIN'}">
+                                    <a href="#"><i class="dripicons-to-do"></i>Document Request<i
+                                            class="mdi mdi-chevron-down mdi-drop"></i></a>
+                                    <ul class="submenu">
+                                        <li th:if="${adminMSHR == 'ROLE_MSHR_ADMIN'}">
+                                            <a th:href="@{/DocumentApproveAdm}">Pending Approval</a>
+                                        </li>
+                                        <li th:if="${adminMSHR == 'ROLE_MSHR_ADMIN'}">
+                                            <a th:href="@{/approvalHistoryMSHRAdm}">Approval History</a>
+                                        </li>
+                                        <li th:if="${adminMSHR == 'ROLE_MSHR_ADMIN'}">
+                                            <a th:href="@{/executiveSumMSHR}">Executive Summary</a>
+                                        </li>
+
+                                        <li th:if="${adminMSHR != 'ROLE_MSHR_ADMIN'}">
+                                            <a th:href="@{/documentRequestAdminRm}">Pending Approval</a>
+                                        </li>
+                                        <li th:if="${adminMSHR != 'ROLE_MSHR_ADMIN'}">
+                                            <a th:href="@{/approvalHistoryPenAdm}">Approval History</a>
+                                        </li>
+                                        <li th:if="${adminMSHR != 'ROLE_MSHR_ADMIN'}">
+                                            <a th:href="@{/executiveSumPenugasan}">Executive Summary</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="has-submenu">
+                                    <a href="#"><i class="dripicons-device-desktop"></i>Training and Development<i
+                                            class="mdi mdi-chevron-down mdi-drop"></i></a>
+                                    <ul class="submenu">
+                                        <li class="has-submenu">
+                                            <a href="#">Manage Data Master</a>
+                                            <ul class="submenu">
+                                                <a th:href="@{/catalogTrainers}">Catalog Trainers</a>
+                                                <a th:href="@{/catalogTraining}">Catalog Training</a>
+                                                <a th:href="@{/assignTrainer}">Assign Trainer</a>
+                                                <a th:href="@{/manageFeedbackForm}">Manage Feedback form</a>
+                                            </ul>
+                                        </li>
+                                        <li class="has-submenu">
+                                            <a href="#">Training</a>
+                                            <ul class="submenu">
+                                                <a th:href="@{/trainingScheduling}">Training Scheduling</a>
+                                                <a th:href="@{/manageRegistrationSchedule}">Manage Participants Registration</a>
+                                                <a th:href="@{/manageTrainingRequest}">Manage Training Request</a>
+                                                <a th:href="@{/historyTraining}">History Training</a>
+                                                <a th:href="@{/trainingMejaKerja}">Training Meja Kerja</a>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <!--Parking reimbursement Navigation Bar-->
+                                <li class="has-submenu">
+                                    <a href="#"><i class="dripicons-to-do"></i>Parking Reimbursement <i class="mdi mdi-chevron-down mdi-drop"></i></a>
+                                    <ul class="submenu">
+                                        <li th:if="${roleUser==10}" >
+                                            <a th:href="@{/parking/addloc}">Add Location Parking</a>
+                                        </li >
+                                        <li th:if="${roleUser==10}">
+                                            <a th:href="@{/parking/listLocation}">List Location Parking</a>
+                                        </li>
+                                        <li>
+                                            <a th:href="@{/parking/historyapproval}">History Approval</a>
+                                        </li>
+                                        <li>
+                                            <a th:href="@{/parking/pending}">Pending Approval</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="has-submenu">
+                                    <a href="#"><i class="fas fa-syringe"></i>Vaccine <i class="mdi mdi-chevron-down mdi-drop"></i></a>
+                                    <ul class="submenu">
+                                        <li>
+                                            <a th:href="@{/historyVaccineAdm}">History Vaccination</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="has-submenu" th:if="${nik == 1000000}">
+                                    <a href="#"><i class="fa fa-users"></i>Employee <i class="mdi mdi-chevron-down mdi-drop"></i></a>
+                                    <ul class="submenu">
+                                        <li>
+                                            <a th:href="@{/employeeBirthday}">Employee Birthday</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li th:if="${session.permit == 1}" hidden="" class="has-submenu">
+                                    <a href="#"><i class="dripicons-user-group"></i>Employee Data <i
+                                            class="mdi mdi-chevron-down mdi-drop"></i></a>
+                                    <ul class="submenu">
+                                        <li>
+                                            <a th:href="@{'/employeedata/' + ${nik}}">Change Request Employee</a>
+                                        </li>
+                                        <li>
+                                            <a th:href="@{'/reqInfo/' + ${nik}}">Employee Information</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li th:if="${session.permit == 0}" class="has-submenu">
+                                    <a href="#"><i class="dripicons-user-group"></i>Employee Data <i
+                                            class="mdi mdi-chevron-down mdi-drop"></i></a>
+                                    <ul class="submenu">
+                                        <li>
+                                            <a th:href="@{'/employeedata/' + ${nik}}">Change Request Employee</a>
+                                        </li>
+                                        <li>
+                                            <a th:href="@{'/reqInfo/' + ${nik}}">Employee Information</a>
+                                        </li>
+                                    </ul>
+                                </li>
+<!--                                <li th:if="${session.permit == 1}" class="has-submenu">
+                                    <a href="#"><i class="dripicons-user-group"></i>Manage Content <i
+                                            class="mdi mdi-chevron-down mdi-drop"></i></a>
+                                    <ul class="submenu">
+                                        <li>
+                                            <a href="#">Announcement</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">FAQ</a>
+                                        </li>
+                                    </ul>
+                                </li>-->
+                                <li th:if="${session.permit == 0}" class="has-submenu">
+                                    <a href="#"><i class="dripicons-user-group"></i>Manage Content <i
+                                            class="mdi mdi-chevron-down mdi-drop"></i></a>
+                                    <ul class="submenu">
+                                       <li>
+                                            <a th:href="@{/manageAnnouncement}">Announcement</a>
+                                        </li>
+                                        <li>
+                                            <a th:href="@{/manageFaq}">FAQ</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <!-- <li>
+                                    <a href="#">Help</a>
+                                </li>-->
+                                <!--Approver's Pending Bar-->
+                                <li class="has-submenu" th:if="${session.permit == 2}">
+                                    <a th:href="@{'/ApproverPending'}"><i class="dripicons-to-do"></i>Approver's Pending</a>
+                                </li>
+                            </ul>
+                            <!-- End navigation menu -->
+                        </div> <!-- end #navigation -->
+                    </div> <!-- end container -->
+                </div> <!-- end navbar-custom -->
+
+            </header>
+            <!-- End Navigation Bar-->
+
+            <div class="container-fluid">
+                <!-- Page-Title -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="page-title-box">
+                            <h4 class="page-title"> <i class="dripicons-device-desktop"></i> &nbsp;Home</h4>
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title end breadcrumb -->
+            </div>
+        </div>
+
+
+        <div class="wrapper">
+            <div class="container-fluid">
+
+                <ul class="nav nav-tabs nav-tabs-custom nav-justified" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#leave" role="tab">
+                            <span class="d-none d-md-block">Leave</span><span class="d-block d-md-none"><i class="dripicons-suitcase h5"></i></span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#overtime" role="tab">
+                            <span class="d-none d-md-block">Overtime</span><span class="d-block d-md-none"><i class="dripicons-clock h5"></i></span>
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane active p-3" id="leave" role="tabpanel">
+
+                        <div class="row">
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card mini-stats">
+                                    <div class="p-3 mini-stats-content-a">
+                                        <div class="mb-4">
+                                            <div class="float-right text-right">
+                                                <h5 class="text-white">Total Request</h5>
+                                                <h3><span class="timer-a" th:text="${totalReqLeave}" style="color: #fafafa;"></span></h3>
+                                            </div>
+                                            <div class="mt-3">
+                                                <i class="fa fa-thumbs-o-up fa-5x" aria-hidden="true" style="color: #fafafa"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card mini-stats">
+                                    <div class="p-3 mini-stats-content-b">
+                                        <div class="mb-4">
+                                            <div class="float-right text-right">
+                                                <h5 class="text-white">Done Approval</h5>
+                                                <h3><span class="timer-b" th:text="${totalDoneLeave}" style="color: #fafafa"></span></h3>
+                                            </div>
+                                            <div class="mt-3">
+                                                <i class="fa fa-check fa-5x" aria-hidden="true" style="color: #fafafa"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--                                    <div class="ml-3 mr-4">
+                                                                            <div class="bg-white p-3 mini-stats-desc rounded text-center">
+                                                                                <h5 class="float-right mt-0">1758</h5>
+                                                                                <h5><span class="timer-b" th:text="${totalDoneLeave}"></span></h5>
+                                                                            </div>
+                                                                        </div>-->
+                                </div>
+                            </div>
+
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card mini-stats">
+                                    <div class="p-3 mini-stats-content-c">
+                                        <div class="mb-4">
+                                            <div class="float-right text-right">
+                                                <h5 class="text-white">Pending Approval</h5>
+                                                <h3><span class="timer-c" th:text="${totalWaitingLeave}" style="color: #fafafa"></span></h3>
+                                            </div>
+                                            <div class="mt-3">
+                                                <i class="fa fa-clock-o fa-5x" aria-hidden="true" style="color: #fafafa"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card mini-stats">
+                                    <div class="p-3 mini-stats-content-d">
+                                        <div class="mb-4">
+                                            <div class="float-right text-right">
+                                                <h5 class="text-white">Rejected Approval</h5>
+                                                <h3><span class="timer-d" th:text="${totalRejectLeave}" style="color: #fafafa"></span></h3>
+                                            </div>
+                                            <div class="mt-3">
+                                                <i class="fa fa-times fa-5x" aria-hidden="true" style="color: #fafafa"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--                                    <div class="ml-3 mr-4">
+                                                                            <div class="bg-white p-3 mini-stats-desc rounded text-center">
+                                                                                <h5 class="float-right mt-0">1758</h5>
+                                                                                <h5><span class="timer-d" th:text="${totalRejectLeave}"></span></h5>
+                                                                            </div>
+                                                                        </div>-->
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- end row -->
+
+
+                        <div class="row">
+                            <div class="col-xl-7">
+                                <div class="card" data-aos="fade-right">
+                                    <div class="card-body">
+                                        <h4 class="mt-0 header-title mb-5">Leave Request Report</h4>
+                                        <div class="row" style="margin-top: -20px">
+                                            <div class="col-md-3">
+
+                                                <span hidden="" id="cutNormal" th:text="${cutiNormal}"/>
+                                                <span hidden="" id="cutPerjalananBisnis" th:text="${perjalananBisnis}"/>
+                                                <span hidden="" id="cutIstriMelahirkan" th:text="${istriMelahirkan}"/>
+                                                <span hidden="" id="cutBersalin" th:text="${cutiBersalin}"/>
+                                                <span hidden="" id="cutSakit" th:text="${sakit}"/>
+                                                <span hidden="" id="cutIjin" th:text="${ijin}"/>
+                                                <span hidden="" id="cutIjin" th:text="${totalCuti}"/>
+                                          
+                                                <input hidden=""  id="hasilCutiNormal" />
+                                                <input hidden=""  id="hasilPerjalananBisnis" />
+                                                <input hidden=""  id="hasilIstriMelahirkan" />
+                                                <input hidden=""  id="hasilCutiBersalin" />
+                                                <input hidden=""  id="hasilSakit" />
+                                                <input hidden=""  id="hasilIjin" />
+                                                <input hidden=""  id="hasilTotalCuti " />
+
+                                                <select id="monthSelect" class="form-control">
+                                                    <option value="" disabled selected>Choose Month</option>
+                                                    <option value="1">January</option>
+                                                    <option value="2">February</option>
+                                                    <option value="3">March</option>
+                                                    <option value="4">April</option>
+                                                    <option value="5">May</option>
+                                                    <option value="6">June</option>
+                                                    <option value="7">July</option>
+                                                    <option value="8">Augustus</option>
+                                                    <option value="9">September</option>
+                                                    <option value="10">October</option>
+                                                    <option value="11">November</option>
+                                                    <option value="12">December</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-7 text-center">
+                                                <h5 class="mb-0 text-center"><input class="text-center" type="text" disabled="" id="totalcut" th:value="${totalCuti}" style="border: none; background: none"></span></h5>
+                                                <p class="text-muted font-14">Total Leave</p>
+                                            </div>
+                                        </div>
+
+                                        <canvas id="pieChart" height="200px"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-5">
+                                <div class="card" data-aos="fade-left">
+                                    <div class="card-body">
+                                        <h4 class="mt-0 header-title">People Trends</h4>
+
+                                        <table id="peopleTrendsLeave" class="table table-hover mb-0">
+                                            <thead class="bg-tb">
+                                                <tr>
+                                                    <th scope="col">Nik</th>
+                                                    <th scope="col">Employee</th>
+                                                    <th scope="col">Total Leave</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr th:each="peopleTrends: ${leavePeopleTrends}">
+                                                    <td th:text="${peopleTrends[0]}"></td>
+                                                    <td th:text="${peopleTrends[1]}"></td>
+                                                    <td th:text="${peopleTrends[4]}"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end row -->
+
+
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card" data-aos="fade-up">
+                                    <div class="card-body">
+                                        <h4 class="mt-0 header-title">Sales Order Trends - TOP 10</h4>
+                                        <div class="table-responsive mt-4">
+                                            <table id="soTrendsLeave" class="table table-hover mb-0">
+                                                <thead class="bg-tb">
+                                                    <tr>
+                                                        <th scope="col">Ranks</th>
+                                                        <th scope="col">Customer</th>
+                                                        <th scope="col">Sales Order</th>
+                                                        <th scope="col">Leave Request</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr th:each="SOTrends,iter: ${leaveSOTrends}">
+                                                        <td th:text="${iter.count}"></td>
+                                                        <td th:text="${SOTrends[2]}"></td>
+                                                        <td th:text="${SOTrends[0]}"></td>
+                                                        <td th:text="${SOTrends[1]}"></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="tab-pane p-3" id="overtime" role="tabpanel">
+
+                        <div class="row">
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card mini-stats">
+                                    <div class="p-3 mini-stats-content-a">
+                                        <div class="mb-4">
+                                            <div class="float-right text-right">
+                                                <h5 class="text-white">Total Request</h5>
+                                                <h3><span class="timer-e" th:text="${totalReqOvertime}" style="color: #fafafa;"></span></h3>
+                                            </div>
+                                            <div class="mt-3">
+                                                <i class="fa fa-thumbs-o-up fa-5x" aria-hidden="true" style="color: #fafafa"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card mini-stats">
+                                    <div class="p-3 mini-stats-content-b">
+                                        <div class="mb-4">
+                                            <div class="float-right text-right">
+                                                <h5 class="text-white">Done Approval</h5>
+                                                <h3><span class="timer-f" th:text="${totalDoneOvertime}" style="color: #fafafa"></span></h3>
+                                            </div>
+                                            <div class="mt-3">
+                                                <i class="fa fa-check fa-5x" aria-hidden="true" style="color: #fafafa"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--                                    <div class="ml-3 mr-4">
+                                                                            <div class="bg-white p-3 mini-stats-desc rounded text-center">
+                                                                                <h5 class="float-right mt-0">1758</h5>
+                                                                                <h5><span class="timer-b" th:text="${totalDoneLeave}"></span></h5>
+                                                                            </div>
+                                                                        </div>-->
+                                </div>
+                            </div>
+
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card mini-stats">
+                                    <div class="p-3 mini-stats-content-c">
+                                        <div class="mb-4">
+                                            <div class="float-right text-right">
+                                                <h5 class="text-white">Pending Approval</h5>
+                                                <h3><span class="timer-g" th:text="${totalWaitingOvertime}" style="color: #fafafa"></span></h3>
+                                            </div>
+                                            <div class="mt-3">
+                                                <i class="fa fa-clock-o fa-5x" aria-hidden="true" style="color: #fafafa"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card mini-stats">
+                                    <div class="p-3 mini-stats-content-d">
+                                        <div class="mb-4">
+                                            <div class="float-right text-right">
+                                                <h5 class="text-white">Rejected Approval</h5>
+                                                <h3><span class="timer-h" th:text="${totalRejectOvertime}" style="color: #fafafa"></span></h3>
+                                            </div>
+                                            <div class="mt-3">
+                                                <i class="fa fa-times fa-5x" aria-hidden="true" style="color: #fafafa"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--                                    <div class="ml-3 mr-4">
+                                                                            <div class="bg-white p-3 mini-stats-desc rounded text-center">
+                                                                                <h5 class="float-right mt-0">1758</h5>
+                                                                                <h5><span class="timer-d" th:text="${totalRejectLeave}"></span></h5>
+                                                                            </div>
+                                                                        </div>-->
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- end row -->
+
+
+                        <div class="row">
+                            <div class="col-xl-7">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="mt-0 header-title mb-5">Overtime Request Report</h4>
+                                        <div class="row" style="margin-top: -20px">
+                                            <div class="col-md-3">
+
+                                                <span hidden="" id="doneOvertime" th:text="${doneOvertime}"/>
+                                                <span hidden="" id="rejectOvertime" th:text="${rejectOvertime}"/>
+                                                <span hidden="" id="waitingMSFCOvertime" th:text="${waitingMSFCOvertime}"/>
+                                                <span hidden="" id="waitingRMOvertime" th:text="${waitingRMOvertime}"/>
+                                                <span hidden="" id="waitingPMOvertime" th:text="${waitingPMOvertime}"/>
+
+                                                <input hidden="" id="hasilDoneOvertime" />
+                                                <input hidden="" id="hasilRejectOvertime" />
+                                                <input hidden="" id="hasilWaitingOvertime" />
+
+                                                <select id="monthSelect2" class="form-control">
+                                                    <option value="" disabled selected>Choose Month</option>
+                                                    <option value="1">January</option>
+                                                    <option value="2">February</option>
+                                                    <option value="3">March</option>
+                                                    <option value="4">April</option>
+                                                    <option value="5">May</option>
+                                                    <option value="6">June</option>
+                                                    <option value="7">July</option>
+                                                    <option value="8">Augustus</option>
+                                                    <option value="9">September</option>
+                                                    <option value="10">October</option>
+                                                    <option value="11">November</option>
+                                                    <option value="12">December</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-7 text-center">
+                                                <h5 class="mb-0 text-center"><input class="text-center" type="text" disabled="" id="statOvertime" th:value="${totalOver}" style="border: none; background: none"></span></h5>
+                                                <p class="text-muted font-14">Total Overtime</p>
+                                            </div>
+                                        </div>
+                                        <canvas id="pieChartOvertime" height="200px"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-5">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="mt-0 header-title">People Trends</h4>
+
+                                        <table id="peopleTrendsOvertime" class="table table-hover mb-0">
+                                            <thead class="bg-tb">
+                                                <tr>
+                                                    <th scope="col">Nik</th>
+                                                    <th scope="col">Employee</th>
+                                                    <th scope="col">Total Overtime</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr th:each="peopleTrendsOvertime,iter: ${overtimePeopleTrends}">
+                                                    <td th:text="${peopleTrendsOvertime[2]}"></td>
+                                                    <td th:text="${peopleTrendsOvertime[1]}"></td>
+                                                    <td th:text="${peopleTrendsOvertime[0]}"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end row -->
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card" data-aos="fade-up">
+                                    <div class="card-body">
+                                        <h4 class="mt-0 header-title">Sales Order Trends - TOP 10</h4>
+                                        <div class="table-responsive mt-4">
+                                            <table id="soTrendsOvertime" class="table table-hover mb-0">
+                                                <thead class="bg-tb">
+                                                    <tr>
+                                                        <th scope="col">Ranks</th>
+                                                        <th scope="col">Customer</th>
+                                                        <th scope="col">Sales Order</th>
+                                                        <th scope="col">Overtime Request</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr th:each="SOTrendsOvertime,iter: ${overtimeSOTrends}">
+                                                        <td th:text="${iter.count}"></td>
+                                                        <td th:text="${SOTrendsOvertime[1]}"></td>
+                                                        <td th:text="${SOTrendsOvertime[2]}"></td>
+                                                        <td th:text="${SOTrendsOvertime[0]}"></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div> <!-- end container-fluid -->
+            </div>
+            <!-- end wrapper -->
+        </div>
+
+        <!-- Footer -->
+        <div th:replace="fragments/footerAdm::footerAdm"></div>
+        <!-- End Footer -->
+
+        <div th:replace="fragments/footerAdm::js"></div>
+        <script th:src="@{/dist/js/session.js}"></script>  
+
+        <!-- App js -->
+        
+        <script th:src="@{/dist/js/app.js}"></script>
+        <script th:src="@{/dist/js/jquery.peity.min.js}"></script>
+        <!--<script th:src="@{/dist/js/morris.min.js}"></script>-->
+        <!--<script th:src="@{/dist/js/raphael-min.js}"></script>-->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+        <script th:src="@{/plugins/datatables/jquery.dataTables.min.js}" type="text/javascript"></script>
+        <script th:src="@{/plugins/datatables/dataTables.bootstrap4.min.js}" type="text/javascript"></script>
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+        <script>
+
+            var peopleTrendsLeaveTb = $('#peopleTrendsLeave').DataTable({
+                "searching": false,
+                "paging": false,
+                "lengthChange": false,
+                "bInfo": false,
+                "ordering": false
+            });
+            var soTrendsLeaveTb = $('#soTrendsLeave').DataTable({
+                "searching": false,
+                "paging": false,
+                "lengthChange": false,
+                "bInfo": false,
+                "ordering": false
+            });
+            var soTrendsOvertimeTb = $('#peopleTrendsOvertime').DataTable({
+                "searching": false,
+                "paging": false,
+                "lengthChange": false,
+                "bInfo": false,
+                "ordering": false
+            });
+            var soTrendsOvertimeTb = $('#soTrendsOvertime').DataTable({
+                "searching": false,
+                "paging": false,
+                "lengthChange": false,
+                "bInfo": false,
+                "ordering": false
+            });
+
+            var cutNormal = $('#cutNormal').text();
+            var cutPerjalananBisnis = $('#cutPerjalananBisnis').text();
+            var cutIstriMelahirkan = $('#cutIstriMelahirkan').text();
+            var cutBersalin = $('#cutBersalin').text();
+            var cutSakit = $('#cutSakit').text();
+            var cutIjin = $('#cutIjin').text();
+
+            var canvas = document.getElementById("pieChart");
+            var ctx = canvas.getContext('2d');
+            Chart.defaults.global.defaultFontColor = 'black';
+            Chart.defaults.global.defaultFontSize = 14;
+            var theHelp = Chart.helpers;
+            var data = {
+                labels: ["Cuti Normal", "Perjalanan Bisnis", "Istri Kary, Melahirkan", "Cuti Bersalin", "Sakit",
+                    "Ijin"
+                ],
+                datasets: [{
+                        fill: true,
+                        backgroundColor: [
+                            'rgba(255, 99, 132)',
+                            'rgba(54, 162, 235)',
+                            'rgba(255, 206, 86)',
+                            'rgba(75, 192, 192)',
+                            'rgba(153, 102, 255)',
+                            'rgba(255, 159, 64)'
+                        ],
+                        data: [cutNormal, cutPerjalananBisnis, cutIstriMelahirkan, cutBersalin, cutSakit, cutIjin]
+                    }]
+            };
+            var options = {
+                title: {
+                    display: true,
+                    position: 'top'
+                },
+                rotation: -0.7 * Math.PI,
+                legend: {
+                    display: true,
+                    position: "bottom",
+//                    align: 'start',
+                    labels: {
+                        useLineStyle: true,
+                        generateLabels: function (chart) {
+                            var data = chart.data;
+                            if (data.labels.length && data.datasets.length) {
+                                return data.labels.map(function (label, i) {
+                                    var meta = chart.getDatasetMeta(0);
+                                    var ds = data.datasets[0];
+                                    var arc = meta.data[i];
+                                    var custom = arc && arc.custom || {};
+                                    var getValueAtIndexOrDefault = theHelp.getValueAtIndexOrDefault;
+                                    var arcOpts = chart.options.elements.arc;
+                                    var fill = custom.backgroundColor ? custom.backgroundColor :
+                                            getValueAtIndexOrDefault(ds.backgroundColor, i, arcOpts
+                                                    .backgroundColor);
+                                    var stroke = custom.borderColor ? custom.borderColor :
+                                            getValueAtIndexOrDefault(ds.borderColor, i, arcOpts.borderColor);
+                                    var bw = custom.borderWidth ? custom.borderWidth :
+                                            getValueAtIndexOrDefault(ds.borderWidth, i, arcOpts.borderWidth);
+                                    return {
+                                        // And finally : 
+                                        text: label + " (" + ds.data[i] + ")",
+                                        fillStyle: fill,
+                                        strokeStyle: stroke,
+                                        lineWidth: bw,
+                                        hidden: isNaN(ds.data[i]) || meta.data[i].hidden,
+                                        index: i
+                                    };
+                                });
+                            }
+                            return [];
+                        }
+                    }
+                }
+            };
+
+            var myPieChart = new Chart(ctx, {
+                type: 'pie',
+                data: data,
+                options: options
+            });
+            console.log(myPieChart.generateLegend());
+
+//            Month Select
+            $('#monthSelect').on('change', function () {
+                var value = $(this).val();
+                $.ajax({
+                    url: 'leavereport/' + value,
+                    type: 'get',
+                    dataType: 'json',
+                    success: function (result) {
+                        console.log("Cuti Normal : " + result.cutiNormal);
+                        console.log("Perjalanan Bisnis: " + result.perjalananBisnis);
+                        console.log("Istri Melahirkan : " + result.istriMelahirkan);
+                        console.log("Cuti Bersalin : " + result.cutiBersalin);
+                        console.log("Sakit : " + result.sakit);
+                        console.log("Ijin : " + result.ijin);
+                        console.log("Total Cuti : " + result.totalCuti);
+
+                        $('#hasilCutiNormal').val(result.cutiNormal);
+                        $('#hasilPerjalananBisnis').val(result.perjalananBisnis);
+                        $('#hasilIstriMelahirkan').val(result.istriMelahirkan);
+                        $('#hasilCutiBersalin').val(result.cutiBersalin);
+                        $('#hasilSakit').val(result.sakit);
+                        $('#hasilIjin').val(result.ijin);
+                        $('#hasilTotalCuti').val(total);
+
+                        var cutiNormal = result.cutiNormal;
+                        var perjalananBisnis = result.perjalananBisnis;
+                        var istriMelahirkan = result.istriMelahirkan;
+                        var cutiBersalin = result.cutiBersalin;
+                        var sakit = result.sakit;
+                        var ijin = result.ijin;
+
+//                        var total = parseInt(cutNormal) + parseInt(perjalananBisnis) + parseInt(istriMelahirkan) + parseInt(cutBersalin) + parseInt(sakit) + parseInt(ijin);
+                        var total = cutiNormal + perjalananBisnis + istriMelahirkan + cutiBersalin + sakit + ijin
+
+                        $('#totalcut').val(total);
+//                        alert(total);
+
+//                        resetChart();
+
+                        var data = {
+                            labels: ["Cuti Normal", "Perjalanan Bisnis", "Istri Kary, Melahirkan", "Cuti Bersalin", "Sakit",
+                                "Ijin"
+                            ],
+                            datasets: [{
+                                    fill: true,
+                                    backgroundColor: [
+                                        'rgba(255, 99, 132)',
+                                        'rgba(54, 162, 235)',
+                                        'rgba(255, 206, 86)',
+                                        'rgba(75, 192, 192)',
+                                        'rgba(153, 102, 255)',
+                                        'rgba(255, 159, 64)'
+                                    ],
+                                    data: [cutiNormal, perjalananBisnis, istriMelahirkan, cutiBersalin, sakit, ijin]
+                                }]
+                        };
+
+                        var options = {
+                            title: {
+                                display: true,
+                                position: 'top'
+                            },
+                            rotation: -0.7 * Math.PI,
+                            legend: {
+                                display: true,
+                                position: "bottom",
+                                labels: {
+                                    generateLabels: function (chart) {
+                                        var data = chart.data;
+                                        if (data.labels.length && data.datasets.length) {
+                                            return data.labels.map(function (label, i) {
+                                                var meta = chart.getDatasetMeta(0);
+                                                var ds = data.datasets[0];
+                                                var arc = meta.data[i];
+                                                var custom = arc && arc.custom || {};
+                                                var getValueAtIndexOrDefault = theHelp.getValueAtIndexOrDefault;
+                                                var arcOpts = chart.options.elements.arc;
+                                                var fill = custom.backgroundColor ? custom.backgroundColor :
+                                                        getValueAtIndexOrDefault(ds.backgroundColor, i, arcOpts
+                                                                .backgroundColor);
+                                                var stroke = custom.borderColor ? custom.borderColor :
+                                                        getValueAtIndexOrDefault(ds.borderColor, i, arcOpts.borderColor);
+                                                var bw = custom.borderWidth ? custom.borderWidth :
+                                                        getValueAtIndexOrDefault(ds.borderWidth, i, arcOpts.borderWidth);
+                                                return {
+                                                    // And finally : 
+                                                    text: label + " (" + ds.data[i] + ")",
+                                                    fillStyle: fill,
+                                                    strokeStyle: stroke,
+                                                    lineWidth: bw,
+                                                    hidden: isNaN(ds.data[i]) || meta.data[i].hidden,
+                                                    index: i
+                                                };
+                                            });
+                                        }
+                                        return [];
+                                    }
+                                }
+                            }
+                        };
+
+                        if (window.myPieChart != undefined) {
+//                            alert("masuk");
+                            window.myPieChart.destroy();
+                            window.myPieChart = new Chart(ctx, {
+                                type: 'pie',
+                                data: data,
+                                options: options
+                            });
+                            console.log(myPieChart.generateLegend());
+                        }
+                    }
+                });
+
+                peopleTrendsLeaveTb.destroy();
+//                $('#peopleTrendsLeave').empty();
+
+                peopleTrendsLeaveTb = $('#peopleTrendsLeave').DataTable({
+
+                    "searching": false,
+                    "paging": false,
+                    "lengthChange": false,
+                    "bInfo": false,
+                    "ordering": false,
+                    "ajax": {
+                        url: "peopletrendsleave/" + value,
+                        type: "GET",
+                        dataTpe: "json"
+                    },
+                    "columns": [
+                        {"data": "nik"},
+                        {"data": "name"},
+                        {"data": "leave_days"}
+                    ]
+                });
+
+                soTrendsLeaveTb.destroy();
+//                $('#soTrendsLeave').empty();
+
+                soTrendsLeaveTb = $('#soTrendsLeave').DataTable({
+                    "searching": false,
+                    "paging": false,
+                    "lengthChange": false,
+                    "bInfo": false,
+                    "ordering": false,
+                    "ajax": {
+                        url: "sotrendsleave/" + value,
+                        type: "GET",
+                        dataTpe: "json"
+                    },
+                    "columns": [
+                        {"data": null, "render": function (data, type, row, meta) {
+                                return meta.row + meta.settings._iDisplayStart + 1;
+                            }},
+                        {"data": "customer_name"},
+                        {"data": "so_id"},
+                        {"data": "co"}
+                    ]
+                });
+
+                function resetChart() {
+                    console.log("reset")
+                    myPieChart.destroy();
+                }
+
+            });
+        </script>
+
+        <script>
+            $({Counter: 0}).animate({
+                Counter: $('.timer-a').text()
+            }, {
+                duration: 2000,
+                easing: 'swing',
+                step: function () {
+                    $('.timer-a').text(Math.ceil(this.Counter));
+                }
+            });
+            $({Counter: 0}).animate({
+                Counter: $('.timer-b').text()
+            }, {
+                duration: 2000,
+                easing: 'swing',
+                step: function () {
+                    $('.timer-b').text(Math.ceil(this.Counter));
+                }
+            });
+            $({Counter: 0}).animate({
+                Counter: $('.timer-c').text()
+            }, {
+                duration: 2000,
+                easing: 'swing',
+                step: function () {
+                    $('.timer-c').text(Math.ceil(this.Counter));
+                }
+            });
+            $({Counter: 0}).animate({
+                Counter: $('.timer-d').text()
+            }, {
+                duration: 2000,
+                easing: 'swing',
+                step: function () {
+                    $('.timer-d').text(Math.ceil(this.Counter));
+                }
+            });
+            $({Counter: 0}).animate({
+                Counter: $('.timer-e').text()
+            }, {
+                duration: 2000,
+                easing: 'swing',
+                step: function () {
+                    $('.timer-e').text(Math.ceil(this.Counter));
+                }
+            });
+            $({Counter: 0}).animate({
+                Counter: $('.timer-f').text()
+            }, {
+                duration: 2000,
+                easing: 'swing',
+                step: function () {
+                    $('.timer-f').text(Math.ceil(this.Counter));
+                }
+            });
+            $({Counter: 0}).animate({
+                Counter: $('.timer-g').text()
+            }, {
+                duration: 2000,
+                easing: 'swing',
+                step: function () {
+                    $('.timer-g').text(Math.ceil(this.Counter));
+                }
+            });
+            $({Counter: 0}).animate({
+                Counter: $('.timer-h').text()
+            }, {
+                duration: 2000,
+                easing: 'swing',
+                step: function () {
+                    $('.timer-h').text(Math.ceil(this.Counter));
+                }
+            });
+
+        </script>
+
+        <script>
+            AOS.init();
+        </script>
+
+        <script>
+            var peopleTrendsOvertimeTb = $('#peopleTrendsOvertime').DataTable();
+            var soTrendsOvertimeTb = $('#soTrendsOvertime').DataTable();
+
+            var done = $('#doneOvertime').text();
+            var reject = $('#rejectOvertime').text();
+            var waiting = $('#waitingMSFCOvertime').text();
+            var waiting2 = $('#waitingRMOvertime').text();
+            var waiting3 = $('#waitingPMOvertime').text();
+
+            var totalAll = done + reject + waiting;
+//            alert(totalAll);
+
+            var canvas2 = document.getElementById("pieChartOvertime");
+            var ctx2 = canvas2.getContext('2d');
+            Chart.defaults.global.defaultFontColor = 'black';
+            Chart.defaults.global.defaultFontSize = 14;
+            var theHelp2 = Chart.helpers;
+            var data2 = {
+                labels: ["Done", "Reject", "Waiting From MSFC", "Waiting From RM", "Waiting From PM"
+                ],
+                datasets: [{
+                        fill: true,
+                        backgroundColor: [
+                            'rgba(75, 192, 192)',
+                            'rgba(255, 99, 132)',
+                            'rgba(251, 229, 85)',
+                            'rgba(251, 146, 36)',
+                            'rgba(244, 89, 5)'
+                        ],
+                        data: [done, reject, waiting, waiting2, waiting3]
+                    }]
+            };
+            var options2 = {
+                title: {
+                    display: true,
+                    position: 'top'
+                },
+                rotation: -0.7 * Math.PI,
+                legend: {
+                    display: true,
+                    position: "bottom",
+                    labels: {
+                        generateLabels: function (chart) {
+                            var data = chart.data;
+                            if (data.labels.length && data.datasets.length) {
+                                return data.labels.map(function (label, i) {
+                                    var meta = chart.getDatasetMeta(0);
+                                    var ds = data.datasets[0];
+                                    var arc = meta.data[i];
+                                    var custom = arc && arc.custom || {};
+                                    var getValueAtIndexOrDefault = theHelp.getValueAtIndexOrDefault;
+                                    var arcOpts = chart.options.elements.arc;
+                                    var fill = custom.backgroundColor ? custom.backgroundColor :
+                                            getValueAtIndexOrDefault(ds.backgroundColor, i, arcOpts
+                                                    .backgroundColor);
+                                    var stroke = custom.borderColor ? custom.borderColor :
+                                            getValueAtIndexOrDefault(ds.borderColor, i, arcOpts.borderColor);
+                                    var bw = custom.borderWidth ? custom.borderWidth :
+                                            getValueAtIndexOrDefault(ds.borderWidth, i, arcOpts.borderWidth);
+                                    return {
+                                        // And finally : 
+                                        text: label + " (" + ds.data[i] + ")",
+                                        fillStyle: fill,
+                                        strokeStyle: stroke,
+                                        lineWidth: bw,
+                                        hidden: isNaN(ds.data[i]) || meta.data[i].hidden,
+                                        index: i
+                                    };
+                                });
+                            }
+                            return [];
+                        }
+                    }
+                }
+            };
+            var myPieChart2 = new Chart(ctx2, {
+                type: 'pie',
+                data: data2,
+                options: options2
+            });
+            console.log(myPieChart2.generateLegend());
+
+            $('#monthSelect2').on('change', function () {
+                var value2 = $(this).val();
+
+                $.ajax({
+                    url: 'overtimereport/' + value2,
+                    type: 'get',
+                    dataType: 'json',
+                    success: function (result) {
+//                        console.log("Cuti Normal : " + result.cutiNormal);
+//                        console.log("Perjalanan Bisnis: " + result.perjalananBisnis);
+//                        console.log("Istri Melahirkan : " + result.istriMelahirkan);
+
+                        $('#hasilDoneOvertime').val(result.doneOvertime);
+                        $('#hasilRejectOvertime').val(result.rejectOverime);
+                        $('#hasilWaitingMSFCOvertime').val(result.waitingMSFCOvertime);
+                        $('#hasilWaitingRMOvertime').val(result.waitingRMOvertime);
+                        $('#hasilWaitingPMOvertime').val(result.waitingPMOvertime);
+
+                        var doneOvertime = result.doneOvertime;
+                        var rejectOverime = result.rejectOverime;
+                        var waitingMSFCOvertime = result.waitingMSFCOvertime;
+                        var waitingRMOvertime = result.waitingRMOvertime;
+                        var waitingPMOvertime = result.waitingPMOvertime;
+
+                        var totall = doneOvertime + rejectOverime + waitingMSFCOvertime + waitingRMOvertime + waitingPMOvertime;
+//                        alert("msfc = " + waitingMSFCOvertime + " & rm = " + waitingRMOvertime + " & pm = " + waitingPMOvertime + " & total = " +totall);
+
+                        $('#statOvertime').val(totall);
+
+                        var data2 = {
+                            labels: ["Done", "Reject", "Waiting From MSFC", "Waiting From RM", "Waiting From PM"
+                            ],
+                            datasets: [{
+                                    fill: true,
+                                    backgroundColor: [
+                                        'rgba(75, 192, 192)',
+                                        'rgba(255, 99, 132)',
+                                        'rgba(251, 229, 85)',
+                                        'rgba(251, 146, 36)',
+                                        'rgba(244, 89, 5)'
+                                    ],
+                                    data: [doneOvertime, rejectOverime, waitingMSFCOvertime, waitingRMOvertime, waitingPMOvertime]
+                                }]
+                        };
+                        var options2 = {
+                            title: {
+                                display: true,
+                                position: 'top'
+                            },
+                            rotation: -0.7 * Math.PI,
+                            legend: {
+                                display: true,
+                                position: "bottom",
+                                labels: {
+                                    generateLabels: function (chart) {
+                                        var data = chart.data;
+                                        if (data.labels.length && data.datasets.length) {
+                                            return data.labels.map(function (label, i) {
+                                                var meta = chart.getDatasetMeta(0);
+                                                var ds = data.datasets[0];
+                                                var arc = meta.data[i];
+                                                var custom = arc && arc.custom || {};
+                                                var getValueAtIndexOrDefault = theHelp.getValueAtIndexOrDefault;
+                                                var arcOpts = chart.options.elements.arc;
+                                                var fill = custom.backgroundColor ? custom.backgroundColor :
+                                                        getValueAtIndexOrDefault(ds.backgroundColor, i, arcOpts
+                                                                .backgroundColor);
+                                                var stroke = custom.borderColor ? custom.borderColor :
+                                                        getValueAtIndexOrDefault(ds.borderColor, i, arcOpts.borderColor);
+                                                var bw = custom.borderWidth ? custom.borderWidth :
+                                                        getValueAtIndexOrDefault(ds.borderWidth, i, arcOpts.borderWidth);
+                                                return {
+                                                    // And finally : 
+                                                    text: label + " (" + ds.data[i] + ")",
+                                                    fillStyle: fill,
+                                                    strokeStyle: stroke,
+                                                    lineWidth: bw,
+                                                    hidden: isNaN(ds.data[i]) || meta.data[i].hidden,
+                                                    index: i
+                                                };
+                                            });
+                                        }
+                                        return [];
+                                    }
+                                }
+                            }
+                        };
+                        if (window.myPieChart2 != undefined) {
+//                            alert("masuk");
+                            window.myPieChart2.destroy();
+                            window.myPieChart2 = new Chart(ctx2, {
+                                type: 'pie',
+                                data: data2,
+                                options: options2
+                            });
+                            console.log(myPieChart2.generateLegend());
+                        }
+                    }
+                });
+
+                soTrendsOvertimeTb.destroy();
+
+                soTrendsOvertimeTb = $('#soTrendsOvertime').DataTable({
+                    "searching": false,
+                    "paging": false,
+                    "lengthChange": false,
+                    "bInfo": false,
+                    "ordering": false,
+                    "ajax": {
+                        url: "sotrendsovertime/" + value2,
+                        type: "GET",
+                        dataTpe: "json"
+                    },
+                    "columns": [
+                        {"data": null, "render": function (data, type, row, meta) {
+                                return meta.row + meta.settings._iDisplayStart + 1;
+                            }},
+                        {"data": "customer_name"},
+                        {"data": "so_id"},
+                        {"data": "done"}
+                    ]
+                });
+
+                peopleTrendsOvertimeTb.destroy();
+
+                peopleTrendsOvertimeTb = $('#peopleTrendsOvertime').DataTable({
+                    "searching": false,
+                    "paging": false,
+                    "lengthChange": false,
+                    "bInfo": false,
+                    "ordering": false,
+                    "ajax": {
+                        url: "peopletrendsovertime/" + value2,
+                        type: "GET",
+                        dataTpe: "json"
+                    },
+                    "columns": [
+                        {"data": "employee_nik"},
+                        {"data": "employeename"},
+                        {"data": "total"}
+                    ]
+                });
+
+            });
+
+        </script>
+    </body>
+</html>

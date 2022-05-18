@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>HRIS - Data Customers</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- App Icons -->
+        <link rel="shortcut icon" th:href="@{/dist/img/favicon.ico}">
+
+    <div th:replace="fragments/headerAdm::cssAdm"></div>
+
+    <link th:href="@{/plugins/datatables/dataTables.bootstrap4.min.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{/plugins/datatables/responsive.bootstrap4.min.css}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+
+    <style>
+        table thead{
+            background-color: #4bbbce;
+            color: #fafafa;
+        }
+
+        #reject_toggle{
+            background-color: #dc3545;
+            color: #fafafa;
+            border-color: #dc3545;
+        }
+
+        #accept_toggle{
+            background-color: #007bff;
+            color: #fafafa;
+            border-color: #007bff;
+        }
+
+        #accept_toggle:disabled, #reject_toggle:disabled{
+            cursor: not-allowed;
+            pointer-events: all !important;
+        }
+    </style>
+
+</head>
+<body>
+    <!-- Loader -->
+    <!--    <div id="preloader">
+            <div id="status">
+                <div class="spinner"></div>
+            </div>
+        </div>-->
+
+    <div class="header-bg">
+
+        <div th:replace="fragments/headerAdm::headerAdm"></div>
+
+        <div class="container-fluid">
+            <!-- Page-Title -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-title-box">
+                        <h4 class="page-title"> <i class="dripicons-blog"></i> Detail Customer</h4>
+                    </div>
+                </div>
+            </div>
+            <!-- end page title end breadcrumb -->
+
+        </div>
+    </div>
+
+
+    <div class="wrapper">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card m-b-20">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group row mt-3 ml-2">
+                                    <label class="col-md-2 label-request">NIK :</label>
+                                    <span class="col-md-6" th:text="${niknya}"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-12" style="margin-top: -20px">
+                                <div class="form-group row ml-2">
+                                    <label class="col-md-2 label-request">Name :</label>
+                                    <span class="col-md-6" th:text="${name}"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-12" style="margin-top: -20px">
+                                <div class="form-group row ml-2">
+                                    <label class="col-md-2 label-request">Status :</label>
+                                    <span class="col-md-6" th:text="${status}"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-12" style="margin-top: -20px">
+                                <div class="form-group row ml-2">
+                                    <label class="col-md-2 label-request">Tunjangan Overtime :</label>
+                                    <span class="col-md-6" th:text="${tunjangan}"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-12" style="margin-top: -20px">
+                                <div class="form-group row ml-2">
+                                    <label class="col-md-2 label-request">Customer :</label>
+                                    <span class="col-md-6" th:text="${custName}"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-responsive pl-4 pr-4 mb-4">
+                            <table id="detailCustomerTb" class="table table-bordered hover dt-responsive nowrap"
+                                   style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                <thead class="text-center">
+                                    <tr>
+                                        <th rowspan="2" nowrap>No</th>
+                                        <th hidden rowspan="2" nowrap>Overtime Detail ID</th>
+                                        <th colspan="2" nowrap>Date</th>
+                                        <th colspan="2" nowrap>Time</th>
+                                        <th rowspan="2" nowrap>Total Hour</th>
+                                        <th rowspan="2" nowrap>Type Day</th>
+                                        <th rowspan="2" nowrap>Contract Status</th>
+                                        <th rowspan="2" nowrap>Overtime Description</th>
+                                        <th rowspan="2" nowrap>Current Approval</th>
+                                        <th rowspan="2">Approval</th>
+                                        <th rowspan="2">Action</th>
+
+                                    </tr>
+                                    <tr>
+                                        <th>Start</th>
+                                        <th>End</th>
+                                        <th>Start</th>
+                                        <th>End</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr id="data" th:each="detail, iter : ${listDetailOT}">
+                                        <td class="text-center" th:text="${iter.count}"></td>
+                                        <td hidden id="overtimeDetail" th:text="${detail.overtimeDetail}">
+                                            <!--<input type="text"  >-->
+                                        </td>
+
+                                        <td class="text-center" th:text="${#dates.format(detail.startDate, 'dd MMM yyyy')}"></td>
+                                        <td th:text="${#dates.format(detail.endDate, 'dd MMM yyyy')}"></td>
+                                        <td class="text-center">
+                                            <span th:if="${detail.startTime == null }" >00:00</span>
+                                            <span th:if="${detail.startTime != null}" th:text="${#dates.format(detail.startTime, 'HH:mm')}"></span>
+                                        </td>
+                                        <td class="text-center">
+                                            <span th:if="${detail.endTime == null }" >00:00</span>
+                                            <span th:if="${detail.endTime != null}" th:text="${#dates.format(detail.endTime, 'HH:mm')}"></span>
+                                        </td>
+                                        <td class="text-center" th:text="${detail.total}"></td>
+                                        <td class="text-center" th:text="${detail.dateType}"></td>
+                                        <td class="text-center" th:text="${detail.requestOvertimeID.contractStatus}"></td>
+                                        <td th:text="${detail.task}"></td>
+                                        <td class="text-center" th:text="${detail.requestStatus}"></td>
+                                        <td  id="tdApproval" class="text-center" nowrap>
+                                            <form id="formApproval" method="POST" action="">
+                                                <input type="text" id="nextApp"  name="approval_path" th:value="${approval_path}" hidden=""/>
+
+                                                <button th:if="(${approval_path == 'no'} OR ${detail.requestStatus == 'Canceled'} OR ${detail.requestStatus == 'Rejected by PM'} OR ${detail.requestStatus == 'Rejected by RM'} OR ${detail.requestStatus == 'Rejected by MSFC'} OR ${detail.requestStatus == 'Done'})
+                                                        OR (${detail.pMorLeader == true} AND ${thisPM == 'pm'}) OR (${detail.rm == true} AND ${thisRM == 'rm'}) OR (${detail.msfc == true} AND ${thisMSFC == 'msfc'}) OR (${detail.msfc == true} AND ${thisADD == 'add'})
+                                                        OR (${detail.pMorLeader == null} AND ${thisRM == 'rm'}) OR (${detail.rm == null} AND ${thisMSFC == 'msfc'}) OR (${detail.rm == null} AND ${thisADD == 'add'})" type="button" disabled="" class="btn btn-sm btn-primary" id="accept_toggle" >
+                                                    Accept
+                                                </button>
+                                                <button th:unless="(${approval_path == 'no'} OR ${detail.requestStatus == 'Canceled'} OR ${detail.requestStatus == 'Rejected by PM'} OR ${detail.requestStatus == 'Rejected by RM'} OR ${detail.requestStatus == 'Rejected by MSFC'} OR ${detail.requestStatus == 'Done'}) 
+                                                        OR (${detail.pMorLeader == true} AND ${thisPM == 'pm'}) OR (${detail.rm == true} AND ${thisRM == 'rm'}) OR (${detail.msfc == true} AND ${thisMSFC == 'msfc'}) OR (${detail.msfc == true} AND ${thisADD == 'add'})
+                                                        OR (${detail.pMorLeader == null} AND ${thisRM == 'rm'}) OR (${detail.rm == null} AND ${thisMSFC == 'msfc'}) OR (${detail.rm == null} AND ${thisADD == 'add'})" type="button" class="btn btn-sm btn-primary" id="accept_toggle" >
+                                                    Accept
+                                                </button>
+                                                <button th:if="(${approval_path == 'no'} OR ${detail.requestStatus == 'Canceled'} OR ${detail.requestStatus == 'Rejected by PM'} OR ${detail.requestStatus == 'Rejected by RM'} OR ${detail.requestStatus == 'Rejected by MSFC'} OR ${detail.requestStatus == 'Done'}) 
+                                                        OR (${detail.pMorLeader == true} AND ${thisPM == 'pm'}) OR (${detail.rm == true} AND ${thisRM == 'rm'}) OR (${detail.msfc == true} AND ${thisMSFC == 'msfc'}) OR (${detail.msfc == true} AND ${thisADD == 'add'})
+                                                        OR (${detail.pMorLeader == null} AND ${thisRM == 'rm'}) OR (${detail.rm == null} AND ${thisMSFC == 'msfc'}) OR (${detail.rm == null} AND ${thisADD == 'add'})" type="button" disabled="" class="btn btn-sm btn-danger" id="reject_toggle" >
+                                                    Reject
+                                                </button>
+                                                <button th:unless="(${approval_path == 'no'} OR ${detail.requestStatus == 'Canceled'} OR ${detail.requestStatus == 'Rejected by PM'} OR ${detail.requestStatus == 'Rejected by RM'} OR ${detail.requestStatus == 'Rejected by MSFC'} OR ${detail.requestStatus == 'Done'}) 
+                                                        OR (${detail.pMorLeader == true} AND ${thisPM == 'pm'}) OR (${detail.rm == true} AND ${thisRM == 'rm'}) OR (${detail.msfc == true} AND ${thisMSFC == 'msfc'}) OR (${detail.msfc == true} AND ${thisADD == 'add'})
+                                                        OR (${detail.pMorLeader == null} AND ${thisRM == 'rm'}) OR (${detail.rm == null} AND ${thisMSFC == 'msfc'}) OR (${detail.rm == null} AND ${thisADD == 'add'})" type="button" class="btn btn-sm btn-danger" id="reject_toggle" >
+                                                    Reject
+                                                </button>
+
+                                                <input type="hidden" id="comment" name="valueComment" />
+                                                <input type="text" id="id" name="otDetailId" th:value="${detail.overtimeDetail}" hidden=""/>
+                                            </form>
+
+                                            <input type="hidden" th:value="${detail.pMorLeader}">
+                                            <input type="hidden" th:value="${detail.rm}">
+                                            <input type="hidden" th:value="${detail.msfc}">
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="#approvalHistory" role="button" type="button" data-toggle="modal" title="History" class="waves-effect waves-light" th:onclick="'javascript:openAppHistory(\''+${detail.overtimeDetail}+'\');'">
+                                                <i class="fa fa-history fa-lg" aria-hidden="true"></i></a>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="5"><b>Total Overtime</b></td>
+                                        <td colspan="1" th:text="${total_lembur}" nowrap><b></b></td>
+                                        <td colspan="6"></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+
+
+                        <!--  Modal content for the above example -->
+                        <div id="approvalHistory" class="modal fade " tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title mt-0" id="myLargeModalLabel"><i class="fa fa-history fa-lg" aria-hidden="true"></i><b> Approval History</b></h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="table-responsive">
+                                            <table id="pendingApprovalTb" class="table table-bordered hover dt-responsive nowrap"
+                                                   style="border-collapse: collapse; border-spacing: 0; width: 100%;"  th:fragment="detailHistoryApproval">
+                                                <thead class="text-center">
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>NIK</th>
+                                                        <th>Nama</th>
+                                                        <th>Status</th>
+                                                        <th>Modified Date</th>
+                                                        <th>Remarks</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr class="text-center" th:each="a,b:${approvalHistory}">
+                                                        <td th:text="${b.count}"></td>
+                                                        <td th:text="${a.userId}"></td>
+                                                        <td>
+                                                            <div align="center" th:each="c, t:${namaUser}">
+                                                                <span th:if="${t.count == b.count}" th:text="${c}"></span>
+                                                            </div>
+                                                        </td>
+                                                        <td th:text="${a.status}"></td>
+                                                        <td th:text="${#dates.format(a.modifiedDate, 'dd MMM yyyy')}"></td>
+                                                        <td th:text="${a.remarks}"></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
+
+                    </div>
+                </div> <!-- end col -->
+            </div> <!-- end row -->
+        </div> <!-- end container -->
+    </div>
+    <!-- end wrapper -->
+
+
+    <!-- Footer -->
+    <div th:replace="fragments/footerAdm::footerAdm"></div>
+    <!-- End Footer -->
+
+    <div th:replace="fragments/footer::js"></div>
+
+    <script th:src="@{/dist/js/session.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+    <script th:src="@{/plugins/datatables/jquery.dataTables.min.js}" type="text/javascript"></script>
+    <script th:src="@{/plugins/datatables/dataTables.bootstrap4.min.js}" type="text/javascript"></script>
+    <script th:src="@{/plugins/datatables/dataTables.responsive.min.js}" type="text/javascript"></script>
+    <script th:src="@{/plugins/datatables/responsive.bootstrap4.min.js}" type="text/javascript"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.10.0/dist/sweetalert2.all.min.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+//            var t = $('#detailCustomerTb').DataTable({
+//                responsive: true,
+//                "columnDefs": [{
+//                        "crchable": false,
+//                        "orderable": false,
+//                        "targets": 0
+//                    }],
+//                "order": [
+//                    [1, 'asc']
+//                ]
+//            });
+
+            t.on('order.dt search.dt', function () {
+                t.column(0, {
+                    search: 'applied',
+                    order: 'applied'
+                }).nodes().each(function (cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();
+        });
+
+        var tempBtnAccept;
+        var tempBtnReject;
+
+        $(function () {
+            $('#detailCustomerTb tbody').on('click', '#accept_toggle', function () {
+                var id = $(this).parents('#data').children('#overtimeDetail').text();
+//                var id = $('#overtimeDetail').val();
+//                alert("id =" + id);
+                console.log("overtime detail id : " + id);
+//                alert("idnya : " + $(this).parents('#tdOvertimeDetail').children('#overtimeDetail').text());
+
+                tempBtnAccept = $(this);
+                tempBtnReject = $(this).parents('#data').children('#tdApproval').children('#formApproval').children('#reject_toggle');
+                Accept(id);
+            });
+
+            $('#detailCustomerTb tbody').on('click', '#reject_toggle', function () {
+                var id = $(this).parents('#data').children('#overtimeDetail').text();
+//                var id = $('#overtimeDetail').val();
+//                alert(id);
+//                alert('ini button reject ' + id);
+                tempBtnAccept = $(this).parents('#data').children('#tdApproval').children('#formApproval').children('#accept_toggle');
+                tempBtnReject = $(this);
+                Reject(id);
+            });
+
+//            $('#detailCustomerTb tbody').on('click', '#lmao', function () {
+//                alert("bisa");
+//            });
+        });
+
+        function Accept(id) {
+            var check = true;
+            var i = 0;
+
+            var btn_accept = 'accept_toggle_' + i;
+            var btn_reject = 'reject_toggle_' + i;
+            var iduser = document.getElementById("id").value
+            var _row = $(this).closest('tr');
+            var reqid = _row.find('td:eq(1)').text();
+            ++i;
+//            alert("ini : " + iduser);
+            Swal.fire({
+                title: 'Accept it?',
+                text: "You will accept this request!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Accept it!'
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        url: "/HRIS/acceptReq/" + id
+                    });
+                    $('#comment').val("");
+
+                    Swal.fire(
+                            'Accepted!',
+                            'Request overtime employee has been accept',
+                            'success'
+                            )
+                    tempBtnAccept.prop('disabled', true);
+                    tempBtnReject.prop('disabled', true);
+                    check = true;
+                }
+            });
+            return check;
+
+        }
+        ;
+
+        function Reject(id) {
+            var check = true;
+            var i = 0;
+
+            var btn_reject = 'reject_toggle_' + i;
+            var btn_accept = 'accept_toggle_' + i;
+            var iduser = document.getElementById("id").value
+            var _row = $(this).closest('tr');
+            var rejid = _row.find('td:eq(1)').text();
+            ++i;
+
+            Swal.fire({
+                title: "Reject it?",
+                text: "Write comment please!",
+                input: 'text',
+                showCancelButton: true,
+                inputValidator: (value) => {
+                    if (value === '') {
+                        return !value && 'You need to write something!'
+                    } else {
+                        if (value.length < 5) {
+                            return value && 'Please write at least 5 characters!'
+                        }
+                    }
+                }
+            }).then((result) => {
+//                Swal.fire({
+//                    title: 'Are you sure?',
+//                    text: "You won't be able to revert this!",
+//                    icon: 'warning',
+//                    showCancelButton: true,
+//                    confirmButtonColor: '#3085d6',
+//                    cancelButtonColor: '#d33',
+//                    confirmButtonText: 'Yes, delete it!'
+//                }).then((result) => {
+                if (result.value) {
+//                    console.log("Result: " + result.value);
+//                    alert("ini resulrnya" + result.value);
+//                    $('#comment').val(result.value);
+                    var cmnt = result.value;
+//                    alert("ini cmt : " + cmnt);
+                        $.ajax({
+                            url: "/HRIS/rejectReq/" + id + "/" + cmnt
+                        });
+//                        tempBtnAccept.prop('disabled', true);
+//                        tempBtnReject.prop('disabled', true);
+                    check = true;
+                    Swal.fire(
+                            'Nice!',
+                            'Success Reject Request Overtime',
+                            'success'
+                            )
+                }
+//                })
+            });
+            return check;
+        }
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('[data-toggle="modal"]').tooltip();
+        }
+        );
+    </script>
+    <script>
+        function openAppHistory(id) {
+            $.ajax({
+                url: "/HRIS/approvalHistory/" + id,
+                data: "",
+                cache: false,
+                success: function (data) {
+                    console.log(data);
+                    $("#pendingApprovalTb").html(data);
+                    $("#modalHistory").modal("show");
+                }
+            });
+        }
+    </script>
+</body>
+</html>

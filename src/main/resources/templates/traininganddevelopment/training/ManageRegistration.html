@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>HRIS - Registration</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- App Icons -->
+        <link rel="shortcut icon" th:href="@{/dist/img/favicon.ico}">
+
+    <div th:replace="fragments/headerAdm::cssAdm"></div>
+
+    <link th:href="@{/plugins/datatables/dataTables.bootstrap4.min.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{/plugins/datatables/responsive.bootstrap4.min.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{/dist/css/checkboxes_manageRegistration.css}" rel="stylesheet" type="text/css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+
+
+    <style>
+        table thead{
+            background-color: #4bbbce;
+            color: #fafafa;
+        }
+        .disabled{
+            cursor: not-allowed;
+        }
+        td.disabled{
+            pointer-events: none;
+            background: grey;
+            opacity: 0.5;
+            
+        }
+        
+    </style>
+
+    <!--<script th:src="@{/plugins/qrcode/qrcode.js}"></script>-->
+</head>
+<body> 
+    <!-- Loader -->
+    <div id="preloader">
+        <div id="status">
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <div class="header-bg">
+
+        <div th:replace="fragments/headerAdm::headerAdm"></div>
+
+        <div class="container-fluid">
+            <!-- Page-Title -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-title-box">
+                        <h4 class="page-title"> <i class="dripicons-blog"></i>Manage Registration</h4>
+                    </div>
+                </div>
+            </div>
+            <!-- end page title end breadcrumb -->
+        </div>
+    </div>
+
+
+    <div class="wrapper">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card m-b-20">
+                        <div class="card-body"> 
+                            <div class="table-responsive">
+                                <form id="frm-example">
+                                    <div>
+                                    
+                                    <form>
+                                        <button class="btn btn-success" hidden="">demo</button>
+                                    </form>
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <button id="addData" class="btn btn-primary"><i class="far fa fa-plus-circle"></i></button>
+                                                <pre id="example-console-rows" hidden=""></pre>
+                                                <input id="test" name="test" class="form-control" hidden="">
+                                            </td>
+                                            <td><form id="accept_form" th:action="${'./accept'}" method="POST">
+                                                    <input id="demo" name="countRows" hidden="">
+                                                    <input id="idIn1" name="idIn" class="form-control" hidden="">
+                                                    <input type="text" th:value="${id}" name="id" readonly="" hidden="">
+                                                    <input type="text" th:value="${TrainName}" name="training_title" readonly="" hidden="">
+                                                    <input type="text" th:value="${TrainTime}" name="training_time" readonly="" hidden="">
+                                                    <input type="text" th:value="123" name="registrator_nik" readonly="" hidden="">
+                                                    <input type="number" th:value="${empl_nik}" name="admin" readonly="" hidden="">
+                                                    <button id="acc" class="btn btn-success">Accept Selected</button>
+                                            </form></td>
+                                            <td><form id="reject_form" th:action="${'./reject'}" method="POST">
+                                                    <input id="demo" name="countRows" hidden="">
+                                                    <input id="idIn" name="idIn" class="form-control" hidden="">
+                                                    <input type="text" th:value="${id}" name="id" readonly="" hidden="">
+                                                    <input type="number" th:value="${empl_nik}" name="admin" readonly="" hidden="">
+                                                    <input type="text" th:value="${TrainName}" name="training_title" readonly="" hidden="">
+                                                    <input type="text" th:value="${TrainTime}" name="training_time" readonly="" hidden="">
+                                                    <input type="text" th:value="123" name="registrator_nik" readonly="" hidden="">
+                                                    <button class="btn btn-warning">Reject Selected</button>
+                                            </form></td>
+                                            <td><form id="waitinglist_form" th:action="${'./waitingList'}" method="POST">
+                                                    <input id="demo" name="countRows" hidden="">
+                                                    <input id="idIn2" name="idIn" class="form-control" hidden="">
+                                                    <input type="text" th:value="${id}" name="id" readonly="" hidden="">
+                                                    <input type="number" th:value="${empl_nik}" name="admin" readonly="" hidden="">
+                                                    <input type="text" th:value="${TrainName}" name="training_title" readonly="" hidden="">
+                                                    <input type="text" th:value="${TrainTime}" name="training_time" readonly="" hidden="">
+                                                    <input type="text" th:value="123" name="registrator_nik" readonly="" hidden="">
+                                                    <button class="btn btn-primary">Add To Waiting List Selected</button>
+                                            </form></td>
+                                        <tr>
+                                    </table>
+                                    </div>
+                                    <br>
+                                <table id="registration" class="table table-bordered hover dt-responsive display responsive nowrap"
+                                       style="border-collapse: collapse; border-spacing: 0;">
+                                    <thead class="text-center">
+                                        <tr>
+                                            <th data-field="No" data-sortable="true" >No</th>
+                                            <th></th>
+                                            <th data-field="nik" data-sortable="true" >NIK</th>
+                                            <th data-field="name" data-sortable="true" >Name</th>
+                                            <th data-field="email" data-sortable="true" >Email</th>
+                                            <th data-field="phone" data-sortable="true" >Phone Number</th>
+                                            <th data-field="status" data-sortable="true" >Status</th>
+                                            <th data-field="allocation" data-sortable="true" class="none">Customer</th>
+                                            <th data-field="position" data-sortable="true" class="none">Position</th>
+                                            <th data-field="training" data-sortable="true" class="none">Training</th>
+                                            <th data-field="action" data-formatter="actionFormatter" >Action</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <!--waiting for approval-->
+                                        <tr class="text-center" th:each="rl : ${requesterList}" th:if="${rl[5] == 'Waiting For Approval'}">
+                                            <td></td>
+                                            <td>[[${rl[1]}]]</td>
+                                            <td th:text="${rl[1]}"></td>
+                                            <td th:text="${rl[7]}"></td>
+                                            <td th:text="${rl[8]}"></td>
+                                            <td th:text="${rl[9]}"></td>
+                                            <td th:text="${rl[5]}"></td>
+                                            <td th:text="${rl[11]}"></td>
+                                            <td th:text="${rl[10]}"></td>
+                                            <td><button type="button" class="btn btn-primary mb-2" title="View History" th:onclick="'javascript:openHistoryTraining(\''+${rl[1]}+'\');'" >
+                                                    View
+                                                </button></td>
+                                            <td class="row" style="width: 150px;padding-left: 80px">
+                                                <!--<p th:text="${rl[8]}"></p>-->
+                                                <form th:action="${'./Approved/'+ rl[0] + '/' + rl[7] + '/' + rl[8]}" method="POST">
+                                                    <input type="number" th:value="${empl_nik}" name="admin" readonly="" hidden="">
+                                                    <input type="text" th:value="${rl[3]}" name="training_title" readonly="" hidden="">
+                                                    <input type="text" th:value="${rl[12]}" name="training_time" readonly="" hidden="">
+                                                    <input type="text" th:value="${rl[1]}" name="registrator_nik" readonly="" hidden="">
+                                                    <input type="text" th:value="${id}" name="id" readonly="" hidden="">                                                    
+                                                    <button title="Accept Registration" th:data-id="${rl[0]}" type="button" class="a btn btn-blue-grey"><i class="fa fa-check-square" aria-hidden="true" style="color: green"></i></button>
+                                                </form>
+                                                <form th:action="${'./rejected/' + rl[0] + '/' + rl[7] + '/' + rl[8]}" method="POST" th:id="${'formReject' + rl[0]}">
+                                                    <input type="number" th:value="${empl_nik}" name="admin" readonly="" hidden="">
+                                                    <input type="text" th:value="${rl[3]}" name="training_title" readonly="" hidden="">
+                                                    <input type="text" th:value="${id}" name="id" readonly="" hidden="">
+                                                    <button th:data-id="${rl[0]}" title="Reject Registration" type="button" class="d btn btn-blue-grey"><i class="fa fa-ban" aria-hidden="true" style="color: red"></i></button>
+                                                </form>
+                                                <form th:action="${'./sendToQueue/' + rl[0] + '/' + rl[2] + '/' + rl[3]}" method="POST">
+                                                    <input type="number" th:value="${empl_nik}" name="admin" readonly="" hidden="">
+                                                    <input type="text" th:value="${rl[3]}" name="training_title" readonly="" hidden="">
+                                                    <input type="text" th:value="${rl[12]}" name="training_time" readonly="" hidden="">
+                                                    <input type="text" th:value="${id}" name="id" readonly="" hidden="">
+                                                    <button title="Waiting List" type="submit" class="btn btn-blue"><i class="fa fa-history" aria-hidden="true" style="color: blue"></i></button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <!--waiting for confirmation-->
+                                        <tr class="text-center" th:each="rl : ${requesterList}" th:if="${rl[5] == 'Waiting For Confirmation'}">
+                                            <td></td>
+                                            <td class="disabled">0</td>
+                                            <td th:text="${rl[1]}"></td>
+                                            <td th:text="${rl[7]}"></td>
+                                            <td th:text="${rl[8]}"></td>
+                                            <td th:text="${rl[9]}"></td>
+                                            <td th:text="${rl[5]}"></td>
+                                            <td th:text="${rl[11]}"></td>
+                                            <td th:text="${rl[10]}"></td>
+                                            <td><button type="button" class="btn btn-primary mb-2" title="View History" th:onclick="'javascript:openHistoryTraining(\''+${rl[1]}+'\');'" >
+                                                    View
+                                                </button></td>
+                                            <td class="row" style="width: 150px;padding-left: 40px">
+
+                                                <button disabled="" title="Accept Registration" th:data-id="${rl[0]}" type="button" class="a btn btn-blue-grey disabled"><i class="fa fa-check-square" aria-hidden="true" style="color: green"></i></button>
+
+                                                <button disabled="" th:data-id="${rl[0]}" title="Reject Registration" type="button" class="d btn btn-blue-grey disabled"><i class="fa fa-ban" aria-hidden="true" style="color: red"></i></button>
+
+                                                <button disabled="" title="Waiting List" type="submit" class="btn btn-blue disabled"><i class="fa fa-history" aria-hidden="true" style="color: blue"></i></button>
+                                            </td>
+                                        </tr>
+                                        <!--waiting list-->
+                                        <tr class="text-center" th:each="rl : ${requesterList}" th:if="${rl[5] == 'Waiting List'}">
+                                            <td></td>
+                                            <td class="disabled">0</td>
+                                            <td th:text="${rl[1]}"></td>
+                                            <td th:text="${rl[7]}"></td>
+                                            <td th:text="${rl[8]}"></td>
+                                            <td th:text="${rl[9]}"></td>
+                                            <td th:text="${rl[5]}"></td>
+                                            <td th:text="${rl[11]}"></td>
+                                            <td th:text="${rl[10]}"></td>
+                                            <td><button type="button" class="btn btn-primary mb-2" title="View History" th:onclick="'javascript:openHistoryTraining(\''+${rl[1]}+'\');'" >
+                                                    View
+                                                </button></td>
+                                            <td class="row" style="width: 150px;padding-left: 40px">
+
+                                                <form th:action="${'./Approved/'+ rl[0] + '/' + rl[7] + '/' + rl[8]}" method="POST">
+                                                    <input type="number" th:value="${empl_nik}" name="admin" readonly="" hidden="">
+                                                    <input type="text" th:value="${rl[3]}" name="training_title" readonly="" hidden="">
+                                                    <input type="text" th:value="${rl[12]}" name="training_time" readonly="" hidden="">
+                                                    <input type="text" th:value="${rl[1]}" name="registrator_nik" readonly="" hidden="">
+                                                    <input type="text" th:value="${id}" name="id" readonly="" hidden="">        
+                                                    <!--<button th:data-id="${rl[0]}" type="submit" style='margin-left: 20px;' class="btn btn-primary mb-2">Resend</button>-->
+                                                    <button th:data-id="${rl[0]}" type="button" style='margin-left: 20px;' class="resend btn btn-primary mb-2">Resend</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <!--User Accepted-->
+
+                                        <!--User Declined-->
+                                        <tr class="text-center" th:each="rl : ${requesterList}" th:if="${rl[5] == 'Decline'}">
+                                            <td></td>
+                                            <td class="disabled">0</td>
+                                            <td th:text="${rl[1]}"></td>
+                                            <td th:text="${rl[7]}"></td>
+                                            <td th:text="${rl[8]}"></td>
+                                            <td th:text="${rl[9]}"></td>
+                                            <td th:text="${rl[5]}"></td>
+                                            <td th:text="${rl[11]}"></td>
+                                            <td th:text="${rl[10]}"></td>
+                                            <td><button type="button" class="btn btn-primary mb-2" title="View History" th:onclick="'javascript:openHistoryTraining(\''+${rl[1]}+'\');'">
+                                                    View
+                                                </button></td>
+                                            <td class="row" style="width: 150px;padding-left: 40px">
+
+
+                                                <a disabled="" style='margin-left: 20px; color: #333333'><i style="font-size: 24px; margin-left: 20px; color: red;" class='fa fa-info-circle'></i></a>
+
+                                            </td>
+                                        </tr>
+                                        <tr class="text-center" th:each="rl : ${requesterList}" th:if="${rl[5] == 'Rejected'}">
+                                            <td></td>
+                                            <td class="disabled">0</td>
+                                            <td th:text="${rl[1]}"></td>
+                                            <td th:text="${rl[7]}"></td>
+                                            <td th:text="${rl[8]}"></td>
+                                            <td th:text="${rl[9]}"></td>
+                                            <td th:text="${rl[5]}"></td>
+                                            <td th:text="${rl[11]}"></td>
+                                            <td th:text="${rl[10]}"></td>
+                                            <td><button type="button" class="btn btn-primary mb-2" title="View History" th:onclick="'javascript:openHistoryTraining(\''+${rl[1]}+'\');'" >
+                                                    View
+                                                </button></td>
+                                            <td class="row" style="width: 150px;padding-left: 40px">
+
+
+                                                <a disabled="" style='margin-left: 20px; color: #333333'><i style="font-size: 24px; margin-left: 20px; color: red;" class='fa fa-info-circle'></i></a>
+
+                                            </td>
+                                        </tr>
+                                        <!--Sent Detail-->
+<!--                                        <tr class="text-center" th:each="rl : ${requesterList}" th:if="${rl[5] == 'Invitation Sent'}">
+                                            <td></td>
+                                            <td class="disabled">0</td>
+                                            <td th:text="${rl[1]}"></td>
+                                            <td th:text="${rl[7]}"></td>
+                                            <td th:text="${rl[8]}"></td>
+                                            <td th:text="${rl[9]}"></td>
+                                            <td th:text="${rl[5]}"></td>
+                                            <td th:text="${rl[11]}"></td>
+                                            <td th:text="${rl[10]}"></td>
+                                            <td><button type="button" class="btn btn-primary mb-2" data-toggle="modal" title="View History" th:data-target="${'#training'+rl[0]}" >
+                                                    View
+                                                </button></td>
+                                            <td class="row" style="width: 150px;padding-left: 40px">
+
+
+                                                <button disabled="" href='#' type="button" class="btn btn-primary mb-2 disabled" style='margin-left: 20px;'>Send QR</button>
+
+                                                <div class="modal fade" th:id="${'training'+rl[0]}">
+                                                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                             Modal Header 
+                                                            <div class="modal-header">
+                                                                <h4 class="modal-title"><i class="fa fa-history"></i>Training History</h4>
+                                                                <button type="button" class="close" data-dismiss="modal" style="color: #4bbbce">&times;</button>
+                                                            </div>
+                                                             Modal body 
+                                                            <div class="modal-body">
+                                                                //th:action="${'./saveTraining/'+trn[0]}"
+                                                                <table class="table info table-bordered hover">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Training Title</th>
+                                                                            <th>Date</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        th:if="${rl[1] == hl{2}}"
+                                                                        <tr th:each="hl : ${requesterHistoryList}" >
+                                                                            <td th:text="${hl[0]}"></td>
+                                                                            <td th:text="${hl[1]}"></td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                             Modal footer 
+                                                                                                                        <div class="modal-footer">
+                                                                                                                            <p>No data available in table</p>
+                                                                                                                        </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>-->
+                                        <!--Check In-->
+                                        <tr class="text-center" th:each="rl : ${requesterList}" th:if="${rl[5] == 'Waiting For Feedback Form'}">
+                                            <td></td>
+                                            <td class="disabled">0</td>
+                                            <td th:text="${rl[1]}"></td>
+                                            <td th:text="${rl[7]}"></td>
+                                            <td th:text="${rl[8]}"></td>
+                                            <td th:text="${rl[9]}"></td>
+                                            <td th:text="${rl[5]}"></td>
+                                            <td th:text="${rl[11]}"></td>
+                                            <td th:text="${rl[10]}"></td>
+                                            <td><button type="button" class="btn btn-primary mb-2" title="View History" th:onclick="'javascript:openHistoryTraining(\''+${rl[1]}+'\');'" >
+                                                    View
+                                                </button></td>
+                                            <td class="row" style="width: 150px;padding-left: 40px">
+
+                                                <!--<p th:text="${rl[1]}">-->
+                                                <a th:href="${'./sendFeedback/'+rl[0]+'/'+rl[7]+'/'+empl_nik+'/'+rl[6]+'/'+id+'/'+rl[8]+'/'+rl[1]}" id="sendFeedback" style="font-size: 12px;" class="btn feedback btn-primary mb-2">Send Feedback Form</a>
+                                                <!--                                            <p th:text="${rl[0]}"></p>
+                                                                                                <p th:text="${rl[6]}"></p>
+                                                                                                <p th:text="${empl_nik}"></p>
+                                                                                                <p th:text="${rl[6]}"></p>-->
+
+                                            </td>
+                                        </tr>
+                                        <!--Sent Feedback-->
+                                        <tr class="text-center" th:each="rl : ${requesterList}" th:if="${rl[5] == 'Feedback Form Sent'}">
+                                            <td></td>
+                                            <td class="disabled">0</td>
+                                            <td th:text="${rl[1]}"></td>
+                                            <td th:text="${rl[7]}"></td>
+                                            <td th:text="${rl[8]}"></td>
+                                            <td th:text="${rl[9]}"></td>
+                                            <td th:text="${rl[5]}"></td>
+                                            <td th:text="${rl[11]}"></td>
+                                            <td th:text="${rl[10]}"></td>
+                                            <td><button type="button" class="btn btn-primary mb-2" title="View History" th:onclick="'javascript:openHistoryTraining(\''+${rl[1]}+'\');'" >
+                                                    View
+                                                </button></td>
+                                            <td class="row" style="width: 150px;padding-left: 40px">
+
+                                                <!--<p th:text="${rl[1]}">-->
+                                                <button disabled="" href='#' type="button" style="font-size: 12px;" class="btn feedback btn-primary mb-2 disabled">Send Feedback Form</button>
+                                                <!--                                            <p th:text="${rl[0]}"></p>
+                                                                                                <p th:text="${rl[6]}"></p>
+                                                                                                <p th:text="${empl_nik}"></p>
+                                                                                                <p th:text="${rl[6]}"></p>-->
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="modal fade" id="modal-history">
+                                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <!-- Modal Header -->
+                                            <div class="modal-header">
+                                                <h4 class="modal-title"><i class="fa fa-history"></i>Training History</h4>
+                                                <button type="button" class="close" data-dismiss="modal" style="color: #4bbbce">&times;</button>
+                                            </div>
+                                            <!-- Modal body -->
+                                            <div class="modal-body">
+                                                <!--//th:action="${'./saveTraining/'+trn[0]}"-->
+                                                <table class="table info table-bordered hover" id="modalH" th:fragment="detailhistorytraining">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Training Title</th>
+                                                            <th>Date</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr th:each="hl : ${detailhistory}" >
+                                                                    <td th:text="${hl[0]}"></td>
+                                                                    <td th:text="${hl[1]}"></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <!-- Modal footer -->
+                                            <!--                                                            <div class="modal-footer">
+                                                                                                            <p>No data available in table</p>
+                                                                                                        </div>-->
+
+                                        </div>
+                                    </div>
+                                </div>    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- end col -->
+</div> <!-- end row -->
+</div> <!-- end container -->
+</div>
+<!-- end wrapper th:action="${'./save/'+trn[0]}" -->
+
+
+
+<!-- Footer -->
+<div th:replace="fragments/footerAdm::footerAdm"></div>
+<!-- End Footer -->
+
+<div th:replace="fragments/footer::js"></div>    
+<script th:src="@{/dist/js/session.js}"></script>
+<!--<script th:src="@{/dist/js/ManageRegistration.js}"></script>-->
+<script th:src="@{/plugins/datatables/jquery.dataTables.min.js}" type="text/javascript"></script>
+<script th:src="@{/plugins/datatables/dataTables.bootstrap4.min.js}" type="text/javascript"></script>
+<script th:src="@{/plugins/datatables/dataTables.responsive.min.js}" type="text/javascript"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+<script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
+<script th:src="@{/dist/js/checkboxes_manageRegistration.js}" type="text/javascript"></script>
+
+<script>
+//            var test = document.getElementById("valueTest");
+
+    let qrcode = new QRCode("output", {
+        text: "QRCode",
+        width: 150,
+        height: 150,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+    });
+</script>
+
+<script th:inline="javascript">
+    function openHistoryTraining(id) {
+                $.ajax({
+                    url: "../historyTrainingEmp/" + id,
+                    data: "",
+                    cache: false,
+                    success: function (data) {
+                        console.log(data);
+                        $("#modalH").html(data);
+                        $("#modal-history").modal("show");
+                    }
+                });
+            }
+</script>
+
+<!--<script>
+    $(document).ready(function () {
+        $('#registration').DataTable({
+            responsive: true
+        });
+    });
+    
+    $('#registration').DataTable( {
+//    dom: 'Blfrtip',
+    buttons: [
+        'selectAll',
+        'selectNone'
+    ],
+    language: {
+        buttons: {
+            selectAll: "Select all items",
+            selectNone: "Select none"
+        }
+    }
+} );
+</script>-->
+
+<!--<script>
+    $(document).ready(function () {
+        var tinfo = $('.info').DataTable({
+            bFilter: false, paging: false, bInfo: false,
+//            "columnDefs": [{
+//                    "searchable": true,
+//                    "orderable": true,
+//                    "targets": 0
+//                }],
+            "order": [
+                [0, 'asc']
+            ]
+        });
+//        tinfo.on('order.dt search.dt', function () {
+//            t.column(0, {
+//                search: 'applied',
+//                order: 'applied'
+//            }).nodes().each(function (cell, i) {
+//                cell.innerHTML = i + 1;
+//            });
+//        }).draw();
+
+
+        var t = $('#registration').DataTable({
+            "columnDefs": [{
+                    "searchable": false,
+                    "orderable": false,
+                    "targets": 0
+                }],
+            "order": [
+                [1, 'asc']
+            ]
+        });
+        
+        t.on('order.dt search.dt', function () {
+            t.column(0, {
+                search: 'applied',
+                order: 'applied'
+            }).nodes().each(function (cell, i) {
+                cell.innerHTML = i + 1;
+    });
+        }).draw();
+    });
+</script>-->
+<script>
+    $(document).ready(function () {
+    var tinfo = $('.info').DataTable({
+        bFilter: false, paging: false, bInfo: false,
+        "order": [
+            [0, 'asc']
+        ]
+    });
+
+    var t = $('#registration').DataTable({
+        'columnDefs': [{
+            'searchable': false,
+            'orderable': false,
+            'targets': 1,
+            'checkboxes': {
+                'selectRow': true
+            }
+        }],
+        'select': {
+            'style': 'multi'
+        },
+        'order': [
+            [1, 'asc']
+        ]
+    });
+
+    console.log("conto", $('.chk').val());
+    // Handle form submission event 
+    $('#frm-example').on('submit', function (e) {
+        var form = this;
+        var rows_selected = t.column(1).checkboxes.selected();
+        
+        
+        // Iterate over all selected checkboxes
+        $.each(rows_selected, function (index, rowId) {
+            // Create a hidden element 
+            $(form).append(
+                $('<input>')
+                    .attr('type', 'hidden')
+                    .attr('name', 'id[]')
+                    .val(rowId)
+                    
+            );
+            console.log("row" +rowId);
+        });
+        // FOR DEMONSTRATION ONLY
+        // The code below is not needed in production
+
+        // Output form data to a console     
+        $('#example-console-rows').text(rows_selected.join(","));
+        var a = $('#example-console-rows').map(function() {
+            return this.textContent;
+        }).get().join();
+
+        $('#idIn').val(a);
+        $('#idIn1').val(a);
+        $('#idIn2').val(a);
+        $('#test').val(a);
+        console.log("ukur" +rows_selected.length);
+
+        $('#demo').val(rows_selected.length);
+
+
+        
+        if($('#idIn1').val() == ""||$('#idIn').val() == ""||$('#idIn2').val() == ""){
+            Swal.fire({title: 'There is No Data!', text: 'Please Select Data First'});
+        }else{
+            Swal.fire({title: 'Data Selected!', text: 'Employee NIK: '+a+' Data Added'});
+        }
+        
+        //$('#idIn').val(a).toString();
+
+        // Output form data to a console     
+        $('#example-console-form').text($(form).serialize());
+
+        // Remove added elements
+        $('input[name="id\[\]"]', form).remove();
+
+        // Prevent actual form submission
+        e.preventDefault();
+    });
+    
+    $('#accept_form').on('submit', function(event){
+        event.preventDefault();
+        var form = this;
+        var idIn1 = $('#idIn1').val();
+        if (idIn1 == ''){
+            console.log("tidak ada")
+            Swal.fire({
+                type: 'warning',
+                title: 'Sorry...',
+                showConfirmButton: true,
+                html: "Please select data and click <i class='far fa fa-plus-circle'></i> button first" 
+                });
+        }else{
+            console.log("ada")
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You will accept this registration",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, accepted!'
+            }).then((result) => {
+                if (result.value){
+                    Swal.fire({
+                        title: 'Saved!',
+                        type: 'success',
+                        text: 'Registration Accepted',
+                        showConfirmButton: false,
+                        timer: 5000
+                    });
+                    form.submit();
+                }
+            });
+        }
+    });
+
+    $('#reject_form').on('submit', function(event){
+        event.preventDefault();
+        var form = this;
+        var idIn = $('#idIn').val();
+        if (idIn == ''){
+            console.log("tidak ada")
+            Swal.fire({
+                type: 'warning',
+                title: 'Sorry...',
+                showConfirmButton: true,
+                html: "Please select data and click <i class='far fa fa-plus-circle'></i> button first" 
+                });
+        }else{
+            console.log("ada")
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You will reject this registration",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, rejected!'
+            }).then((result) => {
+                if (result.value){
+                    Swal.fire({
+                        title: 'Saved!',
+                        type: 'success',
+                        text: 'Registration Rejected',
+                        showConfirmButton: false,
+                        timer: 5000
+                    });
+                    form.submit();
+                }
+            });
+        }
+    });
+
+    $('#waitinglist_form').on('submit', function(event){
+        event.preventDefault();
+        var form = this;
+        var idIn2 = $('#idIn2').val();
+        if (idIn2 == ''){
+            console.log("tidak ada")
+            Swal.fire({
+                type: 'warning',
+                title: 'Sorry...',
+                showConfirmButton: true,
+                html: "Please select data and click <i class='far fa fa-plus-circle'></i> button first" 
+                });
+        }else{
+            console.log("ada")
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You will add this registration to waiting list",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, add to waiting list!'
+            }).then((result) => {
+                if (result.value){
+                    Swal.fire({
+                        title: 'Saved!',
+                        type: 'success',
+                        text: 'Registration added to waiting list',
+                        showConfirmButton: false,
+                        timer: 5000
+                    });
+                    form.submit();
+                }
+            });
+        }
+    });
+
+    t.on('order.dt search.dt', function () {
+        t.column(0, {
+            search: 'applied',
+            order: 'applied'
+        }).nodes().each(function (cell, i) {
+            cell.innerHTML = i + 1;
+        });
+    }).draw();
+});
+
+
+</script>
+
+<script>
+    var reason;
+
+    $('.d').on('click', function () {
+        var dataid = this.getAttribute("data-id");
+
+        console.log("daa:", dataid);
+        var form = $(this).parents('form');
+        console.log(form);
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success',
+                cancelButton: 'btn btn-danger'
+            },
+            buttonsStyling: false
+        });
+        Swal.fire({
+            title: 'Are you sure want to reject this registration?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, reject them!'
+        }).then((result) => {
+            if (result.value) {
+                Swal.fire({
+                    title: 'Reason for rejection',
+                    html:
+                            '<input type="textarea" placeholder="Add Reason" name="reason" id="swal-input1" class="swal2-input">',
+                    focusConfirm: false,
+                    preConfirm: () => {
+                        return [
+                            reason = document.getElementById('swal-input1').value
+                        ];
+                    }
+                }).then((res) => {
+
+                    var div1 = document.createElement('div');
+                    var input = document.getElementById('swal-input1');
+                    div1.innerHTML = "<input type='text' name='reason' value='" + res.value + "' readonly hidden />";
+                    document.getElementById("formReject" + dataid).appendChild(div1);
+
+                    if (input.value.length >= 5) {
+                        form.submit();
+                    } else {
+                        Swal.fire(
+                                'Warning',
+                                'Reason is required with 5 characters minimum!',
+                                'warning');
+                    }
+
+                });
+            } else if (
+                    /* Read more about handling dismissals below */
+                    result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                swalWithBootstrapButtons.fire(
+                        'Cancelled',
+                        'The Entry is safe :)',
+                        'error'
+                        );
+            }
+        });
+    });
+</script>
+
+<script>
+//    $('#sendQR').on('click', function (e) {
+//        var url = document.getElementById('sendQR');
+//        e.preventDefault();
+//        var form = $(this).parents('form');
+//        console.log(form);
+//        const href = $(this).attr('href');
+//        const swalWithBootstrapButtons = Swal.mixin({
+//            customClass: {
+//                confirmButton: 'btn btn-success',
+//                cancelButton: 'btn btn-danger'
+//            },
+//            buttonsStyling: false
+//        });
+//        Swal.fire({
+//            title: 'Send Detail',
+//            text: "Are you sure you want to send detail and QR Code?",
+//            icon: 'question',
+//            showCancelButton: true,
+//            confirmButtonColor: '#3085d6',
+//            cancelButtonColor: '#d33',
+//            confirmButtonText: 'Yes, send it!'
+//        }).then((result) => {
+//            if (result.value) {
+//                location.href = url;
+//            } else if (
+//                    /* Read more about handling dismissals below */
+//                    result.dismiss === Swal.DismissReason.cancel
+//                    ) {
+//                swalWithBootstrapButtons.fire(
+//                        'Cancelled',
+//                        'No changes has been made :)',
+//                        'error'
+//                        );
+//            }
+//        });
+//    });
+
+    $('.sendQR').on('click', function (e) {
+        e.preventDefault();
+        var form = $(this).parents('form');
+        var datalink = this.getAttribute("data-lol");
+        console.log("Href", datalink);
+//        const href = $(this).attr('href');
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success',
+                cancelButton: 'btn btn-danger'
+            },
+            buttonsStyling: false
+        });
+        Swal.fire({
+            title: 'Send Detail',
+            text: "Are you sure you want to send detail and QR Code?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, send it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                location.href = datalink;
+            } else if (
+                    /* Read more about handling dismissals below */
+                    result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                swalWithBootstrapButtons.fire(
+                        'Cancelled',
+                        'No changes has been made :)',
+                        'error'
+                        );
+            }
+        });
+    });
+</script>
+
+<script>
+    $('.feedback').on('click', function (e) {
+        e.preventDefault();
+        var form = $(this).parents('form');
+        console.log(form);
+        const href = $(this).attr('href');
+        Swal.fire({
+            title: 'Feedback Form is successfully sent!',
+//            text: "You won't be able to revert this!",
+            icon: 'success',
+            showCancelButton: false,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Okay!'
+        }).then((result) => {
+            if (result.value) {
+                location.href = href;
+            }
+        });
+    });
+</script>
+
+<script>
+    $('.a').on('click', function (e) {
+        e.preventDefault();
+        var form = $(this).parents('form');
+        console.log(form);
+        const href = $(this).attr('href');
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success',
+                cancelButton: 'btn btn-danger'
+            },
+            buttonsStyling: false
+        });
+        Swal.fire({
+            title: 'Are you sure want to approve this registration?',
+//            text: "You won't be able to revert this!",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, approve them!'
+        }).then((result) => {
+            if (result.value) {
+                form.submit();
+            } else if (
+                    /* Read more about handling dismissals below */
+                    result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                swalWithBootstrapButtons.fire(
+                        'Cancelled',
+                        'No changes has been made :)',
+                        'error'
+                        );
+            }
+        });
+    });
+
+    $('.resend').on('click', function (e) {
+        e.preventDefault();
+        var form = $(this).parents('form');
+        console.log(form);
+        const href = $(this).attr('href');
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success',
+                cancelButton: 'btn btn-danger'
+            },
+            buttonsStyling: false
+        });
+        Swal.fire({
+            title: 'Are you sure want to resend this registration?',
+//            text: "You won't be able to revert this!",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, resend it!'
+        }).then((result) => {
+            if (result.value) {
+                form.submit();
+            } else if (
+                    /* Read more about handling dismissals below */
+                    result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                swalWithBootstrapButtons.fire(
+                        'Cancelled',
+                        'No changes has been made :)',
+                        'error'
+                        );
+            }
+        });
+    });
+</script>
+</body>
+</html>

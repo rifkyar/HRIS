@@ -1,0 +1,128 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>HRIS - Term and Condition</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- App Icons -->
+        <link rel="shortcut icon" th:href="@{/dist/img/favicon.ico}">
+    <div th:replace="fragments/header::css"></div>
+    <link th:href="@{/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+</head>
+<body>
+    <!-- Loader -->
+    <div id="preloader">
+        <div id="status">
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <div class="header-bg">
+
+        <div th:replace="fragments/header::header"></div>
+
+        <div class="container-fluid">
+            <!-- Page-Title -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-title-box">
+                        <h4 class="page-title"> <i class="dripicons-align-justify"></i> Term and Condition</h4>
+                    </div>
+                </div>
+            </div>
+            <!-- end page title end breadcrumb -->
+        </div>
+    </div>
+
+    <div class="wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card m-b-20">
+                        <div class="card-body">
+
+                            <ul class="nav nav-tabs nav-tabs-custom nav-justified" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="#leave" role="tab">
+                                        <span class="d-none d-md-block">Email Rule</span><span class="d-block d-md-none"><i class="dripicons-suitcase h5"></i></span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#overtime" role="tab">
+                                        <span class="d-none d-md-block">Overtime</span><span class="d-block d-md-none"><i class="dripicons-clock h5"></i></span>
+                                    </a>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content">
+                                <div class="tab-pane active p-3" id="leave" role="tabpanel">
+                                    <ol style="font-size: 18px; line-height: 30px">
+                                        <br>
+                                        <li>Term & Conditions sebagai Pedoman penggunaan pesan elektronik (Email) di tempat kerja untuk keperluan / kepentingan perusahaan.</li>
+                                        <li>Email adalah sarana penting dan sensitive terkait bisnis perusahaan. Kebijakan ini mengatur dan memberikan panduan / standarisasi terhadap seluruh pengiriman dan penerimaan pesan elektronik (Email) dengan mamanfaatkan sarana yang disediakan oleh perusahaan.</li>
+                                        <li>Perusahaan menyediakan sarana pesan elektronik (Email) untuk mendukung efektifitas kerja karyawan dan tentunya akan meningkatkan produktifitas perusahaan</li>
+                                        <li>Semua pesan elektronik (Email) yang dibuat dan dikirimkan harus sesuai dengan kebijakan perusahaan seperti tidak terbatas, aturan dan contoh dalam kebijakan ini.</li>
+                                        <li>Perusahaan melarang diskriminasi terhadap usia, ras, gender, orientasi seksual, agama, atau politik dalam penggunaan sarana pesan elektronik.</li>
+                                        <li>Perusahaan melarang penggunaan pesan elektronik (Email) untuk kegiatan politik, kegiatan kriminal/illegal, mengandung isi pornografi, pesan/lampiran illegal, tidak senonoh, memfitnah atau menghina.</li>
+                                        <li>Sarana pesan elektronik (Email) perusahaan tidak boleh digunakan untuk promosi atau publikasi seseorang, pandangan politik atau agama, pengoperasian bisnis atau apapun kegiatan untuk kepentingan pribadi</li>
+                                        <li>Tidak diperkenankan menggunakan pesan elektronik (Email) perusahaan untuk diikutsertakan dalam mailing ist atau kegiatan social networking</li>
+                                        <li>Setiap karyawan yang berhak akan mendapatkan alamat Email yang akan digunakan untuk pengiriman dan penerimaan email hanya untuk kepentingan perusahaan</li>
+                                        <li>Tidak diperkenankan menyebarluaskan kerahasiaan perusahaan ataupun informasi pribadi melalui Pesan elektronik (Email), termasuk informasi salary dan atau benefit lainnya.</li>
+                                        <li>Setiap karyawan yang menemukan pelanggaran kebijakan ini harus segera menginformasikan ke Manager atau Atasan Langsung</li>
+                                        <li>Setiap karyawan yang melanggak kebijakan ini dikenakan tindakan indisipliner</li>
+                                        <li>Jika ada pengakhiran hubungan kerja antara karyawan dan perusahaan maka perusahaan akan menutup email karyawan dan penutupan akses terhadap seluruh  sarana pesan elektronik (Email). Termasuk hak akses, hak melakukan download, mencetak, mengambil pesan yang tersimpan dalam system terhitung sejak tangga terminasi hubungan kerja ditetapkan.</li>                                
+                                        <li>Pesan elektronik (Email) adalah sepenuhnya milik perusahaan. Seluruh sarana Email yang digunakan termasuk semua pesan yang disimpan, dibuat, dikirimkan atau yang diterima oleh karyawan adalah milik perusahaan dan BUKAN milik pribadi karyawan.</li>
+                                        <li>Perusahaan berhak untuk melakukan blocking, monitor, mengkaji dan mengungkapkan setiap/semua pesan yang dikirimkan atau diterima. Jika diperlukan dan sesuai persetujuan atasan atau pihak yang berwenang audit pesan elektronik (Email) dapat dilakukan.</li>
+                                        <li>Karyawan dilarang mengirim pesan elektronik (Email) yang tidak sah, mengungkapkan rahasia perusahaan atau informasi perusahaan yang bersifat rahasia</li>
+                                        <li>Penyalinan dan distribusi terhadap materi yang dilindungi hak cipta adalah hal yang dilarang</li>
+                                        <li>Dilarang mendownload atau menyalin file dari data external system dan internet kecuali setelah memperoleh ijin dari Manager bersangkutan</li>
+                                        <li>Karyawan dilarang men-disable/mennonaktifkan software antivirus sebagai sarana pemeriksaan terhadap pesan elektronik (Email)</li>
+                                        <li>Karyawan tetap diharuskan berhati-hati terhadap adanya penyebaran virus, worm atau sejenisnya terutama jika menerima pesan yang tidak dikenal pengirimnya, tidak jelas isi pesan email dan lampiran yang mencurigakan. Apabila karyawan menerima pesan elektronik (Email) yang mencurigakan, maka lakukan langkah-langkah sebagai berikut : 
+                                            <ol type="a">
+                                                <li>Pastikan tahu/kenal pengirimnya, jika tidak yakin isi dari lampiran email yang diterima, jangan buka lampiran tersebut. Klarifikasi terlebih dahulu kepada pengirim pesan apakah betul mengirimkan email dengan lampiran tersebut.</li>
+                                                <li>b.	Disable fitur “automatic preview messages” pada tools Email Client yang digunakan, Laporkan pesan email tersebut ke IT Helpdesk untuk ditindaklanjuti</li>
+                                            </ol>
+                                        </li>
+                                        <li>Penggunaan yang tidak diperkenankan : 
+                                            <ol type="a">
+                                                <li>Mengedarkan data perusahaan kepada pihak luar tanpa ijin</li>
+                                                <li>Membalas (Reply), meneruskan (Forward) email berantai (chain letters) dan email berkategori hoax</li>
+                                                <li>Pesan elektronik (Email) yang digunakan untuk mengirim pesan yang bersisi pornografi, seksual, rasis, suku, agama, promosi bisnis pribadi, pelecehan atau materi menyinggung</li>
+                                            </ol>
+                                        </li>
+                                        <li>Ketentuan Mailbox pesan elektronik (Email) : 
+                                            <ol type="a">
+                                                <li>Karyawan akan menerima satu alamat email sesuai persetujuan atasan (Manager)</li>
+                                                <li>Username email akan mengikuti policy yang telah ditetapan</li>
+                                                <li>Pesan elektronik (Email) perusahaan memiliki kuota terbatas, check kembali pesan elektronik (Email) secara rutin</li>
+                                                <li>Untuk menghindari akses lambat, perlu dilakukan archiving secara rutin</li>
+                                                <li>Maksimum pengiriman dan penerimaan lampiran email adalah 4Mb</li>
+                                                <li>Kehilangan data pesan elektronik (Email) akibat kelalaian karyawan menjadi tanggung jawab karyawan yang bersangkutan.</li>
+                                            </ol>
+                                        </li>
+                                    </ol>
+                                </div>
+                                <div class="tab-pane p-3" id="overtime" role="tabpanel">
+                                    <center>
+                                        <div class="row">
+                                            <img class="col-md-12" th:src="@{/dist/img/TNC-Overtime-Publish.jpg}">
+                                        </div>
+                                    </center>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div> <!-- end col -->
+            </div> <!-- end row -->
+        </div> <!-- end container -->
+    </div>
+    <!-- end wrapper -->
+
+    <div th:replace="fragments/footer::js"></div>
+    <script th:src="@{/dist/js/session.js}"></script>
+    <!-- App js -->
+</body>
+</html>

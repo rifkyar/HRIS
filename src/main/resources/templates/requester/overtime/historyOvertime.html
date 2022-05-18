@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>HRIS - Requester</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- App Icons -->
+        <link rel="shortcut icon" th:href="@{/dist/img/favicon.ico}">
+
+    <div th:replace="fragments/header::css"></div>
+
+    <link th:href="@{/plugins/datatables/dataTables.bootstrap4.min.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{/plugins/datatables/responsive.bootstrap4.min.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+
+
+    <style>
+        table thead{
+            background-color: #007ac0;
+            color: #fafafa;
+        }
+        .disabled{
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loader -->
+    <div id="preloader">
+        <div id="status">
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <div class="header-bg">
+
+        <div th:replace="fragments/header::header"></div>
+
+        <div class="container-fluid">
+            <!-- Page-Title -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-title-box">
+                        <h4 class="page-title"> <i class="dripicons-blog"></i> Request History</h4>
+                    </div>
+                </div>
+            </div>
+            <!-- end page title end breadcrumb -->
+        </div>
+    </div>
+
+
+    <div class="wrapper">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card m-b-20">
+                        <div class="card-body">
+                            <br>
+                            <form id="formRequestOT" method="POST" th:action="@{/reportRequester}">
+                                <div class="row">
+                                    <div class="mt-2" style="margin-left: 30px">
+                                        <label>Period :</label>
+                                    </div>
+                                    <div class="col-md-4 input-group">
+                                        <input class="form-control periode" type="text" id="periode" name="periode" required="">
+                                        <div class="input-group-append">
+                                            <label class="input-group-text" for="periode">
+                                                <i class="fa fa-calendar"></i>
+                                            </label>
+                                        </div>
+                                        <input type="hidden" class="form-control" id="nik" name="nik" th:value="${nik}" hidden="">
+                                        <button class="btn btn-success"><i class="fa fa-download" aria-hidden="true"> Recap</i></button>
+                                    </div>
+                                </div>
+                            </form>
+                            <br>
+                            <div class="table-responsive">
+                                <table id="historyOvertime" class="table table-bordered hover dt-responsive display responsive"
+                                       style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                    <thead class="text-center">
+                                        <tr>
+                                            <th rowspan="2">No</th>
+                                            <th rowspan="2" style="line-height: 50px" hidden="">Approval ID</th>
+                                            <th colspan="2">Date</th>
+                                            <th colspan="2">Time</th>
+                                            <th rowspan="2">Total Hour</th>
+                                            <th rowspan="2">Type Day</th>
+                                            <th rowspan="2">Contract Status</th>
+                                            <th rowspan="2">Approval Status</th>
+                                            <th rowspan="2">Action</th>
+                                            <th rowspan="2"><i class="fa fa-cog" aria-hidden="true"></i></th>
+                                            <th rowspan="2">Overtime Description:</th>
+                                            <th rowspan="2">Customer Name:</th>
+                                            <th rowspan="2">Lokasi:</th>
+                                        </tr>
+                                        <tr>
+                                            <th>Start</th>
+                                            <th>End</th>
+                                            <th>Start</th>
+                                            <th>End</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="h,iter:${listHistory}">
+                                            <td class="text-center" th:text="${iter.count}" ></td>
+                                            <td th:text="${h.id}" hidden=""></td>
+                                            <td class="text-center" th:text="${#dates.format(h.requestovertimedetailId.startDate, 'dd MMM yyyy')}"></td>
+                                            <td class="text-center" th:text="${#dates.format(h.requestovertimedetailId.EndDate, 'dd MMM yyyy')}"></td>
+                                            <td class="text-center">
+                                                <span th:if="${h.requestovertimedetailId.startTime == null }" >00:00</span>
+                                                <span th:if="${h.requestovertimedetailId.startTime != null}" th:text="${#dates.format(h.requestovertimedetailId.startTime, 'HH:mm')}"></span>
+                                                <!--16:15-->
+                                            </td>
+                                            <td class="text-center">
+                                                <span th:if="${h.requestovertimedetailId.endTime == null }" >00:00</span>
+                                                <span th:if="${h.requestovertimedetailId.endTime != null}" th:text="${#dates.format(h.requestovertimedetailId.endTime, 'HH:mm')}"></span>
+                                            </td>
+                                            <td class="text-center" th:text="${h.requestovertimedetailId.total}"></td>
+                                            <td class="text-center" th:text="${h.requestovertimedetailId.dateType}"></td>
+                                            <td class="text-center" th:text="${h.requestovertimedetailId.requestOvertimeID.contractStatus}">1st Contract</td>
+                                            <td class="text-center" th:text="${h.status}"></td>
+                                            <td class="text-center" nowrap >
+                                                <input type="text" id="id" name="otDetilId" th:value="${h.id}" hidden=""/>
+                                                <a th:href="@{'/formResubmitOvertime/'+${nik} + '/' +${h.id}}">
+                                                    <button class="btn btn-info" type="button" th:if="${h.status == 'Rejected'}">Resubmit</button>
+                                                </a>
+                                                <button class="btn btn-info disabled" id="resubmit_toggle" type="button" disabled="" th:unless="${h.status == 'Rejected'}">Resubmit</button>
+                                                <button class="btn btn-danger cancelBtn disabled" id="cancel_toggle" type="button" disabled="" th:if="${h.status == 'Canceled'} OR ${h.status == 'Rejected'} OR ${h.status == 'Done'} OR ${h.status == 'Accepted'}">Cancel</button>
+                                                <button class="btn btn-danger cancelBtn" id="cancel_toggle" type="button" th:unless="${h.status == 'Canceled'} OR ${h.status == 'Rejected'} OR ${h.status == 'Done'} OR ${h.status == 'Accepted'}">Cancel</button>
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="#modalHistory" role="button" type="button" data-toggle="modal" style="color: #000" data-title="tooltip" title="History" th:onclick="'javascript:openAppHistoryReq(\''+${h.requestovertimedetailId.overtimeDetail}+'\');'">
+                                                    <i class="fa fa-history" aria-hidden="true" style="color: black"></i></a>
+                                                </i></td>
+                                            <td th:text="${h.requestovertimedetailId.task}" nowrap></td>
+                                            <td th:text="${h.requestovertimedetailId.requestOvertimeID.soId.customerName}"></td>
+                                            <td th:text="${h.requestovertimedetailId.lokasi}"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!--  Modal content for the above example -->
+                            <div class="modal fade" id="modalHistory" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title mt-0" id="myLargeModalLabel"><b><i class="fa fa-history" aria-hidden="true" style="color: black"></i> Approval History</b></h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="table-responsive">
+                                                <table id="viewHistory" class="table table-bordered hover dt-responsive nowrap"
+                                                       style="border-collapse: collapse; border-spacing: 0; width: 100%;" th:fragment="detailHistoryApproval">
+                                                    <thead class="text-center">
+                                                        <tr>
+                                                            <th>No</th>
+                                                            <th>NIK</th>
+                                                            <th>Nama</th>
+                                                            <th>Status</th>
+                                                            <th>Modified Date</th>
+                                                            <th>Remark</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr class="text-center" th:each="a,b:${appHistory}">
+                                                            <td th:text="${b.count}"></td>
+                                                            <td th:text="${a.userId}">16059</td>
+                                                            <td>
+                                                                <div th:each="c, t:${namaUser}">
+                                                                    <span th:if="${t.count == b.count}" th:text="${c}"></span>
+                                                                </div>
+                                                            </td>
+                                                            <td th:text="${a.status}">Not Yet</td>
+                                                            <td th:text="${a.modifiedDate}">2020-01-31 09:47:31.0</td>
+                                                            <td th:text="${a.remarks}">-</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div><!-- /.modal-content -->
+                                </div><!-- /.modal-dialog -->
+                            </div><!-- /.modal -->
+
+                        </div>
+                    </div>
+                </div> <!-- end col -->
+            </div> <!-- end row -->
+        </div> <!-- end container -->
+    </div>
+    <!-- end wrapper -->
+
+
+    <!-- Footer -->
+    <div th:replace="fragments/footer::footer"></div>
+    <!-- End Footer -->
+
+    <div th:replace="fragments/footer::js"></div>
+    <script th:src="@{/dist/js/session.js}"></script>
+    <!-- App js -->
+
+    <script th:src="@{/plugins/datatables/jquery.dataTables.min.js}" type="text/javascript"></script>
+    <script th:src="@{/plugins/datatables/dataTables.bootstrap4.min.js}" type="text/javascript"></script>
+    <script th:src="@{/plugins/datatables/dataTables.responsive.min.js}" type="text/javascript"></script>
+    <script th:src="@{/plugins/datatables/responsive.bootstrap4.min.js}" type="text/javascript"></script>
+    <script th:src="@{/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+
+    <script>
+        jQuery('#periode').datepicker({
+            format: "yyyy-mm",
+            viewMode: "months",
+            minViewMode: "months"
+        });
+
+        $(document).ready(function () {
+            var t = $('#historyOvertime').DataTable({
+                responsive: true,
+                "columnDefs": [{
+                        "searchable": false,
+                        "orderable": false,
+                        "targets": 0
+                    }],
+                "order": [
+                    [1, 'asc']
+                ],
+                "ordering": false
+            });
+
+            t.on('order.dt search.dt', function () {
+                t.column(0, {
+                    search: 'applied',
+                    order: 'applied'
+                }).nodes().each(function (cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();
+        });
+
+        $(document).ready(function () {
+            var t = $('#viewHistory').DataTable({
+                "columnDefs": [{
+                        "searchable": false,
+                        "orderable": false,
+                        "targets": 0
+                    }],
+                "order": [
+                    [1, 'asc']
+                ]
+            });
+
+            t.on('order.dt search.dt', function () {
+                t.column(0, {
+                    search: 'applied',
+                    order: 'applied'
+                }).nodes().each(function (cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();
+        });
+
+        $('.cancelBtn').on('click', function () {
+            var $row = $(this).closest("tr");
+            var reqid = $row.find('td:eq(1)').text();
+            Swal.fire({
+                title: "Are you sure? ",
+                text: "You will cancel this overtime request!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No',
+                reverseButtons: true,
+                showLoaderOnConfirm: true,
+            }).then((result) => {
+                if (result.value) {
+                    Swal.fire('Canceled!', 'Your request has been canceled.', 'success');
+                    $.ajax({
+                        url: "/HRIS/cancelRequestOvertime/" + reqid,
+                        type: "GET"
+                    });
+                    setTimeout(function () {
+                        location.reload();
+                    }, 550)
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    Swal.fire('Cancelled', 'Your Overtime Request is safe :)', 'error');
+                }
+            });
+        });
+
+        function openAppHistoryReq(id) {
+            $.ajax({
+                url: "/HRIS/approvalHistoryReq/" + id,
+                data: "",
+                cache: false,
+                success: function (data) {
+                    $("#viewHistory").html(data);
+                    $("#modalHistory").modal("show");
+                }
+            });
+        }
+    </script>
+</body>
+</html>

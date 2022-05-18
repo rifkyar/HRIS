@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>HRIS - Requester</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- App Icons -->
+        <link rel="shortcut icon" th:href="@{/dist/img/favicon.ico}">
+        <link th:href="@{/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css}" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <div th:replace="fragments/header::css"></div>
+</head>
+<body>
+    <!-- Loader -->
+                <div id="preloader">
+                    <div id="status">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+    <div class="header-bg">
+
+        <div th:replace="fragments/header::header"></div>
+
+        <div class="container-fluid">
+            <!-- Page-Title -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-title-box">
+                        <h4 class="page-title"> <i class="fas fa-syringe"></i> Submit Vaccine</h4>
+                    </div>
+                </div>
+            </div>
+            <!-- end page title end breadcrumb -->
+
+        </div>
+    </div>
+
+    <div class="wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card m-b-20">
+                        <div class="card-body" style="padding-left: 100px; padding-right: 100px;">
+                            <h4 class="text-center">Formulir Submit Sertifikat Vaksinasi</h4>
+                            <br>
+                            <div class="card">
+                                <div class="card-header"><b>Employee Detail</b></div>
+                                <form role="form" th:action="@{/vaksin/save}" method="POST" th:object="${tb_tr_vaccine}" id="formVaccine" enctype="multipart/form-data">
+                                    <div class="card-body" >
+                                        <div class="form-group row">
+                                            <label class="col-md-2 label-request">Sales Order Number</label>
+                                            <span class="float-right">:</span>
+                                            <span class="col-md-4" th:text="${so_id}">BANK INDONESIA</span>
+                                            <input type="text" th:value="${so_id}" name="soid" id="soid" hidden=""/>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-2 label-request">Customer Name</label>
+                                            <span class="float-right">:</span>
+                                            <span class="col-md-4" th:text="${customer_requester}">BANK INDONESIA</span>
+                                            <input type="text" th:value="${customer_requester}" name="customer" id="customer" hidden=""/>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-2 label-request">Employee Name</label>
+                                            <span class="float-right">:</span>
+                                            <span class="col-md-4" th:text="${name}">Mr. X</span>
+                                            <input type="text" th:value="${name}" name="name" id="name" hidden=""/>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-2 label-request">No KTP</label>
+                                            <span class="float-right">:</span>
+                                            <span class="col-md-4" th:text="${ktp}">Mr. X</span>
+                                            <input type="text" th:value="${ktp}" name="ktp" id="ktp" hidden=""/>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-2 label-request">Birth Date</label>
+                                            <span class="float-right">:</span>
+                                            <span class="col-md-4" th:text="${dob}">Mr. X</span>
+                                            <input type="text" th:value="${dob}" name="dob" id="dob" hidden=""/>
+                                        </div>
+                                        <input type="text" th:value="${nik}" name="nik" id="nik" hidden=""/>
+                                        <input type="text" th:value="${NIKRM}" name="rm" id="rm" hidden=""/>
+                                    </div>
+                                    <div class="card-header"><b>Vaccination Detail</b></div>
+                                    <!--Column Left-->
+                                    <div class="row">
+                                    <div class="col-sm-6" >
+                                        <div class="form-group">
+                                            <label class="col-sm-4 col-form-label">Vaccine Type :</label>
+                                            <br>
+                                            <div class="col-md-12">
+                                                <select class="form-control" id="Type" name="VaccType" required="">
+                                                    <option value="" disabled selected>Select Vaccine Type</option>
+                                                    <option th:each="vt : ${VaccineType}"
+                                                            th:value="${vt.id}"
+                                                            th:text="${vt.vaccineName}">Choose One</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-4 col-form-label">Vaccine Date :</label>
+                                            <br>
+                                            <div class="col-md-12">
+                                                <input class="form-control VaccineDate" autocomplete="off" type="text" id="VaccineDate" data-inputmask="'alias': 'dd/mm/yyyy'" name="VaccineDate"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-4 col-form-label">Vaccine Location :</label>
+                                            <br>
+                                            <div class="col-md-12">
+                                                <input class="form-control" autocomplete="off" type="text" id="VaccineLocation" name="VaccineLocation" minlength="3"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--Column Right-->
+                                    <div class="col-sm-6" >
+                                        <div class="form-group">
+                                            <label class="col-sm-4 col-form-label">Doses Type :</label>
+                                            <br>
+                                            <div class="col-md-12">
+                                                <select class="form-control" id="DosesType" name="DosesType" required="">
+                                                    <option value="" disabled selected>Select Doses</option>
+                                                    <option th:each="dt : ${DosesType}"
+                                                            th:value="${dt.id}"
+                                                            th:text="${dt.dosesName}">Choose One</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-5 col-form-label">Upload File Certificate :</label>
+                                            <br>
+                                            <div class="col-md-12">
+                                                <input type="file" title="Upload File" class="certifVaccine" name="fileVaccine" id="fileVaccine" accept=".jpg,.jpeg,.png" />
+                                                <span id="error-message" class="validation-error-label"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                    <div class="form-group row m-t-20">
+                                        <div class="col-12 text-center pr-5">
+                                            <button class="btn btn-primary w-md waves-effect waves-light" id="btnSubmit" type="submit">Submit</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <!-- Footer -->
+    <div th:replace="fragments/footer::footer"></div>
+    <!-- End Footer -->
+
+    <div th:replace="fragments/footer::js"></div>
+    <script th:src="@{/dist/js/session.js}"></script> 
+    <!-- App js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>-->
+    <!--<script th:src="@{/dist/js/jquery.dropzone.js}"></script>-->
+    <!--<script th:src="@{/dist/js/app.js}"></script>-->
+    <script th:src="@{/dist/js/dropzone.js}"></script>
+    <script th:src="@{/dist/js/jquery.repeater.js}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.all.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script th:src="@{/dist/js/VaccineManage.js}"></script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>HRIS - Requester</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- App Icons -->
+    <link rel="shortcut icon" th:href="@{/dist/img/favicon.ico}">
+
+    <div th:replace="fragments/header::css"></div>
+
+    <link th:href="@{/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css}" rel="stylesheet" type="text/css" />
+
+    <style>
+        table thead{
+            background-color: #007ac0;
+            color: #fafafa;
+        }
+    </style>
+
+</head>
+<body>
+
+    <!-- Loader -->
+    <div id="preloader">
+        <div id="status">
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <div class="header-bg">
+
+        <div th:replace="fragments/header::header"></div>
+
+        <div class="container-fluid">
+            <!-- Page-Title -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-title-box">
+                        <form class="float-right app-search">
+                            <input type="text" placeholder="Search..." class="form-control">
+                            <button type="submit"><i class="fa fa-search"></i></button>
+                        </form>
+                        <h4 class="page-title"> <i class="dripicons-blog"></i> Document Request</h4>
+                    </div>
+                </div>
+            </div>
+            <!-- end page title end breadcrumb -->
+
+        </div>
+    </div>
+
+
+    <div class="wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+
+                    <div class="card m-b-20">
+                        <div class="card-body">
+                            <form id="formDocumentRequest" >
+
+                                <div class="form-group row">
+                                    <label for="example-text-input" class="col-md-4 col-form-label">NIK</label>
+                                    <span class="float-right col-form-label" >:</span>
+                                    <div class="col-md-7 col-form-label">
+                                        <span th:text="${nik}" ></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-md-4 col-form-label">Employee Name</label>
+                                    <span class="float-right col-form-label">:</span>
+                                    <div class="col-md-7">
+                                        <span th:text="${detail_name}" ></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-md-4 col-form-label">Customer Name</label>
+                                    <span class="float-right col-form-label">:</span>
+                                    <div class="col-md-7">
+                                        <span th:text="${company}" ></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-4 col-form-label">Position</label>
+                                    <span class="float-right col-form-label">:</span>
+                                    <div class="col-md-7">
+                                        <span th:text="${position}" ></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="example-text-input" class="col-md-4 col-form-label">Place/Birth Date</label>
+                                    <span class="float-right col-form-label">:</span>
+                                    <div class="col-md-7">
+                                        <span th:text="${birth_place}" ></span> , <span th:text="${#dates.format(birth_date, 'dd MMMM yyyy')}"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="example-text-input" class="col-md-4 col-form-label">KTP No.</label>
+                                    <span class="float-right col-form-label">:</span>
+                                    <div class="col-md-7">
+                                        <span th:text="${ktp}" ></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="example-text-input" class="col-md-4 col-form-label">Join Date</label>
+                                    <span class="float-right col-form-label">:</span>
+                                    <div class="col-md-7">
+
+                                        <span th:text="${#dates.format(join_date, 'dd MMMM yyyy')}"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="example-text-input" class="col-md-4 col-form-label">Address</label>
+                                    <span class="float-right col-form-label">:</span>
+                                    <div class="col-md-7">
+                                        <span th:text="${address}" ></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="example-text-input" class="col-md-4 col-form-label">Type</label>
+                                    <span class="float-right col-form-label">:</span>
+                                    <div class="col-md-7">
+                                        <span th:text="${name}" ></span>
+                                    </div>
+                                </div>  
+
+                                <div th:if="${Passport_number != ''}" class="form-group row" >
+                                    <label for="example-text-input" class="col-md-4 col-form-label" >Passport</label>
+                                    <span class="float-right col-form-label">:</span>
+                                    <div class="col-md-7">
+                                        <span th:text="${Passport_number}" ></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-md-4 col-form-label">Description <span style="color: #d9534f">*</span> </label>
+                                    <span class="float-right col-form-label">:</span>
+                                    <div class="col-md-7">
+                                        <span th:text="${description}" ></span>
+                                    </div>
+                                </div>
+                        </div>
+                    </div> <!-- end col -->
+                </div> <!-- end row -->
+            </div>
+        </div><!-- end container -->
+    </div><!-- end wrapper -->
+
+
+    <!-- Footer -->
+    <div th:replace="fragments/footer::footer"></div>
+    <!-- End Footer -->
+
+    <div th:replace="fragments/footer::js"></div>
+    <script th:src="@{/dist/js/session.js}"></script>
+</body>
+</html>

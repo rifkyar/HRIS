@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>HRIS - Requester</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- App Icons -->
+        <link rel="shortcut icon" th:href="@{/dist/img/favicon.ico}">
+
+        <link th:href="@{/dist/css/carousel.css}" rel="stylesheet" type="text/css" />
+        <link th:href="@{/dist/css/magnific-popup.css}" rel="stylesheet" type="text/css" />
+        <link th:href="@{/dist/css/owl.carousel.css}" rel="stylesheet" type="text/css" />
+        <!--<img th:src="@{/dist/img/Overtime.jpg}" alt=""/>-->
+    <div th:replace="fragments/header::css"></div>
+
+    <style>
+
+        .box {
+            padding: 50px 30px;
+            text-align: center;
+            -webkit-box-shadow: 0 0 0 0 #ffffff;
+            box-shadow: 0 0 0 0 #ffffff;
+            -webkit-transition: 0.3s;
+            transition: 0.3s;
+            border-radius: 5px;
+            -webkit-transform: translateY(0);
+            transform: translateY(0)
+        }
+
+        .box:hover {
+            -webkit-box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+            -webkit-transform: translateY(-5px);
+            transform: translateY(-5px)
+        }
+
+        .box h4 {
+            text-transform: uppercase;
+        }
+
+        .box .box-icon {
+            height: 160px;
+            margin-bottom: 20px;
+        }
+
+        .box .box-icon img {
+            -webkit-filter: grayscale(100%);
+            filter: grayscale(100%);
+            -webkit-transition: 0.3s;
+            transition: 0.3s;
+        }
+
+        .box:hover .box-icon img {
+            -webkit-filter: grayscale(0);
+            filter: grayscale(0)
+        }
+
+
+        /* NEW */
+        .splitview {
+            position: relative;
+            width: 100%;
+            min-height: 45vw;
+            overflow: hidden;
+        }
+
+        .panel {
+            position: absolute;
+            width: 100vw;
+            min-height: 45vw;
+            overflow: hidden;
+        }
+
+        .panel .content {
+            position: absolute;
+            width: 100vw;
+            min-height: 45vw;
+            color: #FFF;
+        }
+
+        .panel .description {
+            width: 25%;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            text-align: center;
+        }
+
+        .panel img {
+            box-shadow: 0 0 20px 20px rgba(0, 0, 0, 0.15);
+            width: 35%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+
+        .bottom {
+            background-color: rgb(44, 44, 44);
+            z-index: 1;
+        }
+
+        .bottom .description {
+            right: 5%;
+        }
+
+        .top {
+            background-color: rgb(0, 122, 192);
+            z-index: 2;
+            width: 50vw;
+
+            /*-webkit-clip-path: polygon(60% 0, 100% 0, 100% 100%, 40% 100%);
+    clip-path: polygon(60% 0, 100% 0, 100% 100%, 40% 100%);*/
+        }
+
+        .top .description {
+            left: 5%;
+        }
+
+        /* Handle. */
+        .handle {
+            height: 100%;
+            position: absolute;
+            display: block;
+            background-color: rgb(253, 171, 0);
+            width: 5px;
+            top: 0;
+            left: 50%;
+            z-index: 3;
+        }
+
+        /* Skewed. */
+        .skewed .handle {
+            top: 50%;
+            transform: rotate(30deg) translateY(-50%);
+            height: 200%;
+            -webkit-transform-origin: top;
+            -moz-transform-origin: top;
+            transform-origin: top;
+        }
+
+        .skewed .top {
+            transform: skew(-30deg);
+            margin-left: -1000px;
+            width: calc(50vw + 1000px);
+        }
+
+        .skewed .top .content {
+            transform: skew(30deg);
+            margin-left: 1000px;
+        }
+        
+        .caro-img {
+            height: 200px;
+        }
+
+        /* Responsive. */
+        @media (max-width: 900px) {
+            body {
+                font-size: 75%;
+            }
+            .caro-img {
+                height: 200px;
+            }
+        }
+        
+       /*Small devices (landscape phones, 576px and up)*/
+        @media (min-width: 576px) { 
+            .caro-img {
+                height: 200px;
+            }
+        }
+
+        /*Medium devices (tablets, 768px and up)*/
+        @media (min-width: 768px) { 
+            .caro-img {
+                height: 250px;
+            } 
+        }
+
+        /*Large devices (desktops, 992px and up)*/
+        @media (min-width: 992px) { 
+            .caro-img {
+                height: 250px;
+            }
+        }
+
+        /*Extra large devices (large desktops, 1200px and up)*/
+        @media (min-width: 1200px) { 
+            .caro-img {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loader -->
+    <div id="preloader">
+        <div id="status">
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <div class="header-bg">
+
+        <div th:replace="fragments/header::header"></div>
+
+        <div class="container-fluid">
+            <!-- Page-Title -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-title-box">
+                        <h4 class="page-title"> <i class="dripicons-blog"></i> Home</h4>
+                    </div>
+                </div>
+            </div>
+            <!-- end page title end breadcrumb -->
+
+        </div>
+    </div>
+
+
+    <div class="wrapper">
+        
+        <div id="announcementCorousel" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators" id="indicators">
+            </ol>
+            <div class="carousel-inner" id="homepageItems">
+            </div>
+            <a class="carousel-control-prev" href="#announcementCorousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#announcementCorousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+        
+        <div class="container-fluid">
+
+            <div class="row justify-content-center pt-5  pb-5">
+
+                <div class="col-xs-12 col-sm-4">
+                    <div class="box">
+                        <div class="box-icon">
+                            <img th:src="@{/dist/img/leaveicon.png}" alt="" width="200px">
+                        </div>
+                        <h4 class="pt-5">Leave</h4>
+                        <p>Semua karyawan yang ingin mengajukan cuti, wajib mengajukan cuti tersebut menggunakan fitur Leave Request di aplikasi HRIS ini.</p>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-4">
+                    <div class="box">
+                        <div class="box-icon">
+                            <img th:src="@{/dist/img/overtimeincon.png}" alt="" width="200px">
+                        </div>
+                        <h4 class="pt-5">Overtime</h4>
+                        <p>Apabila karyawan ditugaskan ke project tertentu kemudian melakukan lembur, 
+                            dan terdapat kesepakatan dapat mengajukan klaim lembur, maka wajib melakukan klaim lembur menggunakan fitur Overtime. </p>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <div class="box">
+                        <div class="box-icon">
+                            <img th:src="@{/dist/img/trainingicon.png}" alt="" width="200px">
+                        </div>
+                        <h4 class="pt-5">Training & Development</h4>
+                        <p>Informasi dan pendaftaran training yang diadakan oleh Divisi Human Resources PT. Mitra Integrasi Informatika terdapat 
+                            pada Fitur Training & Development.</p>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <div class="box">
+                        <div class="box-icon">
+                            <img th:src="@{/dist/img/parking.png}" alt="" width="200px">
+                        </div>
+                        <h4 class="pt-5">Parking</h4>
+                        <p>Klaim parkir dapat dilakukan menggunakan Fitur Parking Reimbursement dengan mengunggah beberapa kelengkapan dokumen yang berlaku.</p>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <div class="box">
+                        <div class="box-icon">
+                            <img th:src="@{/dist/img/documenticon.png}" alt="" width="200px">
+                        </div>
+                        <h4 class="pt-5">Document Request</h4>
+                        <p>Apabila karyawan membutuhkan surat dari tempat bekerja, dapat mengajukan surat resmi dari PT. Mitra Integrasi Informatika 
+                            menggunakan fitur Document Request.</p>
+                    </div>
+                </div>
+            </div> <!-- end row -->
+        </div> <!-- end container -->
+        <!-- </div> -->
+    </div>
+    <!-- end wrapper -->
+
+
+    <!-- Footer -->
+    <div th:replace="fragments/footer::footer"></div>
+    <!-- End Footer -->
+
+    <div th:replace="fragments/footer::js"></div>
+    <script th:src="@{/dist/js/session.js}"></script>  
+
+    <!-- App js -->
+    <script th:src="@{/dist/js/custom-carousel.js}"></script>-->
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var parent = document.querySelector('.splitview'),
+                    topPanel = parent.querySelector('.top'),
+                    handle = parent.querySelector('.handle'),
+                    skewHack = 0,
+                    delta = 0;
+
+            // If the parent has .skewed class, set the skewHack var.
+            if (parent.className.indexOf('skewed') != -1) {
+                skewHack = 1000;
+            }
+
+            parent.addEventListener('mousemove', function (event) {
+                // Get the delta between the mouse position and center point.
+                delta = (event.clientX - window.innerWidth / 2) * 0.5;
+
+                // Move the handle.
+                handle.style.left = event.clientX + delta + 'px';
+
+                // Adjust the top panel width.
+                topPanel.style.width = event.clientX + skewHack + delta + 'px';
+            });
+        });
+        
+        $(document).ready(function() {
+            var path = window.location.pathname.split("/");
+            var hris_path = path[1];
+            $.ajax({
+                url: '/'+ hris_path +'/announcement',
+                type: 'GET',
+                dataType: 'json',
+                success: function(result) {
+                    var response = '', indicator = '';
+                    for (var i = 0; i < result.data.length; i++) {
+                        response += '<div class="carousel-item"><img class="d-block w-100 caro-img" src="https://images.pexels.com/photos/281260/pexels-photo-281260.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"><div class="carousel-caption d-none d-md-block"><h5>'+result.data[i].Judul+'</h5><p>'+result.data[i].Content+'</p></div></div>';
+                        indicator += '<li data-target="#announcementCorousel" data-slide-to="'+i+'"></li>'
+                    }
+                    $('#homepageItems').append(response);
+                    $('#indicators').append(indicator);
+                    $('.carousel-item').first().addClass('active');
+                    $('.carousel-indicators > li').first().addClass('active');
+                    $("#announcementCorousel").carousel();
+                }   
+            });
+        });
+    </script>
+</body>
+</html>

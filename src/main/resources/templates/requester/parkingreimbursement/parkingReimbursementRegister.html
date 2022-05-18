@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>HRIS - Requester</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- App Icons -->
+        <link rel="shortcut icon" th:href="@{/dist/img/favicon.ico}">
+    <div th:replace="fragments/header::css"></div>
+</head>
+<body>
+
+    <!-- Loader -->
+    <div id="preloader">
+        <div id="status">
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <div class="header-bg">
+
+        <div th:replace="fragments/header::header"></div>
+
+        <div class="container-fluid">
+            <!-- Page-Title -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-title-box">
+                        <form class="float-right app-search">
+                            <input type="text" placeholder="Search..." class="form-control">
+                            <button type="submit"><i class="fa fa-search"></i></button>
+                        </form>
+                        <h4 class="page-title"> <i class="dripicons-blog"></i> Home</h4>
+                    </div>
+                </div>
+            </div>
+            <!-- end page title end breadcrumb -->
+
+        </div>
+    </div>
+
+
+    <div class="wrapper">
+        <div class="container-fluid">
+            <!--Reimbursement division-->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card m-b-20">
+                        <div class="card-body" style="padding-left: 100px; padding-right: 100px;">
+                            <h4 class="text-center">Register Transportation</h4>
+                            <br>
+                            <div class="card">
+                                <div class="card-header"><b>Employee Detail</b></div>
+                                <form th:action="@{/parking/s/regis}" method="POST" enctype="multipart/form-data">
+                                    <div class="card-body">
+                                        <br><br>
+                                        <div class="form-group row">
+                                            <label class="col-md-2 label-request">Name</label>
+                                            <span class="float-right">:</span>
+                                            <span th:text="${nama_requester}" class="col-md-4">N/A</span>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-2 label-request">NIK</label>
+                                            <span class="float-right">:</span>
+                                            <span th:text="${nik_requester}" class="col-md-4">N/A</span>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-2 label-request">Customer Name</label>
+                                            <span class="float-right">:</span>
+                                            <span th:text="${customer_requester}" class="col-md-4">N/A</span>
+                                        </div>
+                                    </div>
+                                    <div class="card-header"><b>Transportation Detail</b></div>
+                                    <div class="card-body">
+                                        <br><br>
+                                        <!--form input Tipe reimbursment-->
+                                        <div class="form-group row">
+                                            <label for="example-text-input" class="col-md-2 col-form-label">Police Number</label>
+                                            <span class="float-right col-form-label">:</span>
+                                            <div class="col-md-4">
+                                                <input disabled th:if="${dataTransport!=null}" class="form-control" type="text" th:value="${dataTransport[0]}" readonly>
+                                                <input th:unless="${dataTransport!=null}" class="form-control" type="text" id="policeNumber" name="policeNumber" value="" placeholder="Insert police number">
+                                                <input th:if="${dataTransport==null}" class="form-control"  id="isEdit" name="isEdit"  type="text" value="false"  hidden="">
+                                                <input th:unless="${dataTransport==null}" class="form-control" type="text" id="isEdit" name="isEdit" value="true" hidden="">
+                                            </div>
+                                        </div>
+                                        <!--form input total payment-->
+                                        <div class="form-group row">
+                                            <label for="example-text-input" class="col-md-2 col-form-label">Vehicle Type</label>
+                                            <span class="float-right col-form-label">:</span>
+                                            <div class="col-md-4">
+                                                <select th:if="${dataTransport==null}" class="form-control"  id="typeTransport" name="typeTransport">
+                                                    <option  selected disabled >Choose type transport</option>
+                                                    <option value="Motorcyle">Motorcyle</option>
+                                                    <option value="Car">Car</option> 
+                                                </select>
+                                                <select th:unless="${dataTransport==null}" class="form-control"  id="typeTransport" name="typeTransport">
+                                                    <option disabled >Choose type transport</option>
+                                                    <option th:if="${dataTransport[2]}=='Motorcyle'"selected="" value="Motorcyle">Motorcyle</option>
+                                                    <option th:if="${dataTransport[2]}=='Motorcyle'" value="Car">Car</option> 
+
+                                                    <option th:if="${dataTransport[2]}=='Car'" value="Motorcyle">Motorcyle</option>
+                                                    <option th:if="${dataTransport[2]}=='Car'"selected="" value="Car">Car</option> 
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <!--form input Tipe reimbursment-->
+                                        <div class="form-group row">
+                                            <label for="example-text-input" class="col-md-2 col-form-label"> STNK / BPKB Number</label>
+                                            <span class="float-right col-form-label">:</span>
+                                            <div class="col-md-4">
+                                                <input  th:if="${dataTransport!=null}"  class="form-control" th:value="${dataTransport[4]}" type="number" id="stnk" name="stnk" value="" placeholder="Insert STNK / BPKB number">
+                                                <input th:if="${dataTransport!=null}"  class="form-control" type="number" id="stnkbck" name="stnkbck" th:value="${dataTransport[4]}"  placeholder="Insert STNK / BPKB number" hidden="">
+                                                <input th:unless="${dataTransport!=null}"  class="form-control" type="number" id="stnkbck" name="stnkbck" th:value="none"  placeholder="Insert STNK / BPKB number" hidden="">
+                                                <input  th:unless="${dataTransport!=null}"  class="form-control" type="number" id="stnk" name="stnk" value="" placeholder="Insert STNK / BPKB number">
+                                            </div>
+                                        </div>
+                                        <br><br>
+                                        <!--                                         <div th:if="${pic} != null" class="form-group row">
+                                                                                    <label for="example-text-input" class="col-md-2 col-form-label">Attachment</label>
+                                                                                    <span class="float-right col-form-label">:</span>
+                                                                                    <div class="col-md-4">
+                                                                                     <img onload="myfunction()" th:src="*{'data:image/png;base64,'+pic}" alt="gambarSTNK" />
+                                                                                    </div>
+                                                                                </div>
+                                        -->
+                                        <!--                                        <img th:src="${pic} == null ? _ : @{'data:image/png;base64,'+${pic}}"alt="gambarSTNK1">-->
+                                        <div th:unless="${pic} != null"  class="form-group row" >
+                                            <label for="example-text-input" class="col-md-2 col-form-label"></label>
+                                            <span class="float-right col-form-label"></span>
+                                            <div class="col-md-6">
+                                                <div class="dropzone-wrapper">
+                                                    <div class="form-group">
+                                                        <div class="preview-zone hidden">
+                                                            <div class="box box-solid">
+                                                                <div class="box-header with-border">
+                                                                    <div class="box-tools pull-right">
+                                                                        <button type="button" class="btn btn-danger btn-xs remove-preview" >
+                                                                            <i class="fa fa-times"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="box-body"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="dropzone-desc">
+                                                            <i class="glyphicon glyphicon-download-alt"></i>
+                                                            <div>Choose an image file or drag it here.</div>
+                                                        </div>
+                                                        <input type="file" onchange="readFileNonRepeatIMG(this)" name="foto_stnk" id="foto_stnk" class="dropzone" />
+                                                        <input type="text" name="fotoconfirm" id="fotoconfirm" value="false" hidden="" />
+                                                    </div>
+                                                </div>
+                                                <p style="color: red" id="uploadTicketError" ></p>
+                                            </div>
+                                        </div>
+                                        <!--// kalau gambar ada-->
+                                        <div th:if="${pic} != null" class="form-group row" >
+                                            <label for="example-text-input" class="col-md-2 col-form-label"></label>
+                                            <span class="float-right col-form-label"></span>
+                                            <div class="col-md-6">
+                                                <div class="dropzone-wrapper">
+                                                    <div class="form-group">
+                                                        <div class="preview-zone">
+                                                            <div class="box box-solid">
+                                                                <div class="box-header with-border">
+                                                                    <div class="box-tools pull-right">
+                                                                        <button type="button" class="btn btn-danger btn-xs remove-preview" >
+                                                                            <i class="fa fa-times"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="box-body">
+                                                                    <img  width="100" class="img-box"  th:src="*{'data:image/png;base64,'+pic}" alt="gambarSTNK" />   
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="dropzone-desc hidden2">
+                                                            <i class="glyphicon glyphicon-download-alt"></i>
+                                                            <div>Choose an image file or drag it here.</div>
+                                                        </div>
+                                                        <input type="file" onchange="readFileNonRepeatIMG(this)" name="foto_stnk" id="foto_stnk" class="dropzone" />
+                                                        <input type="text" name="fotoconfirm" id="fotoconfirm" value="noimage" hidden="" />
+                                                    </div>
+                                                </div>
+                                                <p style="color: red" id="uploadTicketError" ></p>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="form-group row m-t-20">
+                                            <div class="col-12 text-right pr-5">
+                                                <button id="alertsave" type="button" class="btn btn-primary w-md waves-effect waves-light">Submit</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input hidden th:if="${dataTransport!=null}" class="form-control" type="text" th:value="${dataTransport[0]}" id="policeNumber" name="policeNumber" value="" placeholder="Insert police number">
+                                </form>
+                            </div>
+
+                        </div>
+                    </div> <!-- end col -->
+                </div> <!-- end row -->
+            </div> <!-- end container -->
+        </div> <!-- end container -->
+    </div>
+    <!-- end wrapper -->
+
+
+    <!-- Footer -->
+    <div th:replace="fragments/footer::footer"></div>
+    <!-- End Footer -->
+
+    <div th:replace="fragments/footer::js"></div>
+    <script th:src="@{/dist/js/session.js}"></script>  
+
+    <!-- App js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>-->
+    <!--<script th:src="@{/dist/js/jquery.dropzone.js}"></script>-->
+    <!--<script th:src="@{/dist/js/app.js}"></script>-->
+    <script th:src="@{/dist/js/dropzone.js}"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.all.min.js"></script>
+    <script>
+                                                            $('#alertsave').on('click', function () {
+                                                                var lala = document.getElementById("foto_stnk");
+                                                                var form = $(this).parents().find('form');
+                                                                var stnk = document.getElementById("stnk").value;
+                                                                var stnkbck = document.getElementById("stnkbck").value;
+                                                                var nopol = document.getElementById("policeNumber").value;
+                                                                var foto_stnk = document.getElementById("fotoconfirm").value;
+//                                                                var foto_stnk = document.getElementById("fotoconfirm").value;
+                                                                var textError = "false";
+//                                                                if (isNaN(stnk))
+//                                                                    textError = "STNK / BPKB must be a number";
+//                                                                else 
+                                                                if (stnk.length > 11)
+                                                                    textError = "STNK / BPKB maximum 11 digit number";
+                                                                else if (stnk.length < 5)
+                                                                    textError = "STNK / BPKB at least have 5 digit number";
+                                                                else if (nopol.length < 5)
+                                                                    textError = "Police number at least have 5 digit number";
+                                                                else if (foto_stnk == "notSupport") {
+                                                                    textError = "Please upload image/ jpeg or png files";
+                                                                } else if (foto_stnk == "filelarge") {
+                                                                    textError = "File size exceeds 1 MB";
+                                                                } else if (foto_stnk == "false")
+                                                                    textError = "Please upload attachment";
+                                                                else
+                                                                    textError = "false";
+
+                                                                if (textError == "false") {
+
+                                                                    // is EDIT? 
+                                                                    var isEdit = document.getElementById("isEdit").value;
+                                                                    console.log("isedit", isEdit);
+                                                                    if (isEdit == "false") {
+//                            /stnk/check                                                                                                               // check nopol
+                                                                        $.getJSON("/HRIS/parking/check?no=" + nopol, {
+                                                                            ajax: 'true'
+                                                                        }, function (isAvailable) {
+                                                                            if (!isAvailable) {
+                                                                                // kalau no pol OKE, cek STNK nya
+                                                                                $.getJSON("/HRIS/stnk/check?no=" + stnk, {
+                                                                                    ajax: 'true'
+                                                                                }, function (isAvailable) {
+                                                                                    if (!isAvailable) {
+                                                                                        Swal.fire({
+                                                                                            title: 'Are you sure to save this data?',
+                                                                                            text: "You won't be able to revert this!",
+                                                                                            type: 'warning',
+                                                                                            showCancelButton: true,
+                                                                                            confirmButtonColor: '#3085d6',
+                                                                                            cancelButtonColor: '#d33',
+                                                                                            confirmButtonText: 'Yes, submit!'
+                                                                                        }).then((result) => {
+                                                                                            if (result.value) {
+                                                                                                Swal.fire(
+                                                                                                        'Submitted!',
+                                                                                                        'Your file has been submitted.',
+                                                                                                        'success'
+                                                                                                        ).then(res => {
+                                                                                                    form.submit();
+                                                                                                })
+                                                                                            } else {
+                                                                                                Swal.fire(
+                                                                                                        'Canceled!',
+                                                                                                        'The task is canceled',
+                                                                                                        'error'
+                                                                                                        )
+                                                                                            }
+                                                                                        });
+                                                                                    } else {
+                                                                                        Swal.fire({
+                                                                                            title: 'STNK/BPKB number already registered',
+                                                                                            type: 'warning',
+                                                                                            confirmButtonColor: '#3085d6',
+                                                                                            confirmButtonText: 'Ok!'
+                                                                                        })
+                                                                                    }
+                                                                                });
+                                                                            } else {
+                                                                                Swal.fire({
+                                                                                    title: 'Police number already registered',
+                                                                                    type: 'warning',
+                                                                                    confirmButtonColor: '#3085d6',
+                                                                                    confirmButtonText: 'Ok!'
+                                                                                })
+                                                                            }
+                                                                        });
+                                                                    } else {
+                                                                        console.log("DataA", stnkbck, stnk)
+                                                                        if (stnkbck == stnk) {
+                                                                            Swal.fire({
+                                                                                title: 'Are you sure to save this data?',
+                                                                                text: "You won't be able to revert this!",
+                                                                                type: 'warning',
+                                                                                showCancelButton: true,
+                                                                                confirmButtonColor: '#3085d6',
+                                                                                cancelButtonColor: '#d33',
+                                                                                confirmButtonText: 'Yes, submit!'
+                                                                            }).then((result) => {
+                                                                                if (result.value) {
+                                                                                    Swal.fire(
+                                                                                            'Submitted!',
+                                                                                            'Your file has been submitted.',
+                                                                                            'success'
+                                                                                            ).then(res => {
+                                                                                        form.submit();
+                                                                                    })
+                                                                                } else {
+                                                                                    Swal.fire(
+                                                                                            'Canceled!',
+                                                                                            'The task is canceled',
+                                                                                            'error'
+                                                                                            )
+                                                                                }
+                                                                            });
+                                                                        } else {
+                                                                            $.getJSON("/HRIS/stnk/check?no=" + stnk, {
+                                                                                ajax: 'true'
+                                                                            }, function (isAvailable) {
+                                                                                if (!isAvailable) {
+                                                                                    Swal.fire({
+                                                                                        title: 'Are you sure to save this data?',
+                                                                                        text: "You won't be able to revert this!",
+                                                                                        type: 'warning',
+                                                                                        showCancelButton: true,
+                                                                                        confirmButtonColor: '#3085d6',
+                                                                                        cancelButtonColor: '#d33',
+                                                                                        confirmButtonText: 'Yes, submit!'
+                                                                                    }).then((result) => {
+                                                                                        if (result.value) {
+                                                                                            Swal.fire(
+                                                                                                    'Submitted!',
+                                                                                                    'Your file has been submitted.',
+                                                                                                    'success'
+                                                                                                    ).then(res => {
+                                                                                                form.submit();
+                                                                                            })
+                                                                                        } else {
+                                                                                            Swal.fire(
+                                                                                                    'Canceled!',
+                                                                                                    'The task is canceled',
+                                                                                                    'error'
+                                                                                                    )
+                                                                                        }
+                                                                                    });
+                                                                                } else {
+                                                                                    Swal.fire({
+                                                                                        title: 'STNK/BPKB number already registered',
+                                                                                        type: 'warning',
+                                                                                        confirmButtonColor: '#3085d6',
+                                                                                        confirmButtonText: 'Ok!'
+                                                                                    })
+                                                                                }
+                                                                            });
+                                                                        }
+                                                                    }
+                                                                } else {
+                                                                    Swal.fire(
+                                                                            'Warning',
+                                                                            textError,
+                                                                            'warning');
+                                                                }
+
+                                                            });
+
+
+
+    </script>
+    <script>
+
+
+    </script>
+    <!--    <script  th:inline="javascript">
+            $(document).ready(function () {
+    
+                /*<![CDATA[*/
+                var files = /*[[*{'data:image/png;base64,'+pic}]]*/ 'default';
+                /*]]>*/
+                console.log("test1", files)
+                var create_input = document.createElement('input');
+                create_input.setAttribute("type", "file");
+                create_input.setAttribute("name", "fotoTicketData");
+                create_input.setAttribute("id", "fotoTicketData");
+                create_input.files = files;
+                document.getElementById("inputangambar").appendChild(create_input);
+            });
+        </script>-->
+    <script>
+        $("#formDocumentRequest").on('submit', function () {
+            var address = $('#address').val();
+            var ktp = $('#noKTP').val();
+            var joindet = $('#joinDate').val();
+            var tipe = $('#grupType').val();
+            var notes = $('#notes').val();
+
+            if (address === '' || ktp === '' || joindet === '' || tipe === '' || notes.length < 5) {
+                Swal.fire({
+                    type: 'warning',
+                    titles: 'Sorry...',
+                    showConfirmButton: false,
+                    text: "Please fill all fields"
+                });
+                setTimeout(function () {
+                    location.reload();
+                }, 500)
+            } else {
+
+            }
+        });
+
+    </script>
+</body>
+</html>
+
+

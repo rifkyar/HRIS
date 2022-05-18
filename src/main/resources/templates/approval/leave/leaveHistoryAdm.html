@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>HRIS - Requester</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- App Icons -->
+        <link rel="shortcut icon" th:href="@{/dist/img/favicon.ico}">
+
+    <div th:replace="fragments/headerAdm::cssAdm"></div>
+
+    <link th:href="@{/plugins/datatables/dataTables.bootstrap4.min.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{/plugins/datatables/responsive.bootstrap4.min.css}" rel="stylesheet" type="text/css"/>
+
+    <style>
+        table thead{
+            background-color: #4bbbce;
+            color: #fafafa;
+        }
+        .middle {
+            line-height: 70px;
+        }
+    </style>
+
+</head>
+<body> 
+    <!-- Loader -->
+    <div id="preloader">
+        <div id="status">
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <div class="header-bg">
+
+        <div th:replace="fragments/headerAdm::headerAdm"></div>
+
+        <div class="container-fluid">
+            <!-- Page-Title -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-title-box">
+                                               <h4 class="page-title"> <i class="dripicons-blog"></i>Employee Request History</h4>
+                    </div>
+                </div>
+            </div>
+            <!-- end page title end breadcrumb -->
+
+        </div>
+    </div>
+
+
+    <div class="wrapper">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card m-b-20">
+                        <br>
+                        <div class="table-responsive">
+                            <table id="leaveHistoryAdm" class="table table-bordered hover dt-responsive display responsive nowrap"
+                                   style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                <thead class="text-center">
+                                    <tr>
+                                        <th rowspan="2">Request Number</th>
+                                        <th rowspan="2">Requester</th>
+                                        <th rowspan="2">Employee</th>
+                                        <th rowspan="2">Company</th>
+                                        <th colspan="4">Leave</th>
+                                        <th rowspan="2">Submit</th>
+                                        <th rowspan="2">Remarks</th>
+                                        <th rowspan="2">Approval</th>
+                                        <th rowspan="2">Date</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Type</th>
+                                        <th>From</th>
+                                        <th>To</th>
+                                        <th>Notes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="rmreq:${histori}">
+                                        <td th:text="${rmreq[0]}">LEAVE-1303320193A</td>
+                                        <td th:text="${rmreq[1]}">13033</td>
+                                        <td th:text="${rmreq[2]}">Romatua</td>
+                                        <td th:text="${rmreq[3]}">2871003547</td>
+                                        <td th:text="${rmreq[4]}">Cuti Normal</td>
+                                        <td th:text="${rmreq[5]}">27-12-2019</td>
+                                        <td th:text="${rmreq[6]}">30-12-2019	</td>
+                                        <td th:text="${rmreq[7]}">Acara Keluarga. Alamat selama cuti : Mandailing Natal, Sumatera Utara</td>
+                                        <td th:text="${rmreq[8]}">20-12-2019 10:35:44	</td>
+                                        <td th:text="${rmreq[9]}">Approved. NOTE: "Ini hanya buat test di server developer"</td>
+                                        <td th:text="${rmreq[10]}">Accepted</td>
+                                        <td th:text="${rmreq[11]}">19-02-2020 09:52:33</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <br>
+                        </div>
+                    </div>
+                </div> <!-- end col -->
+            </div> <!-- end row -->
+        </div> <!-- end container -->
+    </div>
+    <!-- end wrapper -->
+
+
+    <!-- Footer -->
+    <div th:replace="fragments/footerAdm::footerAdm"></div>
+    <!-- End Footer -->
+
+    <div th:replace="fragments/footer::js"></div>
+
+    <script th:src="@{/dist/js/session.js}"></script>
+    <script th:src="@{/dist/js/jquery.validate.min.js}"></script>
+    <script th:src="@{/plugins/datatables/jquery.dataTables.min.js}" type="text/javascript"></script>
+    <script th:src="@{/plugins/datatables/dataTables.bootstrap4.min.js}" type="text/javascript"></script>
+    <script th:src="@{/plugins/datatables/dataTables.responsive.min.js}" type="text/javascript"></script>
+    <script th:src="@{/plugins/datatables/responsive.bootstrap4.min.js}" type="text/javascript"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#leaveHistoryAdm').DataTable({
+                responsive: true
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            var table = $('#example').DataTable();
+
+            $('#example tbody').on('click', 'tr', function () {
+                var data = table.row(this).data();
+                location.href = "/HRIS/leaveReqAdm";
+            });
+        });
+    </script>
+</body>
+</html>

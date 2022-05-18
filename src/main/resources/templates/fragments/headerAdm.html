@@ -1,0 +1,281 @@
+<div th:fragment="cssAdm">
+    <link rel="stylesheet" th:href="@{/dist/css/bootstrap.min.css}">
+    <link th:href="@{/dist/css/icons.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/dist/css/styleAdm.css}" rel="stylesheet" type="text/css" />
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+</div>
+
+<div th:fragment="headerAdm">
+    <!-- Navigation Bar-->
+    <header id="topnav">
+        <div class="topbar-main">
+            <div class="container-fluid">
+
+                <!-- Logo container-->
+                <div class="logo">
+                    <!-- Text Logo -->
+                    <a th:href="@{/homeAdm}" class="logo">
+                        <img width="30px" alt=""> HRIS
+                    </a>
+                </div>
+                <!-- End Logo container-->
+
+
+                <div class="menu-extras topbar-custom">
+
+                    <ul class="list-inline float-right mb-0">
+
+                        <!-- notification-->
+                        <!--                        <li class="list-inline-item dropdown notification-list">
+                                                    <a class="nav-link dropdown-toggle arrow-none waves-effect" data-toggle="dropdown"
+                                                       href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                                                        <i class="ti-bell noti-icon"></i>
+                                                        <span class="badge badge-info badge-pill noti-icon-badge">3</span>
+                                                    </a>
+                                                    <div class="dropdown-menu dropdown-menu-right dropdown-arrow dropdown-menu-lg">
+                                                         item
+                                                        <div class="dropdown-item noti-title">
+                                                            <h5>Notification (3)</h5>
+                                                        </div>
+                        
+                                                         item
+                                                        <a href="javascript:void(0);" class="dropdown-item notify-item">
+                                                            <div class="notify-icon bg-warning"><i class="mdi mdi-message"></i></div>
+                                                            <p class="notify-details"><b>New Message received</b><small
+                                                                    class="text-muted">You have 1 unread messages</small></p>
+                                                        </a>
+                        
+                                                         All
+                                                        <a href="javascript:void(0);" class="dropdown-item notify-item">
+                                                            View All
+                                                        </a>
+                        
+                                                    </div>
+                                                </li>-->
+                        <!-- User-->
+                        <li class="list-inline-item dropdown notification-list">
+                            <a class="nav-link dropdown-toggle arrow-none waves-effect nav-user"
+                               data-toggle="dropdown" href="#" role="button" aria-haspopup="false"
+                               aria-expanded="false">
+                                <img th:src="@{/dist/img/users/avatar-1.jpg}" alt="user" class="rounded-circle">
+                                <span class="ml-1" id="username">Username <i class="mdi mdi-chevron-down"></i> </span>
+                                <input type="hidden" id="idUser">
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
+                                <a class="dropdown-item" href="#"><i class="dripicons-user text-muted"></i>
+                                    Profile</a>
+                                <a class="dropdown-item" href="#"><i
+                                        class="dripicons-gear text-muted"></i> Settings</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" th:href="@{/logout}"><i class="dripicons-exit text-muted"></i>
+                                    Logout</a>
+                            </div>
+                        </li>
+                        <li class="menu-item list-inline-item">
+                            <!-- Mobile menu toggle-->
+                            <a class="navbar-toggle nav-link">
+                                <div class="lines">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </a>
+                            <!-- End mobile menu toggle-->
+                        </li>
+
+                    </ul>
+                </div>
+                <!-- end menu-extras -->
+
+                <div class="clearfix"></div>
+
+            </div> <!-- end container -->
+        </div>
+        <!-- end topbar-main -->
+
+        <!-- MENU Start -->
+        <div class="navbar-custom">
+            <div class="container-fluid">
+                <div id="navigation">
+                    <!-- Navigation Menu-->
+                    <ul class="navigation-menu">
+
+                        <li class="has-submenu">
+                            <a th:href="@{/homeAdm}"><i class="dripicons-home"></i>Home</a>
+                        </li>
+
+                        <li class="has-submenu">
+                            <a href="#"><i class="dripicons-suitcase"></i>Leave <i
+                                    class="mdi mdi-chevron-down mdi-drop"></i></a>
+                            <ul class="submenu megamenu">
+                                <li>
+                                    <ul>
+                                        <li>
+                                            <a th:href="@{'/approvalRm/' + ${email}}">Employee Leave Request</a>
+                                        </li>
+                                        <li>
+                                            <a th:href="@{'/leaveHistoryAdm/' + ${email}}">Employee Leave History</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="has-submenu">
+                            <a href="#"><i class="dripicons-clock"></i>Overtime <i
+                                    class="mdi mdi-chevron-down mdi-drop"></i></a>
+                            <ul class="submenu">
+                                <li>
+                                    <a th:href="@{'/dataCustomer/' + ${nik}}">Data Customer</a>
+                                </li>
+                                <li>
+                                    <a th:href="@{'/pendingapproval/' + ${nik}}">Pending Approval</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="has-submenu" th:if="${adminMSHR == 'ROLE_MSHR_ADMIN' || adminMSHR == 'ROLE_MSPM_ADMIN' || adminMSHR == 'ROLE_RM' || adminMSHR=='ROLE_MSCS_ADMIN' ||adminMSHR =='ROLE_MSAD_ADMIN'}">
+                            <a href="#"><i class="dripicons-to-do"></i>Document Request<i
+                                    class="mdi mdi-chevron-down mdi-drop"></i></a>
+                            <ul class="submenu">
+                                <li th:if="${adminMSHR == 'ROLE_MSHR_ADMIN'}">
+                                    <a th:href="@{/DocumentApproveAdm}">Pending Approval</a>
+                                </li>
+                                <li th:if="${adminMSHR == 'ROLE_MSHR_ADMIN'}">
+                                    <a th:href="@{/approvalHistoryMSHRAdm}">Approval History</a>
+                                </li>
+                                <li th:if="${adminMSHR == 'ROLE_MSHR_ADMIN'}">
+                                    <a th:href="@{/executiveSumMSHR}">Executive Summary</a>
+                                </li>
+
+                                <li th:if="${adminMSHR != 'ROLE_MSHR_ADMIN'}">
+                                    <a th:href="@{/documentRequestAdminRm}">Pending Approval</a>
+                                </li>
+                                <li th:if="${adminMSHR != 'ROLE_MSHR_ADMIN'}">
+                                    <a th:href="@{/approvalHistoryPenAdm}">Approval History</a>
+                                </li>
+                                <li th:if="${adminMSHR != 'ROLE_MSHR_ADMIN'}">
+                                    <a th:href="@{/executiveSumPenugasan}">Executive Summary</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="has-submenu">
+                            <a href="#"><i class="dripicons-device-desktop"></i>Training and Development<i
+                                    class="mdi mdi-chevron-down mdi-drop"></i></a>
+                            <ul class="submenu">
+                                <li class="has-submenu">
+                                    <a href="#">Manage Data Master</a>
+                                    <ul class="submenu">
+                                        <a th:href="@{/catalogTrainers}">Catalog Trainers</a>
+                                        <a th:href="@{/catalogTraining}">Catalog Training</a>
+                                        <a th:href="@{/assignTrainer}">Assign Trainer</a>
+                                        <a th:href="@{/manageFeedbackForm}">Manage Feedback form</a>
+                                    </ul>
+                                </li>
+                                <li class="has-submenu">
+                                    <a href="#">Training</a>
+                                    <ul class="submenu">
+                                        <a th:href="@{/trainingScheduling}">Training Scheduling</a>
+                                        <a th:href="@{/manageRegistrationSchedule}">Manage Participants Registration</a>
+                                        <a th:href="@{/manageTrainingRequest}">Manage Training Request</a>
+                                        <a th:href="@{/historyTraining}">History Training</a>
+                                        <a th:href="@{/trainingMejaKerja}">Training Meja Kerja</a>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <!--Parking reimbursement Navigation Bar-->
+                        <li class="has-submenu">
+                            <a href="#"><i class="dripicons-to-do"></i>Parking Reimbursement <i class="mdi mdi-chevron-down mdi-drop"></i></a>
+                            <ul class="submenu">
+                                <li th:if="${roleUser==10}" >
+                                    <a th:href="@{/parking/addloc}">Add Location Parking</a>
+                                </li >
+                                <li th:if="${roleUser==10}">
+                                    <a th:href="@{/parking/listLocation}">List Location Parking</a>
+                                </li>
+                                <li>
+                                    <a th:href="@{/parking/historyapproval}">History Approval</a>
+                                </li>
+                                <li>
+                                    <a th:href="@{/parking/pending}">Pending Approval</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="has-submenu">
+                            <a href="#"><i class="fas fa-syringe"></i>Vaccine <i class="mdi mdi-chevron-down mdi-drop"></i></a>
+                            <ul class="submenu">
+                                <li>
+                                    <a th:href="@{/historyVaccineAdm}">History Vaccination</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="has-submenu" th:if="${nik == 1000000}">
+                            <a href="#"><i class="fa fa-users"></i>Employee <i class="mdi mdi-chevron-down mdi-drop"></i></a>
+                            <ul class="submenu">
+                                <li>
+                                    <a th:href="@{/employeeBirthday}">Employee Birthday</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li th:if="${session.permit == 1}" hidden="" class="has-submenu">
+                            <a href="#"><i class="dripicons-user-group"></i>Employee Data <i
+                                    class="mdi mdi-chevron-down mdi-drop"></i></a>
+                            <ul class="submenu">
+                                <li>
+                                    <a th:href="@{'/employeedata/' + ${nik}}">Change Request Employee</a>
+                                </li>
+                                <li>
+                                    <a th:href="@{'/reqInfo/' + ${nik}}">Employee Information</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li th:if="${session.permit == 0}" class="has-submenu">
+                            <a href="#"><i class="dripicons-user-group"></i>Employee Data <i
+                                    class="mdi mdi-chevron-down mdi-drop"></i></a>
+                            <ul class="submenu">
+                                <li>
+                                    <a th:href="@{'/employeedata/' + ${nik}}">Change Request Employee</a>
+                                </li>
+                                <li>
+                                    <a th:href="@{'/reqInfo/' + ${nik}}">Employee Information</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li th:if="${session.permit == 1}" class="has-submenu">
+                            <a href="#"><i class="dripicons-user-group"></i>Manage Content <i
+                                    class="mdi mdi-chevron-down mdi-drop"></i></a>
+                            <ul class="submenu">
+                                <li>
+                                    <a href="#">Announcement</a>
+                                </li>
+                                <li>
+                                    <a href="#">FAQ</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li th:if="${session.permit == 0}" class="has-submenu">
+                            <a href="#"><i class="dripicons-user-group"></i>Manage Content <i
+                                    class="mdi mdi-chevron-down mdi-drop"></i></a>
+                            <ul class="submenu">
+                                <li>
+                                    <a th:href="@{/manageAnnouncement}">Announcement</a>
+                                </li>
+                                <li>
+                                    <a th:href="@{/manageFaq}">FAQ</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <!--Approver's Pending Bar-->
+                        <li class="has-submenu" th:if="${adminMSHR == 'ROLE_MSDEL_MAN'}">
+                            <a th:href="@{'/ApproverPending'}"><i class="dripicons-to-do"></i>Approver's Pending</a>
+                        </li>
+                    </ul>
+                    <!-- End navigation menu -->
+                </div> <!-- end #navigation -->
+            </div> <!-- end container -->
+        </div> <!-- end navbar-custom -->
+        <!--<script src="https://kit.fontawesome.com/a076d05399.js"></script>-->
+    </header>
+    <!-- End Navigation Bar-->
+</div>
